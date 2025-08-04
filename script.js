@@ -1546,6 +1546,7 @@ function initMobileNavigation() {
     });
   }
 }
+}
 
 // Initialize mobile navigation when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -1564,9 +1565,26 @@ function toggleMobileMenu() {
     // Change button icon
     if (navLinks.classList.contains('show')) {
       mobileMenuBtn.innerHTML = '✕';
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = 'hidden';
     } else {
       mobileMenuBtn.innerHTML = '☰';
+      // Restore body scroll when menu is closed
+      document.body.style.overflow = '';
     }
+  }
+}
+
+// Close mobile menu when clicking on close button (X)
+function closeMobileMenu() {
+  const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+  const navLinks = document.querySelector('.nav-links');
+  
+  if (mobileMenuBtn && navLinks) {
+    navLinks.classList.remove('show');
+    mobileMenuBtn.classList.remove('active');
+    mobileMenuBtn.innerHTML = '☰';
+    document.body.style.overflow = '';
   }
 }
 
