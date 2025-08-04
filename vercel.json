@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "sms-phishing-detection",
   "builds": [
     {
       "src": "*.html",
@@ -145,7 +144,6 @@
       ]
     }
   ],
-  "functions": {},
   "env": {
     "NODE_ENV": "production"
   }
