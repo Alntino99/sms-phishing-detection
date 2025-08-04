@@ -10,6 +10,15 @@ body {
   padding: 0;
   text-align: center;
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  position: relative;
+}
+
+html {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 body.dark-mode {
@@ -1506,6 +1515,19 @@ body.dark-mode .nav-links a:hover {
 
 /* Mobile Navigation - Popup Menu */
 @media screen and (max-width: 767px) {
+  /* Prevent horizontal scrolling on mobile */
+  body, html {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+  
+  /* Ensure all containers respect viewport bounds */
+  .header-content, .nav-container, main, section {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  
   .mobile-menu-btn {
     display: block;
   }
@@ -1514,8 +1536,8 @@ body.dark-mode .nav-links a:hover {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    width: 100vw;
+    height: 100vh;
     background: rgba(0, 0, 0, 0.95);
     backdrop-filter: blur(10px);
     flex-direction: column;
@@ -1528,6 +1550,8 @@ body.dark-mode .nav-links a:hover {
     transform: translateY(-100%);
     transition: all 0.3s ease;
     padding: 2rem;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   
   .nav-links.show {
@@ -1649,6 +1673,18 @@ body.dark-mode .nav-links a:hover {
 
 /* Responsive Navigation Bar Sizing */
 @media screen and (max-width: 480px) {
+  /* Additional mobile viewport control */
+  body, html {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+  
+  .header-content, .nav-container, main, section {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  
   .nav-container {
     padding: 0.3rem 0.5rem;
   }
@@ -1664,6 +1700,18 @@ body.dark-mode .nav-links a:hover {
 }
 
 @media screen and (max-width: 320px) {
+  /* Strict viewport control for smallest screens */
+  body, html {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+  
+  .header-content, .nav-container, main, section {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  
   .nav-container {
     padding: 0.2rem 0.3rem;
   }
