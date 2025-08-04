@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMS Alerts - Phishing Detection System</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="stylesheet" href="chatbot.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: url('sms.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: brightness(0.6);
+      z-index: -1;
+    }
+
+    /* Modern Header */
+    header {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      padding: 1.5rem 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      opacity: 0.3;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.1);
+    }
+
+    .main-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, #fff, #e3f2fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin: 0;
+    }
+
+    /* Navigation */
+    nav {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e3c72;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-brand::before {
+      content: '🛡️';
+      font-size: 1.8rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #1e3c72;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(30, 60, 114, 0.2);
+    }
+
+    .nav-links a:hover {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      border-color: transparent;
+    }
+
+    .nav-links a.active {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-color: transparent;
+    }
+
+    /* Main Content */
+    .sms-page {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    .sms-container {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(40px);
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sms-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+      border-radius: 20px 20px 0 0;
+    }
+
+    .sms-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .sms-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #1e3c72;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sms-header p {
+      color: #666;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .alert-section {
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border-left: 5px solid #e74c3c;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .alert-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .alert-icon {
+      font-size: 2rem;
+      color: #e74c3c;
+    }
+
+    .alert-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #e74c3c;
+    }
+
+    .alert-content {
+      color: #333;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+      background: linear-gradient(135deg, #5a67d8, #6b46c1);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      color: white;
+      box-shadow: 0 8px 25px rgba(240, 147, 251, 0.3);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(240, 147, 251, 0.4);
+      background: linear-gradient(135deg, #e91e63, #f50057);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      color: white;
+      box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+    }
+
+    .btn-danger:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(231, 76, 60, 0.4);
+      background: linear-gradient(135deg, #c0392b, #a93226);
+    }
+
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      z-index: 1000;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: white;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Dark Mode Styles */
+    body.dark-mode {
+      color: #e2e8f0;
+    }
+
+    body.dark-mode::before {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: brightness(0.3);
+    }
+
+    body.dark-mode header {
+      background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+    }
+
+    body.dark-mode .sms-container {
+      background: rgba(45, 55, 72, 0.8);
+      color: #e2e8f0;
+    }
+
+    body.dark-mode .alert-section {
+      background: rgba(45, 55, 72, 0.8);
+      color: #e2e8f0;
+    }
+
+    body.dark-mode .main-title {
+      background: linear-gradient(45deg, #e2e8f0, #cbd5e0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    body.dark-mode .nav-links a {
+      color: #e2e8f0;
+      background: rgba(45, 55, 72, 0.9);
+      border: 1px solid rgba(226, 232, 240, 0.3);
+    }
+
+    body.dark-mode .nav-links a:hover {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-color: transparent;
+    }
+
+    /* Navigation Styles - Ensure Visibility */
+    .nav-links a {
+      color: #1e3c72 !important;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      background: rgba(255, 255, 255, 0.9) !important;
+      border: 1px solid rgba(30, 60, 114, 0.2) !important;
+      display: inline-block;
+    }
+
+    .nav-links a:hover {
+      background: linear-gradient(135deg, #667eea, #764ba2) !important;
+      color: white !important;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      border-color: transparent !important;
+    }
+
+    .nav-links a.active {
+      background: linear-gradient(135deg, #667eea, #764ba2) !important;
+      color: white !important;
+      border-color: transparent !important;
+    }
+
+    /* User Account Section */
+    .user-account {
+      position: relative;
+      display: none;
+    }
+
+    .user-account.show {
+      display: block;
+    }
+
+    .user-button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .user-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .user-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 15px;
+      padding: 1rem;
+      min-width: 250px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    .user-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .user-info {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      margin-bottom: 1rem;
+    }
+
+    .user-name {
+      font-weight: 700;
+      color: #1e3c72;
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .user-email {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .user-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .user-menu li {
+      margin-bottom: 0.5rem;
+    }
+
+    .user-menu a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      color: #1e3c72;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .user-menu a:hover {
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+    }
+
+    .user-menu a.logout {
+      color: #ef4444;
+    }
+
+    .user-menu a.logout:hover {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+
+    /* Dark Mode Styles for User Account */
+    body.dark-mode .user-dropdown {
+      background: rgba(45, 55, 72, 0.95);
+      border-color: rgba(226, 232, 240, 0.2);
+    }
+
+    body.dark-mode .user-name {
+      color: #e2e8f0;
+    }
+
+    body.dark-mode .user-email {
+      color: #a0aec0;
+    }
+
+    body.dark-mode .user-menu a {
+      color: #e2e8f0;
+    }
+
+    body.dark-mode .user-menu a:hover {
+      background: rgba(102, 126, 234, 0.2);
+      color: #667eea;
+    }
+
+    body.dark-mode .user-info {
+      border-bottom-color: rgba(226, 232, 240, 0.2);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .action-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+      
+      .sms-container {
+        padding: 2rem;
+        margin: 1rem;
+      }
+      
+      .main-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Dark Mode Toggle -->
+  <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+    🌙
+  </button>
+
+  <header>
+    <div class="header-content">
+      <div class="logo-title">
+        <img src="logo.png" alt="SMS Phishing Logo" class="logo">
+        <h1 class="main-title">SMS Alerts</h1>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-container">
+        <a href="#" class="nav-brand">SMS Phishing Detection</a>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="detect.html">Detection</a></li>
+          <li><a href="sms.html" class="active">SMS Alerts</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li id="nav-login"><a href="login.html">Login</a></li>
+          <li id="nav-signup"><a href="signup.html">Sign Up</a></li>
+          <li class="user-account" id="user-account">
+            <button class="user-button" onclick="toggleUserDropdown()">
+              <div class="user-avatar" id="user-avatar">👤</div>
+              <span id="user-display-name">User</span>
+              <span>▼</span>
+            </button>
+            <div class="user-dropdown" id="user-dropdown">
+              <div class="user-info">
+                <div class="user-name" id="dropdown-user-name">User Name</div>
+                <div class="user-email" id="dropdown-user-email">user@example.com</div>
+              </div>
+              <ul class="user-menu">
+                <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="create.html"><i class="fas fa-plus"></i> Create Post</a></li>
+                <li><a href="#" onclick="logoutUser()" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <div class="sms-page">
+    <div class="sms-container">
+      <div class="sms-header">
+        <h1>🚨 SMS Alert System</h1>
+        <p>Stay informed about potential phishing threats and share alerts with others</p>
+      </div>
+
+      <div class="alert-section">
+        <div class="alert-header">
+          <span class="alert-icon">⚠️</span>
+          <h2 class="alert-title">Phishing Detection Alert</h2>
+        </div>
+        <div class="alert-content" id="result">
+          Analysis Result: This SMS contains suspicious keywords and potential phishing indicators. 
+          The message appears to be attempting to gather personal information through deceptive means.
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <a href="detect.html" class="btn btn-primary">
+          🔍 Back to Detection
+        </a>
+        <a href="#" class="btn btn-secondary" id="shareAlert">
+          📤 Share Alert
+        </a>
+        <a href="#" class="btn btn-danger" id="sendSMS">
+          📱 Send SMS Alert
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="firebase.js"></script>
+  <script src="darkMode.js"></script>
+  <script src="chatbot.js"></script>
+  <script>
+    // SMS Alert functionality
+    document.getElementById('sendSMS').addEventListener('click', (event) => {
+      event.preventDefault();
+      const resultText = document.getElementById('result').textContent;
+      const smsLink = `sms:+1234567890?body=${encodeURIComponent(resultText)}`;
+      window.open(smsLink, '_blank');
+    });
+
+    // Share Alert functionality
+    document.getElementById('shareAlert').addEventListener('click', (event) => {
+      event.preventDefault();
+      const resultText = document.getElementById('result').textContent;
+      
+      if (navigator.share) {
+        navigator.share({
+          title: 'SMS Phishing Alert',
+          text: resultText,
+          url: window.location.href
+        });
+      } else {
+        // Fallback for browsers that don't support Web Share API
+        const textArea = document.createElement('textarea');
+        textArea.value = resultText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        alert('Alert copied to clipboard!');
+      }
+    });
+
+    // Update alert content dynamically
+    function updateAlertContent(content) {
+      document.getElementById('result').textContent = content;
+    }
+
+    // Example: Update with real analysis result
+    // updateAlertContent('New analysis result here...');
+
+    // User Account Management
+    auth.onAuthStateChanged(async user => {
+      if (user) {
+        // Hide login/signup, show user account
+        document.getElementById('nav-login').style.display = 'none';
+        document.getElementById('nav-signup').style.display = 'none';
+        document.getElementById('user-account').classList.add('show');
+        
+        // Get user data from Firebase
+        try {
+          const userRef = db.ref(`users/${user.uid}`);
+          const snapshot = await userRef.once('value');
+          const userData = snapshot.val();
+          
+          // Update user display
+          const displayName = userData?.username || user.email.split('@')[0];
+          const userEmail = user.email;
+          
+          document.getElementById('user-display-name').textContent = displayName;
+          document.getElementById('dropdown-user-name').textContent = displayName;
+          document.getElementById('dropdown-user-email').textContent = userEmail;
+          
+          // Set avatar with first letter of username
+          const avatar = document.getElementById('user-avatar');
+          avatar.textContent = displayName.charAt(0).toUpperCase();
+          
+        } catch (error) {
+          console.error('Error loading user data:', error);
+          // Fallback to email
+          const displayName = user.email.split('@')[0];
+          document.getElementById('user-display-name').textContent = displayName;
+          document.getElementById('dropdown-user-name').textContent = displayName;
+          document.getElementById('dropdown-user-email').textContent = user.email;
+          
+          const avatar = document.getElementById('user-avatar');
+          avatar.textContent = displayName.charAt(0).toUpperCase();
+        }
+      } else {
+        // Show login/signup, hide user account
+        document.getElementById('nav-login').style.display = '';
+        document.getElementById('nav-signup').style.display = '';
+        document.getElementById('user-account').classList.remove('show');
+      }
+    });
+
+    // Toggle user dropdown
+    function toggleUserDropdown() {
+      const dropdown = document.getElementById('user-dropdown');
+      dropdown.classList.toggle('show');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const userAccount = document.getElementById('user-account');
+      const dropdown = document.getElementById('user-dropdown');
+      
+      if (!userAccount.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    function logoutUser() {
+      auth.signOut().then(() => {
+        window.location.reload();
+      }).catch(error => {
+        console.error('Error signing out:', error);
+      });
+    }
+  </script>
+</body>
+</html>

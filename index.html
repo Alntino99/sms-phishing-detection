@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMS Phishing Detection System</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="stylesheet" href="chatbot.css">
+
+  <script src="index.js"></script>
+  <script src="darkMode.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+      color: #fff;
+      line-height: 1.6;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: brightness(0.6);
+      z-index: -1;
+    }
+
+    /* Modern Header */
+    header {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      padding: 1.5rem 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      opacity: 0.3;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.1);
+    }
+
+    .main-title {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, #fff, #e3f2fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Navigation */
+    nav {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e3c72;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-brand::before {
+      content: '🛡️';
+      font-size: 1.8rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #1e3c72 !important;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      background: rgba(255, 255, 255, 0.9) !important;
+      border: 1px solid rgba(30, 60, 114, 0.2) !important;
+      display: inline-block;
+    }
+
+    .nav-links a:hover {
+      background: linear-gradient(135deg, #667eea, #764ba2) !important;
+      color: white !important;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      border-color: transparent !important;
+    }
+
+    .nav-links a.active {
+      background: linear-gradient(135deg, #667eea, #764ba2) !important;
+      color: white !important;
+      border-color: transparent !important;
+    }
+
+    /* User Account Section */
+    .user-account {
+      position: relative;
+      display: none;
+    }
+
+    .user-account.show {
+      display: block;
+    }
+
+    .user-button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .user-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .user-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 15px;
+      padding: 1rem;
+      min-width: 250px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    .user-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .user-info {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      margin-bottom: 1rem;
+    }
+
+    .user-name {
+      font-weight: 700;
+      color: #1e3c72;
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .user-email {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .user-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .user-menu li {
+      margin-bottom: 0.5rem;
+    }
+
+    .user-menu a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      color: #1e3c72;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .user-menu a:hover {
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+    }
+
+    .user-menu a.logout {
+      color: #ef4444;
+    }
+
+    .user-menu a.logout:hover {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+
+    /* Dark Mode Styles for User Account */
+    body.dark-mode .user-dropdown {
+      background: rgba(45, 55, 72, 0.95);
+      border-color: rgba(226, 232, 240, 0.2);
+    }
+
+    body.dark-mode .user-name {
+      color: #e2e8f0;
+    }
+
+    body.dark-mode .user-email {
+      color: #a0aec0;
+    }
+
+    body.dark-mode .user-menu a {
+      color: #e2e8f0;
+    }
+
+    body.dark-mode .user-menu a:hover {
+      background: rgba(102, 126, 234, 0.2);
+      color: #667eea;
+    }
+
+    body.dark-mode .user-info {
+      border-bottom-color: rgba(226, 232, 240, 0.2);
+    }
+
+    /* Main Content */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      padding: 4rem 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .hero-logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .hero-logo:hover {
+      transform: scale(1.05);
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff, #e3f2fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: #e2e8f0;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+      background: linear-gradient(135deg, #5a67d8, #6b46c1);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      color: white;
+      box-shadow: 0 8px 25px rgba(240, 147, 251, 0.3);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(240, 147, 251, 0.4);
+      background: linear-gradient(135deg, #e91e63, #f50057);
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+      border-radius: 20px 20px 0 0;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #667eea;
+    }
+
+    .feature-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .feature-description {
+      color: #e2e8f0;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .feature-button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      text-decoration: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .feature-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+      background: linear-gradient(135deg, #5a67d8, #6b46c1);
+    }
+
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      z-index: 1000;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: white;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Dark Mode Styles */
+    body.dark-mode {
+      color: #e2e8f0;
+    }
+
+    body.dark-mode::before {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: brightness(0.3);
+    }
+
+    body.dark-mode header {
+      background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+    }
+
+    body.dark-mode .feature-card {
+      background: rgba(45, 55, 72, 0.8);
+      color: #e2e8f0;
+    }
+
+    body.dark-mode .main-title {
+      background: linear-gradient(45deg, #e2e8f0, #cbd5e0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    body.dark-mode .nav-links a {
+      color: #e2e8f0;
+      background: rgba(45, 55, 72, 0.9);
+      border: 1px solid rgba(226, 232, 240, 0.3);
+    }
+
+    body.dark-mode .nav-links a:hover {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-color: transparent;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      margin-top: 3rem;
+    }
+
+    footer p {
+      color: #e2e8f0;
+      font-size: 1rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Dark Mode Toggle -->
+  <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+    🌙
+  </button>
+
+  <header>
+    <div class="header-content">
+      <div class="logo-title">
+        <img src="logo.png" alt="SMS Phishing Logo" class="logo">
+        <h1 class="main-title">SMS Phishing Detection</h1>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <div class="nav-container">
+      <a href="#" class="nav-brand">SMS Phishing Detection</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="detect.html">Detection</a></li>
+        <li><a href="sms.html">SMS Alerts</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li id="nav-login"><a href="login.html">Login</a></li>
+        <li id="nav-signup"><a href="signup.html">Sign Up</a></li>
+        <li class="user-account" id="user-account">
+          <button class="user-button" onclick="toggleUserDropdown()">
+            <div class="user-avatar" id="user-avatar">👤</div>
+            <span id="user-display-name">User</span>
+            <span>▼</span>
+          </button>
+          <div class="user-dropdown" id="user-dropdown">
+            <div class="user-info">
+              <div class="user-name" id="dropdown-user-name">User Name</div>
+              <div class="user-email" id="dropdown-user-email">user@example.com</div>
+            </div>
+            <ul class="user-menu">
+              <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+              <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+              <li><a href="create.html"><i class="fas fa-plus"></i> Create Post</a></li>
+              <li><a href="#" onclick="logoutUser()" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <img src="logo.png" alt="SMS Phishing Logo" class="hero-logo">
+      <h1 class="hero-title">Welcome to SMS Phishing Detection</h1>
+      <p class="hero-subtitle">Your ultimate solution to identifying and combating phishing threats in SMS messages. Stay safe with our advanced AI-powered detection system.</p>
+      <div class="hero-buttons">
+        <a href="detect.html" class="btn btn-primary">🔍 Start Detection</a>
+        <a href="about.html" class="btn btn-secondary">📚 Learn More</a>
+      </div>
+    </section>
+
+    <!-- Features Grid -->
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3 class="feature-title">AI-Powered Detection</h3>
+        <p class="feature-description">Advanced machine learning algorithms detect phishing attempts with high accuracy using Naive Bayes and LSTM neural networks.</p>
+        <a href="detect.html" class="feature-button">Analyze Now</a>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3 class="feature-title">Dashboard & Analytics</h3>
+        <p class="feature-description">Track your security progress with detailed analytics, badges, and comprehensive threat reports.</p>
+        <a href="dashboard.html" class="feature-button">View Dashboard</a>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3 class="feature-title">SMS Alert System</h3>
+        <p class="feature-description">Share and receive real-time alerts about phishing threats to keep your community safe.</p>
+        <a href="sms.html" class="feature-button">Get Alerts</a>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h3 class="feature-title">Community Posts</h3>
+        <p class="feature-description">Share experiences, tips, and warnings with the community to help others stay protected.</p>
+        <a href="create.html" class="feature-button">Create Post</a>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📈</div>
+        <h3 class="feature-title">Bulk Analysis</h3>
+        <p class="feature-description">Analyze multiple SMS messages at once with our powerful bulk processing feature.</p>
+        <a href="detect.html" class="feature-button">Bulk Analysis</a>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3 class="feature-title">Real-time Protection</h3>
+        <p class="feature-description">Get instant analysis results with our real-time detection system that works instantly.</p>
+        <a href="detect.html" class="feature-button">Try Real-time</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 SMS Phishing Detection System. All rights reserved.</p>
+  </footer>
+
+  <!-- Scripts -->
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="firebase.js"></script>
+  <script src="chatbot.js"></script>
+  
+  <script>
+    // Auth state management
+    auth.onAuthStateChanged(async user => {
+      if (user) {
+        // Hide login/signup, show user account
+        document.getElementById('nav-login').style.display = 'none';
+        document.getElementById('nav-signup').style.display = 'none';
+        document.getElementById('user-account').classList.add('show');
+        
+        // Get user data from Firebase
+        try {
+          const userRef = db.ref(`users/${user.uid}`);
+          const snapshot = await userRef.once('value');
+          const userData = snapshot.val();
+          
+          // Update user display
+          const displayName = userData?.username || user.email.split('@')[0];
+          const userEmail = user.email;
+          
+          document.getElementById('user-display-name').textContent = displayName;
+          document.getElementById('dropdown-user-name').textContent = displayName;
+          document.getElementById('dropdown-user-email').textContent = userEmail;
+          
+          // Set avatar with first letter of username
+          const avatar = document.getElementById('user-avatar');
+          avatar.textContent = displayName.charAt(0).toUpperCase();
+          
+        } catch (error) {
+          console.error('Error loading user data:', error);
+          // Fallback to email
+          const displayName = user.email.split('@')[0];
+          document.getElementById('user-display-name').textContent = displayName;
+          document.getElementById('dropdown-user-name').textContent = displayName;
+          document.getElementById('dropdown-user-email').textContent = user.email;
+          
+          const avatar = document.getElementById('user-avatar');
+          avatar.textContent = displayName.charAt(0).toUpperCase();
+        }
+      } else {
+        // Show login/signup, hide user account
+        document.getElementById('nav-login').style.display = '';
+        document.getElementById('nav-signup').style.display = '';
+        document.getElementById('user-account').classList.remove('show');
+      }
+    });
+
+    // Toggle user dropdown
+    function toggleUserDropdown() {
+      const dropdown = document.getElementById('user-dropdown');
+      dropdown.classList.toggle('show');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const userAccount = document.getElementById('user-account');
+      const dropdown = document.getElementById('user-dropdown');
+      
+      if (!userAccount.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    function logoutUser() {
+      auth.signOut().then(() => {
+        window.location.reload();
+      }).catch(error => {
+        console.error('Error signing out:', error);
+      });
+    }
+  </script>
+</body>
+</html>
+

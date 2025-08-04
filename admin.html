@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .admin-container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: rgba(0,0,0,0.85);
+      padding: 2rem;
+      border-radius: 1rem;
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    }
+    h2, h3 { text-align: center; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+      background: rgba(255,255,255,0.05);
+    }
+    th, td {
+      padding: 0.7rem;
+      border-bottom: 1px solid #444;
+      text-align: left;
+    }
+    th { background: #ffa500; color: #fff; }
+    tr:last-child td { border-bottom: none; }
+    .delete-btn {
+      background: #d9534f;
+      color: #fff;
+      border: none;
+      border-radius: 0.3rem;
+      padding: 0.4rem 1rem;
+      cursor: pointer;
+    }
+    .delete-btn:hover { background: #b52a25; }
+    .section {
+      margin-bottom: 2rem;
+    }
+    .error, .success {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .success { color: #8fff8f; }
+    .error { color: #ff8080; }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <h2>Admin Panel</h2>
+    <div class="section">
+      <h3>All Users</h3>
+      <div class="success" id="userSuccess"></div>
+      <div class="error" id="userError"></div>
+      <table id="usersTable">
+        <thead><tr><th>Username</th><th>Action</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="section">
+      <h3>All Feedback</h3>
+      <div class="success" id="feedbackSuccess"></div>
+      <div class="error" id="feedbackError"></div>
+      <table id="feedbackTable">
+        <thead><tr><th>Feedback</th><th>Timestamp</th><th>Action</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="section">
+      <h3>All Histories</h3>
+      <table id="historiesTable">
+        <thead><tr><th>Username</th><th>SMS</th><th>Result</th><th>Timestamp</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="firebase.js"></script>
+  <script>
+    // Check admin access
+    async function checkAdmin() {
+      const res = await fetch('http://localhost:3000/me', { credentials: 'include' });
+      const data = await res.json();
+      if (!data.loggedIn || !data.isAdmin) {
+        alert('Admin access required.');
+        window.location.href = 'index.html';
+      }
+    }
+    checkAdmin();
+
+    // Load all users
+    async function loadUsers() {
+      const usersRef = db.ref('users');
+      const snapshot = await usersRef.once('value');
+      const users = snapshot.val();
+      const tbody = document.querySelector('#usersTable tbody');
+      tbody.innerHTML = '';
+      for (const username in users) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${username}</td><td><button class='delete-btn' onclick='deleteUser("${username}")'>Delete</button></td>`;
+        tbody.appendChild(tr);
+      }
+    }
+    loadUsers();
+
+    // Delete user
+    async function deleteUser(username) {
+      if (!confirm('Delete user ' + username + '?')) return;
+      const usersRef = db.ref('users');
+      const userRef = usersRef.child(username);
+      const res = await userRef.remove();
+      if (res) {
+        document.getElementById('userSuccess').textContent = 'User deleted successfully.';
+        loadUsers();
+      } else {
+        document.getElementById('userError').textContent = 'Error deleting user.';
+      }
+    }
+
+    // Load all feedback
+    async function loadFeedback() {
+      const feedbacksRef = db.ref('feedback');
+      const snapshot = await feedbacksRef.once('value');
+      const feedbacks = snapshot.val();
+      const tbody = document.querySelector('#feedbackTable tbody');
+      tbody.innerHTML = '';
+      for (const id in feedbacks) {
+        const fb = feedbacks[id];
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${fb.feedback}</td><td>${new Date(fb.timestamp).toLocaleString()}</td><td><button class='delete-btn' onclick='deleteFeedback("${id}")'>Delete</button></td>`;
+        tbody.appendChild(tr);
+      }
+    }
+    loadFeedback();
+
+    // Delete feedback
+    async function deleteFeedback(id) {
+      if (!confirm('Delete this feedback?')) return;
+      const feedbacksRef = db.ref('feedback');
+      const feedbackRef = feedbacksRef.child(id);
+      const res = await feedbackRef.remove();
+      if (res) {
+        document.getElementById('feedbackSuccess').textContent = 'Feedback deleted successfully.';
+        loadFeedback();
+      } else {
+        document.getElementById('feedbackError').textContent = 'Error deleting feedback.';
+      }
+    }
+
+    // Load all histories
+    async function loadHistories() {
+      const historiesRef = db.ref('histories');
+      const snapshot = await historiesRef.once('value');
+      const histories = snapshot.val();
+      const tbody = document.querySelector('#historiesTable tbody');
+      tbody.innerHTML = '';
+      for (const id in histories) {
+        const h = histories[id];
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${h.username}</td><td>${h.sms}</td><td>${h.result}</td><td>${new Date(h.timestamp).toLocaleString()}</td>`;
+        tbody.appendChild(tr);
+      }
+    }
+    loadHistories();
+  </script>
+</body>
+</html> 

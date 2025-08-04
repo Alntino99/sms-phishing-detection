@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile - SMS Phishing Detection</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="stylesheet" href="chatbot.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: -1;
+    }
+
+    /* Header Styles */
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-section img {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+    }
+
+    .logo-section h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Navigation Styles */
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #1e3c72;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(30, 60, 114, 0.2);
+    }
+
+    .nav-links a:hover {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    /* User Account Dropdown */
+    .user-account {
+      position: relative;
+      display: none;
+    }
+
+    .user-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .user-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      min-width: 200px;
+      display: none;
+      z-index: 1000;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .user-dropdown.show {
+      display: block;
+    }
+
+    .user-dropdown a {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: #333;
+      text-decoration: none;
+      transition: background 0.3s ease;
+      border-radius: 8px;
+      margin: 0.25rem;
+    }
+
+    .user-dropdown a:hover {
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+    }
+
+    .user-info {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      margin-bottom: 0.5rem;
+    }
+
+    .user-info h4 {
+      margin: 0 0 0.25rem 0;
+      color: #333;
+      font-size: 0.9rem;
+    }
+
+    .user-info p {
+      margin: 0;
+      color: #666;
+      font-size: 0.8rem;
+    }
+
+    /* Main Content */
+    .main-content {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    .profile-hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .profile-hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .profile-hero p {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0;
+    }
+
+    /* Profile Cards */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .profile-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .profile-card h3 {
+      margin: 0 0 1.5rem 0;
+      color: #333;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .profile-card h3 i {
+      color: #667eea;
+    }
+
+    .profile-info {
+      margin-bottom: 1rem;
+    }
+
+    .profile-info p {
+      margin: 0.5rem 0;
+      color: #666;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .profile-info strong {
+      color: #333;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 1rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .stat-item:hover {
+      transform: scale(1.05);
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    /* Password Change Form */
+    .password-form {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid rgba(102, 126, 234, 0.2);
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #666;
+      font-size: 1.1rem;
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .message {
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .success {
+      background: rgba(76, 175, 80, 0.1);
+      color: #4caf50;
+      border: 1px solid rgba(76, 175, 80, 0.3);
+    }
+
+    .error {
+      background: rgba(244, 67, 54, 0.1);
+      color: #f44336;
+      border: 1px solid rgba(244, 67, 54, 0.3);
+    }
+
+    /* Dark Mode Styles */
+    body.dark-mode {
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    body.dark-mode .header {
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(20px);
+    }
+
+    body.dark-mode .nav-links a {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark-mode .profile-card,
+    body.dark-mode .password-form {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-mode .profile-card h3,
+    body.dark-mode .password-form label {
+      color: #fff;
+    }
+
+    body.dark-mode .profile-info p {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    body.dark-mode .profile-info strong {
+      color: #fff;
+    }
+
+    body.dark-mode .form-group input {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    body.dark-mode .form-group input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .main-content {
+        padding: 0 1rem;
+      }
+
+      .profile-hero h2 {
+        font-size: 2rem;
+      }
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo-section">
+        <img src="logo.png" alt="SMS Phishing Logo">
+        <h1>SMS Phishing Detection</h1>
+      </div>
+      
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="detect.html">Detection</a>
+        <a href="sms.html">SMS Alerts</a>
+        <a href="contact.html">Contact Us</a>
+        <button class="theme-toggle" onclick="toggleTheme()">
+          <i class="fas fa-moon"></i> Dark Mode
+        </button>
+      </nav>
+
+      <!-- User Account Dropdown -->
+      <div class="user-account" id="userAccount">
+        <button class="user-btn" onclick="toggleUserDropdown()">
+          <i class="fas fa-user"></i>
+          <span id="userDisplayName">User</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="user-dropdown" id="userDropdown">
+          <div class="user-info">
+            <h4 id="dropdownUsername">Username</h4>
+            <p id="dropdownEmail">email@example.com</p>
+          </div>
+          <a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+          <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+          <a href="create.html"><i class="fas fa-plus"></i> Create Post</a>
+          <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="profile-hero">
+      <h2>User Profile</h2>
+      <p>Manage your account settings and view your analysis statistics</p>
+    </div>
+
+    <div class="profile-grid">
+      <!-- Profile Information Card -->
+      <div class="profile-card">
+        <h3><i class="fas fa-user-circle"></i> Profile Information</h3>
+        <div class="profile-info" id="profileInfo">
+          <p><strong>Username:</strong> <span id="profileUsername">Loading...</span></p>
+          <p><strong>Email:</strong> <span id="profileEmail">Loading...</span></p>
+          <p><strong>Member Since:</strong> <span id="memberSince">Loading...</span></p>
+        </div>
+      </div>
+
+      <!-- Analysis Statistics Card -->
+      <div class="profile-card">
+        <h3><i class="fas fa-chart-bar"></i> Analysis Statistics</h3>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-number" id="totalAnalyses">0</span>
+            <span class="stat-label">Total Analyses</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="phishingCount">0</span>
+            <span class="stat-label">Phishing Detected</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Password Change Form -->
+    <div class="password-form">
+      <h3><i class="fas fa-lock"></i> Change Password</h3>
+      <form id="changePasswordForm">
+        <div class="form-group">
+          <label for="oldPassword">Current Password</label>
+          <input type="password" id="oldPassword" name="oldPassword" placeholder="Enter your current password" required>
+          <button type="button" class="password-toggle" onclick="togglePassword('oldPassword')">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <input type="password" id="newPassword" name="newPassword" placeholder="Enter your new password" required>
+          <button type="button" class="password-toggle" onclick="togglePassword('newPassword')">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <i class="fas fa-key"></i> Change Password
+        </button>
+        
+        <div class="message" id="changeSuccess" style="display: none;"></div>
+        <div class="message" id="changeError" style="display: none;"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="firebase.js"></script>
+  <script src="darkMode.js"></script>
+  <script src="chatbot.js"></script>
+  
+  <script>
+    // Load profile info and stats
+    function loadProfile() {
+      auth.onAuthStateChanged(async user => {
+        if (!user) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        // Update user account dropdown
+        const userAccount = document.getElementById('userAccount');
+        const userDisplayName = document.getElementById('userDisplayName');
+        const dropdownUsername = document.getElementById('dropdownUsername');
+        const dropdownEmail = document.getElementById('dropdownEmail');
+        
+        userAccount.style.display = 'block';
+        userDisplayName.textContent = user.email ? user.email.split('@')[0] : 'User';
+        dropdownUsername.textContent = user.email ? user.email.split('@')[0] : 'User';
+        dropdownEmail.textContent = user.email || 'No email';
+
+        // Load profile information
+        document.getElementById('profileUsername').textContent = user.email ? user.email.split('@')[0] : 'User';
+        document.getElementById('profileEmail').textContent = user.email || 'No email';
+        
+        // Format member since date
+        const memberSince = user.metadata.creationTime ? new Date(user.metadata.creationTime) : new Date();
+        document.getElementById('memberSince').textContent = memberSince.toLocaleDateString();
+
+        // Get analysis stats from Firebase Realtime Database
+        try {
+          const snapshot = await db.ref(`history/${user.uid}`).once('value');
+          const historyData = snapshot.val();
+          
+          let totalAnalyses = 0;
+          let phishingCount = 0;
+          
+          if (historyData) {
+            Object.keys(historyData).forEach(key => {
+              const analysis = historyData[key];
+              totalAnalyses++;
+              if (analysis.result && analysis.result.toLowerCase().includes('phishing')) {
+                phishingCount++;
+              }
+            });
+          }
+          
+          document.getElementById('totalAnalyses').textContent = totalAnalyses;
+          document.getElementById('phishingCount').textContent = phishingCount;
+        } catch (error) {
+          console.error('Error loading stats:', error);
+        }
+      });
+    }
+
+    // Toggle user dropdown
+    function toggleUserDropdown() {
+      const dropdown = document.getElementById('userDropdown');
+      dropdown.classList.toggle('show');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById('userDropdown');
+      const userBtn = document.querySelector('.user-btn');
+      
+      if (!userBtn.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    // Toggle password visibility
+    function togglePassword(inputId) {
+      const input = document.getElementById(inputId);
+      const toggle = input.nextElementSibling;
+      const icon = toggle.querySelector('i');
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fas fa-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'fas fa-eye';
+      }
+    }
+
+    // Change password functionality
+    document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const successDiv = document.getElementById('changeSuccess');
+      const errorDiv = document.getElementById('changeError');
+      
+      // Hide previous messages
+      successDiv.style.display = 'none';
+      errorDiv.style.display = 'none';
+      
+      const oldPassword = e.target.oldPassword.value;
+      const newPassword = e.target.newPassword.value;
+      
+      // Disable button and show loading
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Changing Password...';
+      
+      const user = auth.currentUser;
+      if (!user) {
+        errorDiv.textContent = 'Not logged in.';
+        errorDiv.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-key"></i> Change Password';
+        return;
+      }
+
+      try {
+        // Re-authenticate
+        const credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPassword);
+        await user.reauthenticateWithCredential(credential);
+        
+        // Update password
+        await user.updatePassword(newPassword);
+        
+        successDiv.textContent = 'Password changed successfully!';
+        successDiv.style.display = 'block';
+        e.target.reset();
+        
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+          successDiv.style.display = 'none';
+        }, 3000);
+        
+      } catch (err) {
+        errorDiv.textContent = err.message;
+        errorDiv.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-key"></i> Change Password';
+      }
+    });
+
+    // Logout function
+    function logout() {
+      auth.signOut().then(() => {
+        window.location.href = 'index.html';
+      }).catch((error) => {
+        console.error('Error signing out:', error);
+      });
+    }
+
+    // Initialize page
+    loadProfile();
+  </script>
+</body>
+</html> 
