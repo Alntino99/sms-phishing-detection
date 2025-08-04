@@ -322,23 +322,23 @@
 
     /* Main Content */
     main {
-      max-width: 1200px;
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 2rem;
+      padding: 1.5rem;
     }
 
     /* Hero Section */
     .hero-section {
       text-align: center;
-      padding: 4rem 2rem;
-      margin-bottom: 3rem;
+      padding: 3rem 1.5rem;
+      margin-bottom: 2rem;
     }
 
     .hero-logo {
-      width: 120px;
-      height: 120px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
-      margin: 0 auto 2rem;
+      margin: 0 auto 1.5rem;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       transition: transform 0.3s ease;
     }
@@ -348,7 +348,7 @@
     }
 
     .hero-title {
-      font-size: 3.5rem;
+      font-size: 3rem;
       font-weight: 700;
       margin-bottom: 1rem;
       background: linear-gradient(135deg, #fff, #e3f2fd);
@@ -359,10 +359,10 @@
     }
 
     .hero-subtitle {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       color: #e2e8f0;
-      margin-bottom: 2rem;
-      max-width: 600px;
+      margin-bottom: 1.5rem;
+      max-width: 500px;
       margin-left: auto;
       margin-right: auto;
     }
@@ -417,16 +417,16 @@
     /* Features Grid */
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin: 3rem 0;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
     }
 
     .feature-card {
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(20px);
       border-radius: 20px;
-      padding: 2rem;
+      padding: 1.5rem;
       text-align: center;
       border: 1px solid rgba(255, 255, 255, 0.2);
       transition: all 0.3s ease;
@@ -567,8 +567,21 @@
 
     /* Responsive Design */
     @media (max-width: 768px) {
+      main {
+        padding: 1rem;
+      }
+      
+      .hero-section {
+        padding: 2rem 1rem;
+      }
+      
       .hero-title {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+        max-width: 100%;
       }
       
       .hero-buttons {
@@ -578,13 +591,17 @@
       
       .btn {
         width: 100%;
-        max-width: 300px;
+        max-width: 280px;
         justify-content: center;
       }
       
       .features-grid {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 1rem;
+      }
+      
+      .feature-card {
+        padding: 1.25rem;
       }
       
       .header-content {
@@ -595,6 +612,47 @@
       .nav-links {
         flex-wrap: wrap;
         justify-content: center;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      main {
+        padding: 0.75rem;
+      }
+      
+      .hero-section {
+        padding: 1.5rem 0.75rem;
+      }
+      
+      .hero-title {
+        font-size: 1.8rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+      
+      .hero-logo {
+        width: 80px;
+        height: 80px;
+      }
+      
+      .btn {
+        max-width: 250px;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+      }
+      
+      .feature-card {
+        padding: 1rem;
+      }
+      
+      .feature-title {
+        font-size: 1.3rem;
+      }
+      
+      .feature-description {
+        font-size: 0.9rem;
       }
     }
   </style>
