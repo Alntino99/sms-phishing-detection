@@ -50,66 +50,62 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/",
-      "dest": "/index.html"
+      "source": "/",
+      "destination": "/index.html"
     },
     {
-      "src": "/login",
-      "dest": "/login.html"
+      "source": "/login",
+      "destination": "/login.html"
     },
     {
-      "src": "/signup",
-      "dest": "/signup.html"
+      "source": "/signup",
+      "destination": "/signup.html"
     },
     {
-      "src": "/detect",
-      "dest": "/detect.html"
+      "source": "/detect",
+      "destination": "/detect.html"
     },
     {
-      "src": "/dashboard",
-      "dest": "/dashboard.html"
+      "source": "/dashboard",
+      "destination": "/dashboard.html"
     },
     {
-      "src": "/profile",
-      "dest": "/profile.html"
+      "source": "/profile",
+      "destination": "/profile.html"
     },
     {
-      "src": "/contact",
-      "dest": "/contact.html"
+      "source": "/contact",
+      "destination": "/contact.html"
     },
     {
-      "src": "/about",
-      "dest": "/about.html"
+      "source": "/about",
+      "destination": "/about.html"
     },
     {
-      "src": "/create",
-      "dest": "/create.html"
+      "source": "/create",
+      "destination": "/create.html"
     },
     {
-      "src": "/sms",
-      "dest": "/sms.html"
+      "source": "/sms",
+      "destination": "/sms.html"
     },
     {
-      "src": "/admin",
-      "dest": "/admin.html"
+      "source": "/admin",
+      "destination": "/admin.html"
     },
     {
-      "src": "/reset",
-      "dest": "/reset.html"
+      "source": "/reset",
+      "destination": "/reset.html"
     },
     {
-      "src": "/interactive",
-      "dest": "/interactive_main.html"
+      "source": "/interactive",
+      "destination": "/interactive_main.html"
     },
     {
-      "src": "/post",
-      "dest": "/post.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/post",
+      "destination": "/post.html"
     }
   ],
   "headers": [
