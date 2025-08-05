@@ -192,6 +192,14 @@
       "destination": "/comprehensive-test.js"
     },
     {
+      "source": "/enhanced-pwa-install.js",
+      "destination": "/enhanced-pwa-install.js"
+    },
+    {
+      "source": "/advanced-sms-notifications.js",
+      "destination": "/advanced-sms-notifications.js"
+    },
+    {
       "source": "/webfonts/:file*",
       "destination": "/webfonts/:file*"
     },
@@ -305,6 +313,24 @@
     },
     {
       "source": "/comprehensive-test.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/enhanced-pwa-install.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/advanced-sms-notifications.js",
       "headers": [
         {
           "key": "Cache-Control",
