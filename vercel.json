@@ -188,6 +188,10 @@
       "destination": "/sw-sms-monitor.js"
     },
     {
+      "source": "/comprehensive-test.js",
+      "destination": "/comprehensive-test.js"
+    },
+    {
       "source": "/webfonts/:file*",
       "destination": "/webfonts/:file*"
     },
@@ -292,6 +296,15 @@
     },
     {
       "source": "/sw-sms-monitor.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/comprehensive-test.js",
       "headers": [
         {
           "key": "Cache-Control",

@@ -248,9 +248,32 @@
         font-weight: bold;
       }
 
-      .confidence {
-        color: #666;
-      }
+          .confidence {
+      color: #666;
+    }
+
+    /* Test Button Styles */
+    .test-button {
+      background: linear-gradient(135deg, #6f42c1, #e83e8c);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+      font-size: 0.9rem;
+    }
+
+    .test-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(111, 66, 193, 0.4);
+      background: linear-gradient(135deg, #e83e8c, #fd7e14);
+    }
 
       /* Navigation */
       nav {
@@ -1704,6 +1727,11 @@
             🛡️ Start Monitoring
           </button>
         </li>
+        <li id="test-container">
+          <button id="test-btn" class="test-button" onclick="window.runComprehensiveTests()">
+            🧪 Test All
+          </button>
+        </li>
         <li class="user-account" id="user-account">
             <button class="user-button" onclick="toggleUserDropdown()">
               <div class="user-avatar" id="user-avatar">👤</div>
@@ -2010,6 +2038,7 @@
   <script src="universal-button-handler.js"></script>
       <script src="ml-classifiers.js"></script>
     <script src="real-time-sms-monitor.js"></script>
+    <script src="comprehensive-test.js"></script>
     <script src="complete-button-functions.js"></script>
   
   <script>

@@ -24,7 +24,30 @@ class NaiveBayesClassifier {
     train(trainingData) {
         this.totalDocuments = trainingData.length;
         
-        trainingData.forEach(item => {
+        // Enhanced training with more comprehensive data
+        const enhancedTrainingData = [
+            ...trainingData,
+            // Additional phishing examples
+            { text: "Your account has been suspended due to suspicious activity", isPhishing: true },
+            { text: "Click here to verify your identity immediately", isPhishing: true },
+            { text: "You have won a prize! Claim your reward now", isPhishing: true },
+            { text: "Your password has expired. Reset now", isPhishing: true },
+            { text: "Security alert: Unusual login detected", isPhishing: true },
+            { text: "Your bank account has been locked", isPhishing: true },
+            { text: "Verify your payment information", isPhishing: true },
+            { text: "Your package delivery is pending", isPhishing: true },
+            // Additional legitimate examples
+            { text: "Your order has been confirmed", isPhishing: false },
+            { text: "Meeting reminder: Tomorrow at 2 PM", isPhishing: false },
+            { text: "Your package has been delivered", isPhishing: false },
+            { text: "Weather alert: Rain expected today", isPhishing: false },
+            { text: "Your appointment is confirmed", isPhishing: false },
+            { text: "Thank you for your payment", isPhishing: false },
+            { text: "Your subscription has been renewed", isPhishing: false },
+            { text: "Your account balance is $1,234.56", isPhishing: false }
+        ];
+        
+        enhancedTrainingData.forEach(item => {
             const words = this.extractWords(item.text);
             
             if (item.isPhishing) {
@@ -42,7 +65,7 @@ class NaiveBayesClassifier {
             }
         });
         
-        console.log('✅ Naive Bayes Classifier trained successfully');
+        console.log('✅ Naive Bayes Classifier trained successfully with enhanced data');
     }
 
     // Predict if text is phishing
@@ -105,13 +128,26 @@ class LSTMClassifier {
             { pattern: /verify.*identity/i, weight: 0.7 },
             { pattern: /account.*locked/i, weight: 0.8 },
             { pattern: /claim.*reward/i, weight: 0.9 },
-            { pattern: /limited.*time/i, weight: 0.6 }
+            { pattern: /limited.*time/i, weight: 0.6 },
+            { pattern: /reset.*password/i, weight: 0.9 },
+            { pattern: /unusual.*login/i, weight: 0.8 },
+            { pattern: /verify.*payment/i, weight: 0.7 },
+            { pattern: /suspicious.*activity/i, weight: 0.8 },
+            { pattern: /immediate.*action/i, weight: 0.7 },
+            { pattern: /account.*compromised/i, weight: 0.9 },
+            { pattern: /click.*here.*claim/i, weight: 0.8 },
+            { pattern: /verify.*details/i, weight: 0.7 },
+            { pattern: /urgent.*action/i, weight: 0.8 },
+            { pattern: /security.*breach/i, weight: 0.9 }
         ];
         
         this.suspiciousKeywords = [
             'urgent', 'bank', 'password', 'click', 'verify', 'suspended', 
             'locked', 'prize', 'won', 'claim', 'security', 'alert', 
-            'expired', 'identity', 'reward', 'limited', 'time'
+            'expired', 'identity', 'reward', 'limited', 'time', 'reset',
+            'unusual', 'payment', 'suspicious', 'immediate', 'compromised',
+            'details', 'action', 'breach', 'confirm', 'validate', 'secure',
+            'protect', 'warning', 'critical', 'important', 'required'
         ];
     }
 
