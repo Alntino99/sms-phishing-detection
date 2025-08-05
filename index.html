@@ -7,9 +7,15 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="all.min.css">
   <link rel="stylesheet" href="chatbot.css">
+  <link rel="stylesheet" href="mobile-sms-detector.css">
+  <link rel="stylesheet" href="font-fix.css">
+  <link rel="stylesheet" href="mobile-responsive-fix.css">
+  <link rel="manifest" href="manifest.json">
 
   <script src="index.js"></script>
   <script src="darkMode.js"></script>
+  <script src="universal-button-handler.js"></script>
+  <script src="complete-button-functions.js"></script>
   
   <style>
     * {
@@ -806,6 +812,16 @@
     🌙
   </button>
 
+  <!-- Mobile Back Button -->
+  <button class="mobile-back-btn" onclick="goBack()" title="Go Back">
+    <i class="fas fa-arrow-left"></i>
+  </button>
+
+  <!-- SMS Status Indicator -->
+  <div class="status" id="sms-status" style="display: none;">
+    SMS monitoring inactive
+  </div>
+
   <header>
     <div class="header-content">
       <div class="logo-title">
@@ -859,6 +875,7 @@
       <div class="hero-buttons">
         <a href="detect.html" class="btn btn-primary">🔍 Start Detection</a>
         <a href="about.html" class="btn btn-secondary">📚 Learn More</a>
+        <button onclick="connectMobilePhone()" class="btn btn-mobile" style="background: linear-gradient(135deg, #17a2b8, #138496); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1rem 2rem; box-shadow: 0 8px 25px rgba(23, 162, 184, 0.3); margin: 0.5rem;">📱 Connect Mobile Phone</button>
       </div>
     </section>
 
@@ -917,7 +934,11 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script src="firebase.js"></script>
+  <script src="firebase-fixed.js"></script>
+  <script src="script.js"></script>
+  <script src="sms-security-rules.js"></script>
+  <script src="ai-training-system.js"></script>
+  <script src="mobile-sms-detector-fixed-v2.js"></script>
   <script src="chatbot.js"></script>
   
   <script>
@@ -987,6 +1008,207 @@
         window.location.reload();
       }).catch(error => {
         console.error('Error signing out:', error);
+      });
+    }
+
+    // PWA Installation Handler
+    let deferredPrompt;
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        showInstallPrompt();
+    });
+
+    function showInstallPrompt() {
+        const installPrompt = document.createElement('div');
+        installPrompt.className = 'install-prompt';
+        installPrompt.innerHTML = `
+            <div class="install-content">
+                <h3>📱 Install SMS Shield as App</h3>
+                <p>Get enhanced SMS protection with app-like features!</p>
+                <div class="install-buttons">
+                    <button onclick="installApp()" class="install-btn">📲 Install App</button>
+                    <button onclick="dismissInstall()" class="dismiss-btn">Maybe Later</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(installPrompt);
+    }
+
+    async function installApp() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('App installed successfully');
+                showSuccessMessage('SMS Shield installed as app!');
+            }
+            deferredPrompt = null;
+        }
+        dismissInstall();
+    }
+
+    function dismissInstall() {
+        const prompt = document.querySelector('.install-prompt');
+        if (prompt) {
+            prompt.remove();
+        }
+    }
+
+    function showSuccessMessage(message) {
+        const successMsg = document.createElement('div');
+        successMsg.className = 'success-message';
+        successMsg.textContent = message;
+        document.body.appendChild(successMsg);
+        setTimeout(() => successMsg.remove(), 3000);
+    }
+
+    // Enhanced mobile connection
+    async function connectMobilePhone() {
+        try {
+            // Check if app is installed
+            const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches;
+            
+            if (isAppInstalled) {
+                // Enhanced features for installed app
+                if (window.mobileSMSDetector) {
+                    await window.mobileSMSDetector.enableEnhancedSMSFeatures();
+                    showMobileConnectionStatus('✅ Enhanced SMS protection enabled in app mode!');
+                } else {
+                    showMobileConnectionStatus('⚠️ Mobile detector not loaded. Please refresh and try again.');
+                }
+            } else {
+                // Standard connection for browser
+                if (window.mobileSMSDetector) {
+                    await window.mobileSMSDetector.setupMobileIntegration();
+                    showMobileConnectionStatus('📱 Mobile connection established! Install as app for enhanced features.');
+                } else {
+                    showMobileConnectionStatus('⚠️ Mobile detector not loaded. Please refresh and try again.');
+                }
+            }
+        } catch (error) {
+            console.error('Mobile connection failed:', error);
+            showMobileConnectionStatus('❌ Connection failed. Please try again.');
+        }
+    }
+
+    function showMobileConnectionStatus(message) {
+        const statusDiv = document.createElement('div');
+        statusDiv.className = 'mobile-status-message';
+        statusDiv.textContent = message;
+        document.body.appendChild(statusDiv);
+        setTimeout(() => statusDiv.remove(), 5000);
+    }
+
+    // Check if running as installed app
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        console.log('📱 Running as installed app');
+        // Enable enhanced features automatically
+        setTimeout(() => {
+            if (window.mobileSMSDetector) {
+                window.mobileSMSDetector.enableEnhancedSMSFeatures();
+            }
+        }, 1000);
+    }
+    
+    function showMobileConnectionStatus(message, type) {
+      // Create status element
+      const statusDiv = document.createElement('div');
+      statusDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        z-index: 10000;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.3s ease;
+      `;
+      
+      if (type === 'success') {
+        statusDiv.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+      } else {
+        statusDiv.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
+      }
+      
+      statusDiv.textContent = message;
+      document.body.appendChild(statusDiv);
+      
+      // Auto-remove after 3 seconds
+      setTimeout(() => {
+        statusDiv.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+          if (statusDiv.parentNode) {
+            statusDiv.parentNode.removeChild(statusDiv);
+          }
+        }, 300);
+      }, 3000);
+    }
+    
+    // Add CSS animations for status messages
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Mobile back button functionality
+    function goBack() {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        // If no history, go to home page
+        window.location.href = '/';
+      }
+    }
+
+    // Initialize mobile back button
+    function initializeMobileBackButton() {
+      const backBtn = document.querySelector('.mobile-back-btn');
+      if (backBtn) {
+        // Show back button only on mobile
+        if (window.innerWidth <= 768) {
+          backBtn.style.display = 'flex';
+        } else {
+          backBtn.style.display = 'none';
+        }
+        
+        // Update visibility on window resize
+        window.addEventListener('resize', function() {
+          if (window.innerWidth <= 768) {
+            backBtn.style.display = 'flex';
+          } else {
+            backBtn.style.display = 'none';
+          }
+        });
+      }
+    }
+
+    // Initialize mobile features when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeMobileBackButton();
+    });
+
+    // Register Service Worker for PWA functionality
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw-fixed.js')
+          .then(registration => {
+            console.log('Service Worker registered successfully:', registration);
+          })
+          .catch(error => {
+            console.error('Service Worker registration failed:', error);
+          });
       });
     }
   </script>

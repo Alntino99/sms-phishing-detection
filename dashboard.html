@@ -5,11 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Dashboard - SMS Phishing Detection System</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="mobile-sms-detector.css">
   <link rel="stylesheet" href="all.min.css">
+  <link rel="stylesheet" href="font-fix.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script src="index.js"></script>
   <script src="darkMode.js"></script>
+  <script src="universal-button-handler.js"></script>
+  <script src="complete-button-functions.js"></script>
   
   <style>
     * {
@@ -791,6 +795,9 @@
     <section class="dashboard-hero">
       <h1>Your Security Dashboard</h1>
       <p>Track your analysis progress, achievements, and security insights</p>
+      <div class="dashboard-actions">
+        <button onclick="connectMobilePhone()" class="btn btn-mobile" style="background: linear-gradient(135deg, #17a2b8, #138496); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1rem 2rem; box-shadow: 0 8px 25px rgba(23, 162, 184, 0.3); margin: 0.5rem;">📱 Connect Mobile Phone</button>
+      </div>
     </section>
 
     <!-- Stats Grid -->
@@ -838,6 +845,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <script src="firebase.js"></script>
+  <script src="mobile-sms-detector.js"></script>
   
   <script>
     // Enhanced dashboard with real-time stats
@@ -1139,6 +1147,167 @@
         console.error('Error signing out:', error);
       });
     }
+
+    // Mobile Phone Connection Function
+    // Enhanced mobile connection function with proper initialization
+    async function connectMobilePhone() {
+      console.log('📱 Mobile Phone Connection initiated...');
+      
+      try {
+        // Show loading status
+        showMobileConnectionStatus('🔄 Loading mobile detector...', 'info');
+        
+        // Wait a bit for scripts to load
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // First, ensure the mobile SMS detector script is loaded
+        if (typeof MobileSMSDetector === 'undefined') {
+          console.log('⚠️ MobileSMSDetector class not found, loading script...');
+          await loadMobileSMSDetector();
+          
+          // Wait for script to load
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+        
+        // Check if mobile SMS detector is available
+        if (typeof MobileSMSDetector !== 'undefined') {
+          console.log('✅ MobileSMSDetector class found, creating instance...');
+          
+          // Create new instance
+          window.mobileSMSDetector = new MobileSMSDetector();
+          console.log('✅ Mobile SMS Detector created successfully');
+          
+          // Wait for initialization
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          // Setup mobile integration
+          if (window.mobileSMSDetector.setupMobileIntegration) {
+            await window.mobileSMSDetector.setupMobileIntegration();
+          }
+          
+          // Show mobile interface
+          if (window.mobileSMSDetector.showMobileInterface) {
+            window.mobileSMSDetector.showMobileInterface();
+          }
+          
+          // Request mobile permissions
+          if (window.mobileSMSDetector.requestMobilePermissions) {
+            await window.mobileSMSDetector.requestMobilePermissions();
+          }
+          
+          // Show success message
+          showMobileConnectionStatus('✅ Mobile phone connected successfully!', 'success');
+          
+        } else {
+          console.log('❌ MobileSMSDetector class still not available');
+          showMobileConnectionStatus('❌ Mobile detector not loaded. Please refresh and try again.', 'error');
+        }
+      } catch (error) {
+        console.error('❌ Mobile connection failed:', error);
+        showMobileConnectionStatus('❌ Mobile connection failed: ' + error.message, 'error');
+      }
+    }
+
+    // Function to load mobile SMS detector script with fallback
+    function loadMobileSMSDetector() {
+      return new Promise((resolve, reject) => {
+        // Check if script is already loaded
+        if (document.querySelector('script[src="mobile-sms-detector.js"]')) {
+          console.log('✅ Mobile SMS Detector script already loaded');
+          resolve();
+          return;
+        }
+        
+        // Try multiple paths for the script
+        const scriptPaths = [
+          'mobile-sms-detector.js',
+          '/mobile-sms-detector.js',
+          './mobile-sms-detector.js'
+        ];
+        
+        let currentPathIndex = 0;
+        
+        function tryLoadScript() {
+          if (currentPathIndex >= scriptPaths.length) {
+            console.error('❌ All script paths failed');
+            reject(new Error('Failed to load mobile SMS detector script from all paths'));
+            return;
+          }
+          
+          const script = document.createElement('script');
+          script.src = scriptPaths[currentPathIndex];
+          
+          script.onload = function() {
+            console.log('✅ Mobile SMS Detector script loaded successfully from:', scriptPaths[currentPathIndex]);
+            resolve();
+          };
+          
+          script.onerror = function() {
+            console.error('❌ Failed to load script from:', scriptPaths[currentPathIndex]);
+            currentPathIndex++;
+            tryLoadScript();
+          };
+          
+          document.head.appendChild(script);
+        }
+        
+        tryLoadScript();
+      });
+    }
+    
+    function showMobileConnectionStatus(message, type) {
+      // Create status element
+      const statusDiv = document.createElement('div');
+      statusDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        z-index: 10000;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.3s ease;
+      `;
+      
+      if (type === 'success') {
+        statusDiv.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+      } else if (type === 'info') {
+        statusDiv.style.background = 'linear-gradient(135deg, #17a2b8, #138496)';
+      } else if (type === 'warning') {
+        statusDiv.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
+      } else {
+        statusDiv.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
+      }
+      
+      statusDiv.textContent = message;
+      document.body.appendChild(statusDiv);
+      
+      // Auto-remove after 3 seconds
+      setTimeout(() => {
+        statusDiv.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+          if (statusDiv.parentNode) {
+            statusDiv.parentNode.removeChild(statusDiv);
+          }
+        }, 300);
+      }, 3000);
+    }
+    
+    // Add CSS animations for status messages
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
 </script>
 </body>
 </html>

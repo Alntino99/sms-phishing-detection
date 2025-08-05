@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="chatbot.css">
+  <link rel="stylesheet" href="mobile-sms-detector.css">
+  <link rel="stylesheet" href="font-fix.css">
   <title>Phishing Fraud Detection System</title>
 
   <link rel="stylesheet" href="all.min.css">
@@ -1563,6 +1565,142 @@
             <button class="mode-btn" onclick="setAnalysisMode('deepseek-ai')">DeepSeek AI Analysis</button>
       </div>
       
+      <!-- Mobile Phone Connection Section -->
+      <div class="mobile-connection-section" style="
+        margin: 2rem 0;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        border-radius: 20px;
+        border: 2px solid rgba(102, 126, 234, 0.3);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      ">
+        <div style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        "></div>
+        
+        <h3 style="
+          color: #1e3c72;
+          font-size: 1.8rem;
+          font-weight: 700;
+          margin-bottom: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        ">
+          📱 Connect Your Mobile Phone
+        </h3>
+        
+        <p style="
+          color: #666;
+          font-size: 1.1rem;
+          margin-bottom: 2rem;
+          line-height: 1.6;
+        ">
+          Enable real-time SMS monitoring and automatic phishing detection on your mobile device
+        </p>
+        
+        <div class="mobile-connection-buttons" style="
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-bottom: 1.5rem;
+        ">
+          <button onclick="connectMobilePhone()" class="mobile-connect-btn" style="
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+          ">
+            🔗 Connect Mobile Phone
+          </button>
+          
+          <button onclick="requestMobilePermissions()" class="mobile-permission-btn" style="
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+          ">
+            🔐 Request Permissions
+          </button>
+          
+          <button onclick="testMobileFeatures()" class="mobile-test-btn" style="
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+          ">
+            🧪 Test Mobile Features
+          </button>
+        </div>
+        
+        <div class="mobile-status" id="mobileStatus" style="
+          padding: 1rem;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          font-size: 0.9rem;
+          color: #666;
+          text-align: center;
+          display: none;
+        ">
+          <p><strong>📱 Mobile Status:</strong> <span id="mobileStatusText">Checking mobile connection...</span></p>
+        </div>
+        
+        <div class="mobile-features-info" style="
+          margin-top: 1.5rem;
+          padding: 1rem;
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 12px;
+          font-size: 0.9rem;
+          color: #666;
+        ">
+          <p><strong>✨ Mobile Features Available:</strong></p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem; text-align: left;">
+            <li>📱 Real-time SMS monitoring</li>
+            <li>🔔 Push notifications for threats</li>
+            <li>👥 Contact integration for context</li>
+            <li>📍 Location-based analysis</li>
+            <li>📲 PWA installation for app-like experience</li>
+            <li>🔄 Background processing</li>
+          </ul>
+        </div>
+      </div>
+      
       <div class="input-section">
         <textarea id="smsInput" placeholder="Paste your SMS message here..." oninput="if(currentMode === 'real-time') analyzeRealTime()"></textarea>
         <div class="input-stats">
@@ -1575,6 +1713,10 @@
         <button id="analyzeButton" onclick="handleAnalyzeWithFallback()">🔍 Analyze Message</button>
         <button id="clearButton" onclick="clearResults()">🗑️ Clear</button>
         <button id="bulkButton" onclick="bulkAnalysis()">📊 Bulk Analysis</button>
+                          <button id="notificationButton" onclick="testNotification()" style="background: linear-gradient(135deg, #ffc107, #ff9800);">🔔 Test Notifications</button>
+                  <button id="mobileConnectButton" onclick="connectMobilePhone()" style="background: linear-gradient(135deg, #17a2b8, #138496); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; min-width: 150px; padding: 1rem 2rem; box-shadow: 0 8px 25px rgba(23, 162, 184, 0.3);">📱 Connect Mobile Phone</button>
+                  <button id="testSMSButton" onclick="testSMSAnalysis()" style="background: linear-gradient(135deg, #28a745, #20c997); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; min-width: 150px; padding: 1rem 2rem; box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);">🧪 Test SMS Analysis</button>
+                  <button id="testPermissionsButton" onclick="testMobilePermissions()" style="background: linear-gradient(135deg, #6f42c1, #5a2d91); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; min-width: 150px; padding: 1rem 2rem; box-shadow: 0 8px 25px rgba(111, 66, 193, 0.3);">🔐 Test Permissions</button>
   </div>
 
       <div id="result" class="result-container"></div>
@@ -1687,6 +1829,9 @@
   <script src="script.js"></script>
   <script src="darkMode.js"></script>
   <script src="chatbot.js"></script>
+  <script src="mobile-sms-detector.js" onerror="console.error('Failed to load mobile-sms-detector.js from HTML')"></script>
+  <script src="universal-button-handler.js"></script>
+  <script src="complete-button-functions.js"></script>
   
   <script>
     let currentMode = 'basic';
@@ -2166,6 +2311,32 @@
                </div>
              </div>
            `;
+           
+           // Send notification if phishing detected
+           if (isPhishing && 'Notification' in window && Notification.permission === 'granted') {
+             const notification = new Notification('🚨 Phishing Threat Detected!', {
+               body: `High-risk SMS detected with ${confidence}% confidence. Risk Level: ${riskLevel}`,
+               icon: '/logo.png',
+               badge: '/logo.png',
+               tag: 'phishing-alert',
+               requireInteraction: true,
+               actions: [
+                 {
+                   action: 'view',
+                   title: 'View Details'
+                 },
+                 {
+                   action: 'block',
+                   title: 'Block Sender'
+                 }
+               ]
+             });
+             
+             notification.onclick = function() {
+               window.focus();
+               notification.close();
+             };
+           }
          } else {
            resultElement.innerHTML = `
              <div class="analysis-result">
@@ -3307,6 +3478,18 @@ This will install the app on your phone for quick access!
       console.log('lstmClassifier available:', typeof lstmClassifier);
       console.log('areMLModelsReady available:', typeof areMLModelsReady);
       console.log('ML models ready:', typeof areMLModelsReady === 'function' ? areMLModelsReady() : 'function not available');
+      
+      // Initialize mobile detector after page loads
+      setTimeout(() => {
+        console.log('🔄 Initializing mobile detector...');
+        if (typeof MobileSMSDetector !== 'undefined') {
+          console.log('✅ MobileSMSDetector class available, creating instance...');
+          window.mobileSMSDetector = new MobileSMSDetector();
+          console.log('✅ Mobile SMS Detector initialized successfully');
+        } else {
+          console.log('⚠️ MobileSMSDetector class not available yet');
+        }
+      }, 2000);
 
       // Listen for when ML models become ready
       window.addEventListener('mlModelsReady', () => {
@@ -3416,6 +3599,475 @@ This will install the app on your phone for quick access!
         }
       };
       document.body.appendChild(testSMSBtn);
+
+      // Test notification functionality
+      function testNotification() {
+        if (!('Notification' in window)) {
+          alert('❌ Notifications not supported in this browser');
+          return;
+        }
+        
+        if (Notification.permission === 'default') {
+          Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              showTestNotification();
+            } else {
+              alert('❌ Notification permission denied');
+            }
+          });
+        } else if (Notification.permission === 'granted') {
+          showTestNotification();
+        } else {
+          alert('❌ Notification permission denied');
+        }
+      }
+      
+      function showTestNotification() {
+        const notification = new Notification('🔔 SMS Phishing Detection', {
+          body: 'Notification system is working! You will receive alerts for suspicious SMS messages.',
+          icon: '/logo.png',
+          badge: '/logo.png',
+          tag: 'test-notification'
+        });
+        
+        notification.onclick = function() {
+          window.focus();
+          notification.close();
+        };
+        
+        // Auto-close after 3 seconds
+        setTimeout(() => {
+          notification.close();
+        }, 3000);
+      }
+
+      // Mobile Phone Connection Function
+      // Enhanced mobile connection function with proper initialization
+      async function connectMobilePhone() {
+        console.log('📱 Mobile Phone Connection initiated...');
+        
+        try {
+          // Show loading status
+          showMobileConnectionStatus('🔄 Loading mobile detector...', 'info');
+          
+          // Wait a bit for scripts to load
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          // First, ensure the mobile SMS detector script is loaded
+          if (typeof MobileSMSDetector === 'undefined') {
+            console.log('⚠️ MobileSMSDetector class not found, loading script...');
+            await loadMobileSMSDetector();
+            
+            // Wait for script to load
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+          
+          // Check if mobile SMS detector is available
+          if (typeof MobileSMSDetector !== 'undefined') {
+            console.log('✅ MobileSMSDetector class found, creating instance...');
+            
+            // Create new instance
+            window.mobileSMSDetector = new MobileSMSDetector();
+            console.log('✅ Mobile SMS Detector created successfully');
+            
+            // Wait for initialization
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Setup mobile integration
+            if (window.mobileSMSDetector.setupMobileIntegration) {
+              await window.mobileSMSDetector.setupMobileIntegration();
+            }
+            
+            // Show mobile interface
+            if (window.mobileSMSDetector.showMobileInterface) {
+              window.mobileSMSDetector.showMobileInterface();
+            }
+            
+            // Request mobile permissions
+            if (window.mobileSMSDetector.requestMobilePermissions) {
+              await window.mobileSMSDetector.requestMobilePermissions();
+            }
+            
+            // Show success message
+            showMobileConnectionStatus('✅ Mobile phone connected successfully!', 'success');
+            
+          } else {
+            console.log('❌ MobileSMSDetector class still not available');
+            showMobileConnectionStatus('❌ Mobile detector not loaded. Please refresh and try again.', 'error');
+          }
+        } catch (error) {
+          console.error('❌ Mobile connection failed:', error);
+          showMobileConnectionStatus('❌ Mobile connection failed: ' + error.message, 'error');
+        }
+      }
+
+      // Function to load mobile SMS detector script with fallback
+      function loadMobileSMSDetector() {
+        return new Promise((resolve, reject) => {
+          // Check if script is already loaded
+          if (document.querySelector('script[src="mobile-sms-detector.js"]')) {
+            console.log('✅ Mobile SMS Detector script already loaded');
+            resolve();
+            return;
+          }
+          
+          // Try multiple paths for the script
+          const scriptPaths = [
+            'mobile-sms-detector.js',
+            '/mobile-sms-detector.js',
+            './mobile-sms-detector.js'
+          ];
+          
+          let currentPathIndex = 0;
+          
+          function tryLoadScript() {
+            if (currentPathIndex >= scriptPaths.length) {
+              console.error('❌ All script paths failed');
+              reject(new Error('Failed to load mobile SMS detector script from all paths'));
+              return;
+            }
+            
+            const script = document.createElement('script');
+            script.src = scriptPaths[currentPathIndex];
+            
+            script.onload = function() {
+              console.log('✅ Mobile SMS Detector script loaded successfully from:', scriptPaths[currentPathIndex]);
+              resolve();
+            };
+            
+            script.onerror = function() {
+              console.error('❌ Failed to load script from:', scriptPaths[currentPathIndex]);
+              currentPathIndex++;
+              tryLoadScript();
+            };
+            
+            document.head.appendChild(script);
+          }
+          
+          tryLoadScript();
+        });
+      }
+
+      // Initialize mobile SMS detector when page loads
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          console.log('🔄 Initializing mobile SMS detector...');
+          
+          // Wait a bit for all scripts to load
+          setTimeout(async () => {
+            if (typeof MobileSMSDetector !== 'undefined') {
+              window.mobileSMSDetector = new MobileSMSDetector();
+              console.log('✅ Mobile SMS Detector initialized on page load');
+            } else {
+              console.log('⚠️ MobileSMSDetector not available on page load');
+            }
+          }, 2000);
+          
+        } catch (error) {
+          console.error('❌ Error initializing mobile SMS detector on page load:', error);
+        }
+      });
+
+      // Enhanced test notification function
+      async function testNotification() {
+        try {
+          console.log('🔔 Testing notifications...');
+          
+          // Check if notifications are supported
+          if (!('Notification' in window)) {
+            showTestNotification('❌ Notifications not supported', 'This browser does not support notifications');
+            return;
+          }
+          
+          // Request permission if needed
+          if (Notification.permission === 'default') {
+            const permission = await Notification.requestPermission();
+            if (permission !== 'granted') {
+              showTestNotification('❌ Permission denied', 'Please allow notifications to test this feature');
+              return;
+            }
+          }
+          
+          if (Notification.permission === 'granted') {
+            // Test system notification
+            const notification = new Notification('🔔 SMS Shield Test', {
+              body: 'This is a test notification from SMS Shield',
+              icon: 'logo.png',
+              badge: 'logo.png',
+              tag: 'sms-shield-test',
+              requireInteraction: false,
+              silent: false
+            });
+            
+            // Auto-close after 5 seconds
+            setTimeout(() => {
+              notification.close();
+            }, 5000);
+            
+            showTestNotification('✅ Test notification sent', 'Check your system notifications');
+          } else {
+            showTestNotification('❌ Permission denied', 'Please allow notifications in your browser settings');
+          }
+          
+        } catch (error) {
+          console.error('Test notification failed:', error);
+          showTestNotification('❌ Test failed', 'Error: ' + error.message);
+        }
+      }
+
+      // Enhanced test notification display
+      function showTestNotification(title, message) {
+        const notificationDiv = document.createElement('div');
+        notificationDiv.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 15px;
+          padding: 1.5rem;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+          z-index: 10001;
+          text-align: center;
+          max-width: 300px;
+          animation: fadeInUp 0.3s ease;
+        `;
+        
+        notificationDiv.innerHTML = `
+          <h3 style="margin: 0 0 1rem 0; color: #333; font-size: 1.2rem;">${title}</h3>
+          <p style="margin: 0; color: #666; line-height: 1.5;">${message}</p>
+          <button onclick="this.parentElement.remove()" style="
+            margin-top: 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+          ">OK</button>
+        `;
+        
+        document.body.appendChild(notificationDiv);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+          if (notificationDiv.parentNode) {
+            notificationDiv.remove();
+          }
+        }, 5000);
+      }
+
+      // Test SMS analysis function
+      async function testSMSAnalysis() {
+        try {
+          console.log('🧪 Testing SMS analysis...');
+          
+          const testSMS = {
+            sender: 'Test Sender',
+            body: 'Your account has been suspended. Click here to verify: http://fake-bank.com',
+            timestamp: new Date().toISOString()
+          };
+          
+          if (window.mobileSMSDetector) {
+            await window.mobileSMSDetector.analyzeIncomingSMS(testSMS);
+            showTestNotification('✅ SMS Analysis Test', 'Test SMS has been analyzed successfully');
+          } else {
+            showTestNotification('❌ Mobile Detector Not Available', 'Please connect mobile phone first');
+          }
+          
+        } catch (error) {
+          console.error('SMS analysis test failed:', error);
+          showTestNotification('❌ Test Failed', 'Error: ' + error.message);
+        }
+      }
+
+      // Test mobile permissions function
+      async function testMobilePermissions() {
+        try {
+          console.log('🔐 Testing mobile permissions...');
+          
+          if (window.mobileSMSDetector) {
+            await window.mobileSMSDetector.requestMobilePermissions();
+            showTestNotification('✅ Permissions Requested', 'Check your browser for permission prompts');
+          } else {
+            showTestNotification('❌ Mobile Detector Not Available', 'Please connect mobile phone first');
+          }
+          
+        } catch (error) {
+          console.error('Permission test failed:', error);
+          showTestNotification('❌ Test Failed', 'Error: ' + error.message);
+        }
+      }
+
+
+
+      // Request Mobile Permissions Function
+      async function requestMobilePermissions() {
+        console.log('🔐 Requesting mobile permissions...');
+        
+        try {
+          if (typeof window.mobileSMSDetector !== 'undefined' && window.mobileSMSDetector) {
+            if (window.mobileSMSDetector.requestMobilePermissions) {
+              await window.mobileSMSDetector.requestMobilePermissions();
+              showMobileConnectionStatus('✅ Permissions requested successfully!', 'success');
+            } else {
+              showMobileConnectionStatus('❌ Permission function not available', 'error');
+            }
+          } else {
+            showMobileConnectionStatus('❌ Mobile detector not available', 'error');
+          }
+        } catch (error) {
+          console.error('❌ Permission request failed:', error);
+          showMobileConnectionStatus('❌ Permission request failed: ' + error.message, 'error');
+        }
+      }
+
+      // Test Mobile Features Function
+      async function testMobileFeatures() {
+        console.log('🧪 Testing mobile features...');
+        
+        try {
+          if (typeof window.mobileSMSDetector !== 'undefined' && window.mobileSMSDetector) {
+            // Test various mobile features
+            const tests = [
+              { name: 'SMS Detection', test: () => window.mobileSMSDetector.isSMSContent },
+              { name: 'Permission Check', test: () => window.mobileSMSDetector.requestMobilePermissions },
+              { name: 'Interface Display', test: () => window.mobileSMSDetector.showMobileInterface },
+              { name: 'Real-time Mode', test: () => window.mobileSMSDetector.enableRealTimeMode }
+            ];
+            
+            let passedTests = 0;
+            tests.forEach(({ name, test }) => {
+              if (typeof test() === 'function') {
+                console.log(`✅ ${name}: Available`);
+                passedTests++;
+              } else {
+                console.log(`❌ ${name}: Not available`);
+              }
+            });
+            
+            const message = `Tests completed: ${passedTests}/${tests.length} features available`;
+            showMobileConnectionStatus(message, passedTests === tests.length ? 'success' : 'warning');
+          } else {
+            showMobileConnectionStatus('❌ Mobile detector not available for testing', 'error');
+          }
+        } catch (error) {
+          console.error('❌ Feature test failed:', error);
+          showMobileConnectionStatus('❌ Feature test failed: ' + error.message, 'error');
+        }
+      }
+
+      // Test Mobile Detector Function
+      async function testMobileDetector() {
+        console.log('🔧 Testing mobile detector...');
+        
+        try {
+          // Check if MobileSMSDetector class exists
+          if (typeof MobileSMSDetector !== 'undefined') {
+            console.log('✅ MobileSMSDetector class found');
+            showMobileConnectionStatus('✅ MobileSMSDetector class available', 'success');
+            
+            // Try to create an instance
+            const testInstance = new MobileSMSDetector();
+            console.log('✅ MobileSMSDetector instance created successfully');
+            showMobileConnectionStatus('✅ Mobile detector instance created', 'success');
+            
+            // Check if window.mobileSMSDetector exists
+            if (typeof window.mobileSMSDetector !== 'undefined' && window.mobileSMSDetector) {
+              console.log('✅ window.mobileSMSDetector is available');
+              showMobileConnectionStatus('✅ Mobile detector is ready to use', 'success');
+            } else {
+              console.log('⚠️ window.mobileSMSDetector not set');
+              showMobileConnectionStatus('⚠️ Mobile detector not initialized', 'warning');
+            }
+          } else {
+            console.log('❌ MobileSMSDetector class not found');
+            showMobileConnectionStatus('❌ MobileSMSDetector class not available', 'error');
+          }
+        } catch (error) {
+          console.error('❌ Mobile detector test failed:', error);
+          showMobileConnectionStatus('❌ Mobile detector test failed: ' + error.message, 'error');
+        }
+      }
+      
+      function showMobileConnectionStatus(message, type) {
+        // Create status element
+        const statusDiv = document.createElement('div');
+        statusDiv.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          padding: 1rem 1.5rem;
+          border-radius: 10px;
+          color: white;
+          font-weight: 600;
+          z-index: 10000;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          animation: slideIn 0.3s ease;
+        `;
+        
+        if (type === 'success') {
+          statusDiv.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+        } else if (type === 'info') {
+          statusDiv.style.background = 'linear-gradient(135deg, #17a2b8, #138496)';
+        } else if (type === 'warning') {
+          statusDiv.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
+        } else {
+          statusDiv.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
+        }
+        
+        statusDiv.textContent = message;
+        document.body.appendChild(statusDiv);
+        
+        // Auto-remove after 3 seconds
+        setTimeout(() => {
+          statusDiv.style.animation = 'slideOut 0.3s ease';
+          setTimeout(() => {
+            if (statusDiv.parentNode) {
+              statusDiv.parentNode.removeChild(statusDiv);
+            }
+          }, 300);
+        }, 3000);
+      }
+      
+      // Add CSS animations for status messages and test notifications
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes slideIn {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+          from { transform: translateX(0); opacity: 1; }
+          to { transform: translateX(100%); opacity: 0; }
+        }
+        @keyframes fadeInUp {
+          from { 
+            transform: translate(-50%, -30%); 
+            opacity: 0; 
+          }
+          to { 
+            transform: translate(-50%, -50%); 
+            opacity: 1; 
+          }
+        }
+        @keyframes fadeOut {
+          from { opacity: 1; }
+          to { opacity: 0; }
+        }
+      `;
+      document.head.appendChild(style);
+
+      // Initialize notifications when page loads
+      document.addEventListener('DOMContentLoaded', () => {
+        // Request notification permission
+        if ('Notification' in window && Notification.permission === 'default') {
+          Notification.requestPermission();
+        }
+      });
 
     });
   </script>

@@ -106,6 +106,151 @@
     {
       "source": "/post",
       "destination": "/post.html"
+    },
+    {
+      "source": "/mobile-test",
+      "destination": "/mobile-test.html"
+    },
+    {
+      "source": "/test-fixes",
+      "destination": "/test-fixes.html"
+    },
+    {
+      "source": "/sms-detector-test",
+      "destination": "/sms-detector-test.html"
+    },
+    {
+      "source": "/mobile-sms-detector.js",
+      "destination": "/mobile-sms-detector.js"
+    },
+    {
+      "source": "/mobile-sms-detector-fixed.js",
+      "destination": "/mobile-sms-detector-fixed.js"
+    },
+    {
+      "source": "/mobile-sms-detector-fixed-v2.js",
+      "destination": "/mobile-sms-detector-fixed-v2.js"
+    },
+    {
+      "source": "/firebase-fixed.js",
+      "destination": "/firebase-fixed.js"
+    },
+    {
+      "source": "/sw-fixed.js",
+      "destination": "/sw-fixed.js"
+    },
+    {
+      "source": "/mobile-sms-detector.css",
+      "destination": "/mobile-sms-detector.css"
+    },
+    {
+      "source": "/mobile-responsive-fix.css",
+      "destination": "/mobile-responsive-fix.css"
+    },
+    {
+      "source": "/cross-platform-css.css",
+      "destination": "/cross-platform-css.css"
+    },
+    {
+      "source": "/cross-platform-ml.js",
+      "destination": "/cross-platform-ml.js"
+    },
+    {
+      "source": "/complete-button-functions.js",
+      "destination": "/complete-button-functions.js"
+    },
+    {
+      "source": "/universal-button-handler.js",
+      "destination": "/universal-button-handler.js"
+    },
+    {
+      "source": "/button-function-verifier.js",
+      "destination": "/button-function-verifier.js"
+    },
+    {
+      "source": "/webfonts/:file*",
+      "destination": "/webfonts/:file*"
+    },
+    {
+      "source": "/webfonts/fa-solid-900.woff2",
+      "destination": "/webfonts/fa-solid-900.woff2"
+    },
+    {
+      "source": "/webfonts/fa-solid-900.ttf",
+      "destination": "/webfonts/fa-solid-900.ttf"
+    },
+    {
+      "source": "/../webfonts/:file*",
+      "destination": "/webfonts/:file*"
+    },
+    {
+      "source": "/font-fix.css",
+      "destination": "/font-fix.css"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/sw-fixed.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/mobile-sms-detector-fixed.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/firebase-fixed.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/complete-button-functions.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/universal-button-handler.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/cross-platform-ml.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/cross-platform-css.css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
     }
   ]
 } 

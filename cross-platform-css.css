@@ -1,0 +1,456 @@
+/* ===== CROSS-PLATFORM CSS ===== */
+/* Ensures perfect compatibility across all platforms */
+
+/* Universal Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Cross-Platform Viewport */
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Cross-Platform Container */
+.mobile-test-container {
+    max-width: 800px;
+    width: 90%;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive Header */
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.header-section h1 {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    color: #1e3c72;
+    margin: 0;
+}
+
+/* Cross-Platform Back Button */
+.back-button {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    font-size: 0.9rem;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.back-button:hover,
+.back-button:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    text-decoration: none;
+    color: white;
+    outline: none;
+}
+
+.back-button:active {
+    transform: translateY(0);
+}
+
+/* Cross-Platform Banner */
+.cross-platform-banner {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.cross-platform-banner h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+}
+
+.cross-platform-banner p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+}
+
+/* Responsive Test Sections */
+.test-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 12px;
+    border-left: 4px solid #667eea;
+}
+
+.test-section h3 {
+    color: #1e3c72;
+    margin-bottom: 1rem;
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+}
+
+/* Cross-Platform Buttons */
+.test-button {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0.5rem;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.test-button:hover,
+.test-button:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    outline: none;
+}
+
+.test-button:active {
+    transform: translateY(0);
+}
+
+/* Status Indicators */
+.status-indicator {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: clamp(0.7rem, 2vw, 0.8rem);
+    font-weight: 600;
+    margin: 0.5rem;
+}
+
+.status-success {
+    background: rgba(39, 174, 96, 0.1);
+    color: #27ae60;
+    border: 1px solid #27ae60;
+}
+
+.status-error {
+    background: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
+.status-warning {
+    background: rgba(243, 156, 18, 0.1);
+    color: #f39c12;
+    border: 1px solid #f39c12;
+}
+
+/* Test Results */
+.test-results {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+}
+
+/* Device Info Grid */
+.device-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.info-card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.info-card h4 {
+    margin: 0 0 0.5rem 0;
+    color: #1e3c72;
+    font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+}
+
+.info-card p {
+    margin: 0;
+    font-size: clamp(0.7rem, 2vw, 0.8rem);
+    color: #666;
+}
+
+/* Cross-Platform Textarea */
+textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 1rem;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-family: inherit;
+    font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+    resize: vertical;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Mobile-Specific Optimizations */
+@media (max-width: 768px) {
+    .mobile-test-container {
+        width: 95%;
+        margin: 1rem auto;
+        padding: 1rem;
+    }
+    
+    .header-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .back-button {
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    
+    .test-button {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+    
+    .device-info {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tablet Optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .mobile-test-container {
+        width: 92%;
+        padding: 1.5rem;
+    }
+    
+    .test-button {
+        margin: 0.3rem;
+    }
+}
+
+/* Desktop Enhancements */
+@media (min-width: 1025px) {
+    .mobile-test-container {
+        max-width: 900px;
+    }
+    
+    .test-button:hover {
+        transform: translateY(-3px);
+    }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .mobile-test-container {
+        border-width: 0.5px;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+    
+    .mobile-test-container {
+        background: rgba(30, 30, 30, 0.95);
+        color: #fff;
+    }
+    
+    .info-card {
+        background: rgba(40, 40, 40, 0.9);
+        color: #fff;
+    }
+    
+    .test-results {
+        background: rgba(40, 40, 40, 0.8);
+        color: #fff;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus Indicators */
+.test-button:focus-visible,
+.back-button:focus-visible {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+    .mobile-test-container {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+    
+    .test-button,
+    .back-button {
+        display: none;
+    }
+}
+
+/* Cross-Browser Compatibility */
+@supports not (backdrop-filter: blur(20px)) {
+    .mobile-test-container {
+        background: rgba(255, 255, 255, 0.98);
+    }
+}
+
+/* iOS Safari Fixes */
+@supports (-webkit-touch-callout: none) {
+    .mobile-test-container {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .test-button,
+    .back-button {
+        -webkit-appearance: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* Android Chrome Fixes */
+@supports (-webkit-appearance: none) and (not (-webkit-touch-callout: none)) {
+    .test-button,
+    .back-button {
+        -webkit-appearance: none;
+    }
+}
+
+/* Firefox Specific */
+@-moz-document url-prefix() {
+    .mobile-test-container {
+        backdrop-filter: none;
+        background: rgba(255, 255, 255, 0.98);
+    }
+}
+
+/* Edge/IE Support */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .mobile-test-container {
+        backdrop-filter: none;
+        background: rgba(255, 255, 255, 0.98);
+    }
+}
+
+/* Ensure text is readable */
+p, h1, h2, h3, h4, h5, h6 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Prevent horizontal scroll */
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Success animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.test-results {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Cross-platform font loading */
+@font-face {
+    font-family: 'System Font';
+    src: local(-apple-system), local(BlinkMacSystemFont), local('Segoe UI'), local(Roboto), local('Helvetica Neue'), local(Arial), local(sans-serif);
+}
+
+/* Ensure buttons work on all touch devices */
+button, input[type="button"], input[type="submit"], input[type="reset"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent zoom on input focus (iOS) */
+input, textarea, select {
+    font-size: 16px;
+}
+
+/* Cross-platform selection */
+::selection {
+    background: rgba(102, 126, 234, 0.3);
+    color: inherit;
+}
+
+::-moz-selection {
+    background: rgba(102, 126, 234, 0.3);
+    color: inherit;
+} 

@@ -1,0 +1,97 @@
+{
+  "name": "SMS Phishing Detection System",
+  "short_name": "SMS Shield",
+  "description": "Real-time SMS phishing detection and protection system - Install as app for enhanced SMS access",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#1e3c72",
+  "theme_color": "#667eea",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["security", "utilities", "productivity"],
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "frame.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "permissions": [
+    "sms",
+    "notifications",
+    "background-sync",
+    "storage",
+    "contacts",
+    "geolocation",
+    "clipboard-read",
+    "clipboard-write"
+  ],
+  "features": [
+    "cross-origin-isolated",
+    "cross-origin-opener-policy",
+    "cross-origin-embedder-policy"
+  ],
+  "shortcuts": [
+    {
+      "name": "Detect SMS",
+      "short_name": "Detect",
+      "description": "Quickly analyze SMS for phishing threats",
+      "url": "/detect.html",
+      "icons": [
+        {
+          "src": "logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your security analytics",
+      "url": "/dashboard.html",
+      "icons": [
+        {
+          "src": "logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Mobile Connect",
+      "short_name": "Mobile",
+      "description": "Connect to mobile SMS for real-time protection",
+      "url": "/detect.html?mobile=true",
+      "icons": [
+        {
+          "src": "logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "display_override": ["standalone", "minimal-ui"],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
+} 

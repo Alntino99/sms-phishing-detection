@@ -397,6 +397,10 @@ const trainingData = [
 const naiveBayesClassifier = new NaiveBayesClassifier();
 const lstmClassifier = new LSTMClassifier();
 
+// Make models globally available
+window.naiveBayesClassifier = naiveBayesClassifier;
+window.lstmClassifier = lstmClassifier;
+
 // Global flag to track if ML models are ready
 let mlModelsReady = false;
 
@@ -1134,8 +1138,8 @@ if (smsForm) {
     
     if (!smsContent.trim()) {
       resultDiv.innerHTML = '<div class="error">Please enter a message to analyze.</div>';
-        return;
-      }
+      return;
+    }
     
     // Show loading animation
     resultDiv.innerHTML = `
@@ -1542,10 +1546,20 @@ function initMobileNavigation() {
         navLinks.classList.remove('show');
         mobileMenuBtn.classList.remove('active');
         mobileMenuBtn.innerHTML = '☰';
+        document.body.style.overflow = '';
       });
     });
+    
+    // Close menu when clicking on close button (X)
+    navLinks.addEventListener('click', function(event) {
+      if (event.target === navLinks || event.target.classList.contains('close-menu')) {
+        navLinks.classList.remove('show');
+        mobileMenuBtn.classList.remove('active');
+        mobileMenuBtn.innerHTML = '☰';
+        document.body.style.overflow = '';
+      }
+    });
   }
-}
 }
 
 // Initialize mobile navigation when DOM is loaded
@@ -1587,6 +1601,119 @@ function closeMobileMenu() {
     document.body.style.overflow = '';
   }
 }
+
+// ===== NOTIFICATION SYSTEM SETUP =====
+
+// Request notification permission and setup
+async function setupNotifications() {
+  console.log('Setting up notifications...');
+  
+  // Check if notifications are supported
+  if (!('Notification' in window)) {
+    console.log('❌ Notifications not supported in this browser');
+    return false;
+  }
+  
+  // Check current permission status
+  let permission = Notification.permission;
+  console.log('Current notification permission:', permission);
+  
+  if (permission === 'default') {
+    // Request permission
+    try {
+      permission = await Notification.requestPermission();
+      console.log('Notification permission result:', permission);
+    } catch (error) {
+      console.error('Error requesting notification permission:', error);
+      return false;
+    }
+  }
+  
+  if (permission === 'granted') {
+    console.log('✅ Notification permission granted');
+    
+    // Test notification
+    try {
+      const testNotification = new Notification('🔔 SMS Phishing Detection', {
+        body: 'Notification system is working! You will receive alerts for suspicious SMS messages.',
+        icon: '/logo.png',
+        badge: '/logo.png',
+        tag: 'test-notification'
+      });
+      
+      // Auto-close test notification after 3 seconds
+      setTimeout(() => {
+        testNotification.close();
+      }, 3000);
+      
+      return true;
+    } catch (error) {
+      console.error('Error showing test notification:', error);
+      return false;
+    }
+  } else {
+    console.log('❌ Notification permission denied');
+    return false;
+  }
+}
+
+// Send notification for phishing threat
+function sendPhishingNotification(title, message, riskLevel = 'medium') {
+  if (!('Notification' in window) || Notification.permission !== 'granted') {
+    console.log('Notifications not available or permission not granted');
+    return;
+  }
+  
+  const icon = riskLevel === 'high' ? '🚨' : riskLevel === 'medium' ? '⚠️' : '✅';
+  const badge = '/logo.png';
+  
+  const notification = new Notification(`${icon} ${title}`, {
+    body: message,
+    icon: '/logo.png',
+    badge: badge,
+    tag: 'phishing-alert',
+    requireInteraction: riskLevel === 'high',
+    actions: riskLevel === 'high' ? [
+      {
+        action: 'view',
+        title: 'View Details'
+      },
+      {
+        action: 'block',
+        title: 'Block Sender'
+      }
+    ] : []
+  });
+  
+  // Handle notification click
+  notification.onclick = function() {
+    window.focus();
+    window.location.href = '/detect.html';
+    notification.close();
+  };
+  
+  // Auto-close medium and low risk notifications after 5 seconds
+  if (riskLevel !== 'high') {
+    setTimeout(() => {
+      notification.close();
+    }, 5000);
+  }
+  
+  console.log(`Notification sent: ${title} - ${message}`);
+}
+
+// Initialize notifications when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  // Setup notifications after a short delay
+  setTimeout(() => {
+    setupNotifications();
+  }, 1000);
+});
+
+// Export functions for global access
+window.setupNotifications = setupNotifications;
+window.sendPhishingNotification = sendPhishingNotification;
+window.analyzeSMS = analyzeSMS;
 
 
 
