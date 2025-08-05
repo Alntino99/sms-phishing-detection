@@ -1526,8 +1526,13 @@
           <li><a href="about.html">About</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li id="nav-login"><a href="login.html">Login</a></li>
-          <li id="nav-signup"><a href="signup.html">Sign Up</a></li>
-          <li class="user-account" id="user-account">
+                  <li id="nav-signup"><a href="signup.html">Sign Up</a></li>
+        <li id="install-app-container" style="display: none;">
+          <button id="install-app-btn" class="install-app-button" onclick="installApp()">
+            📱 Install App
+          </button>
+        </li>
+        <li class="user-account" id="user-account">
             <button class="user-button" onclick="toggleUserDropdown()">
               <div class="user-avatar" id="user-avatar">👤</div>
               <span id="user-display-name">User</span>

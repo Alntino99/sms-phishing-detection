@@ -299,6 +299,108 @@
       color: #ef4444;
     }
 
+    /* Install App Button Styles */
+    .install-app-button {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+      font-size: 0.9rem;
+    }
+
+    .install-app-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+      background: linear-gradient(135deg, #20c997, #17a2b8);
+    }
+
+    .install-app-button.installing {
+      background: linear-gradient(135deg, #ffc107, #fd7e14);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Install Prompt Styles */
+    .install-prompt {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      z-index: 10000;
+      display: none;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .install-prompt.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+      to { transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
+
+    .install-prompt h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+    }
+
+    .install-prompt p {
+      margin: 0 0 1rem 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .install-prompt-buttons {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .install-prompt-btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .install-prompt-btn.primary {
+      background: white;
+      color: #667eea;
+    }
+
+    .install-prompt-btn.secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    .install-prompt-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
     /* Dark Mode Styles for User Account */
     body.dark-mode .user-dropdown {
       background: rgba(45, 55, 72, 0.95);
@@ -842,6 +944,11 @@
         <li><a href="contact.html">Contact</a></li>
         <li id="nav-login"><a href="login.html">Login</a></li>
         <li id="nav-signup"><a href="signup.html">Sign Up</a></li>
+        <li id="install-app-container" style="display: none;">
+          <button id="install-app-btn" class="install-app-button" onclick="installApp()">
+            📱 Install App
+          </button>
+        </li>
         <li class="user-account" id="user-account">
           <button class="user-button" onclick="toggleUserDropdown()">
             <div class="user-avatar" id="user-avatar">👤</div>
@@ -928,6 +1035,16 @@
   <footer>
     <p>&copy; 2025 SMS Phishing Detection System. All rights reserved.</p>
   </footer>
+
+  <!-- Install App Prompt -->
+  <div id="install-prompt" class="install-prompt">
+    <h3>📱 Install SMS Shield App</h3>
+    <p>Install our app on your mobile device for enhanced SMS access and real-time protection!</p>
+    <div class="install-prompt-buttons">
+      <button class="install-prompt-btn primary" onclick="installAsApp()">Install Now</button>
+      <button class="install-prompt-btn secondary" onclick="dismissInstall()">Maybe Later</button>
+    </div>
+  </div>
 
   <!-- Scripts -->
 
@@ -1211,6 +1328,122 @@
           });
       });
     }
+
+    // PWA Installation Functionality
+    const installContainer = document.getElementById('install-app-container');
+    const installBtn = document.getElementById('install-app-btn');
+    const installPrompt = document.getElementById('install-prompt');
+
+    // Listen for the beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+      console.log('📱 Install prompt available');
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      // Show install button in navigation
+      if (installContainer) {
+        installContainer.style.display = 'block';
+      }
+      
+      // Show install prompt after 3 seconds
+      setTimeout(() => {
+        if (installPrompt && !localStorage.getItem('installPromptDismissed')) {
+          installPrompt.classList.add('show');
+        }
+      }, 3000);
+    });
+
+    // Handle install button click
+    function installApp() {
+      if (deferredPrompt) {
+        installBtn.classList.add('installing');
+        installBtn.textContent = 'Installing...';
+        
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('✅ App installed successfully');
+            showMobileConnectionStatus('📱 App installed successfully! Enhanced SMS features enabled.', 'success');
+            installContainer.style.display = 'none';
+            installPrompt.classList.remove('show');
+          } else {
+            console.log('❌ App installation declined');
+            showMobileConnectionStatus('App installation declined. You can install later from browser menu.', 'error');
+          }
+          installBtn.classList.remove('installing');
+          installBtn.textContent = '📱 Install App';
+          deferredPrompt = null;
+        });
+      } else {
+        // Fallback for browsers that don't support beforeinstallprompt
+        showInstallInstructions();
+      }
+    }
+
+    // Handle install prompt actions
+    function installAsApp() {
+      installApp();
+      installPrompt.classList.remove('show');
+    }
+
+    function dismissInstall() {
+      installPrompt.classList.remove('show');
+      localStorage.setItem('installPromptDismissed', 'true');
+    }
+
+    // Show manual install instructions
+    function showInstallInstructions() {
+      const instructions = `
+        📱 To install SMS Shield App:
+        
+        Chrome/Edge:
+        1. Tap the menu (⋮) in browser
+        2. Select "Install app" or "Add to home screen"
+        
+        Safari (iOS):
+        1. Tap the share button (□↑)
+        2. Select "Add to Home Screen"
+        
+        Firefox:
+        1. Tap the menu (☰)
+        2. Select "Install App"
+      `;
+      
+      alert(instructions);
+    }
+
+    // Check if app is already installed
+    window.addEventListener('load', () => {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        console.log('📱 App is already installed');
+        if (installContainer) {
+          installContainer.style.display = 'none';
+        }
+        if (installPrompt) {
+          installPrompt.classList.remove('show');
+        }
+        
+        // Enable enhanced SMS features
+        setTimeout(() => {
+          if (window.mobileSMSDetector) {
+            window.mobileSMSDetector.enableEnhancedSMSFeatures();
+          }
+        }, 1000);
+      }
+    });
+
+    // Handle app installation events
+    window.addEventListener('appinstalled', (evt) => {
+      console.log('📱 App installed successfully');
+      showMobileConnectionStatus('📱 SMS Shield App installed! Enhanced features enabled.', 'success');
+      
+      // Enable enhanced SMS features
+      setTimeout(() => {
+        if (window.mobileSMSDetector) {
+          window.mobileSMSDetector.enableEnhancedSMSFeatures();
+        }
+      }, 1000);
+    });
   </script>
 </body>
 </html>

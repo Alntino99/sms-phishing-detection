@@ -104,6 +104,40 @@
             border: 1px solid #e74c3c;
         }
 
+        /* Install App Button Styles */
+        .install-app-button {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            font-size: 0.9rem;
+        }
+
+        .install-app-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+            background: linear-gradient(135deg, #20c997, #17a2b8);
+        }
+
+        .install-app-button.installing {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
         .status-warning {
             background: rgba(243, 156, 18, 0.1);
             color: #f39c12;
@@ -169,10 +203,15 @@
     <div class="mobile-test-container">
         <div class="header-section">
             <h1>📱 Mobile Phone Integration Test</h1>
-            <a href="/index.html" class="back-button">
-                <i class="fas fa-arrow-left"></i>
-                Back to Home
-            </a>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <button id="install-app-btn" class="install-app-button" onclick="installApp()" style="display: none;">
+                    📱 Install App
+                </button>
+                <a href="/index.html" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Home
+                </a>
+            </div>
         </div>
 
         <div class="cross-platform-banner">
@@ -688,6 +727,135 @@
         document.addEventListener('DOMContentLoaded', () => {
             initializeDeviceInfo();
         });
+
+        // PWA Installation Functionality
+        let deferredPrompt;
+        const installBtn = document.getElementById('install-app-btn');
+
+        // Listen for the beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('📱 Install prompt available');
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install button
+            if (installBtn) {
+                installBtn.style.display = 'flex';
+            }
+        });
+
+        // Handle install button click
+        function installApp() {
+            if (deferredPrompt) {
+                installBtn.classList.add('installing');
+                installBtn.textContent = 'Installing...';
+                
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('✅ App installed successfully');
+                        showNotification('📱 App installed successfully! Enhanced SMS features enabled.', 'success');
+                        installBtn.style.display = 'none';
+                    } else {
+                        console.log('❌ App installation declined');
+                        showNotification('App installation declined. You can install later from browser menu.', 'error');
+                    }
+                    installBtn.classList.remove('installing');
+                    installBtn.textContent = '📱 Install App';
+                    deferredPrompt = null;
+                });
+            } else {
+                // Fallback for browsers that don't support beforeinstallprompt
+                showInstallInstructions();
+            }
+        }
+
+        // Show manual install instructions
+        function showInstallInstructions() {
+            const instructions = `
+                📱 To install SMS Shield App:
+                
+                Chrome/Edge:
+                1. Tap the menu (⋮) in browser
+                2. Select "Install app" or "Add to home screen"
+                
+                Safari (iOS):
+                1. Tap the share button (□↑)
+                2. Select "Add to Home Screen"
+                
+                Firefox:
+                1. Tap the menu (☰)
+                2. Select "Install App"
+            `;
+            
+            alert(instructions);
+        }
+
+        // Check if app is already installed
+        window.addEventListener('load', () => {
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                console.log('📱 App is already installed');
+                if (installBtn) {
+                    installBtn.style.display = 'none';
+                }
+                
+                // Enable enhanced SMS features
+                setTimeout(() => {
+                    if (window.mobileSMSDetector) {
+                        window.mobileSMSDetector.enableEnhancedSMSFeatures();
+                    }
+                }, 1000);
+            }
+        });
+
+        // Handle app installation events
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('📱 App installed successfully');
+            showNotification('📱 SMS Shield App installed! Enhanced features enabled.', 'success');
+            
+            // Enable enhanced SMS features
+            setTimeout(() => {
+                if (window.mobileSMSDetector) {
+                    window.mobileSMSDetector.enableEnhancedSMSFeatures();
+                }
+            }, 1000);
+        });
+
+        // Notification helper function
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                color: white;
+                font-weight: 600;
+                z-index: 10000;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                animation: slideIn 0.3s ease;
+            `;
+            
+            if (type === 'success') {
+                notification.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+            } else {
+                notification.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
     </script>
 </body>
 </html> 
