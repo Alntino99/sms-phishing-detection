@@ -152,6 +152,10 @@
       "destination": "/cross-platform-css.css"
     },
     {
+      "source": "/ml-classifiers.js",
+      "destination": "/ml-classifiers.js"
+    },
+    {
       "source": "/cross-platform-ml.js",
       "destination": "/cross-platform-ml.js"
     },
@@ -227,6 +231,15 @@
     },
     {
       "source": "/universal-button-handler.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/ml-classifiers.js",
       "headers": [
         {
           "key": "Cache-Control",
