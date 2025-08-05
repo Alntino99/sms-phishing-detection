@@ -263,9 +263,16 @@ function showFirebaseNotification(message, type = 'info') {
 async function testFirebaseConnection() {
   try {
     if (db && db.ref) {
+      // Use a timeout to prevent infinite recursion
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Connection timeout')), 5000);
+      });
+      
       // Try to access a public path that should always be available
       const testRef = db.ref('.info/connected');
-      await testRef.once('value');
+      const connectionPromise = testRef.once('value');
+      
+      await Promise.race([connectionPromise, timeoutPromise]);
       console.log('✅ Firebase connection test successful');
       return true;
     } else {
@@ -281,6 +288,10 @@ async function testFirebaseConnection() {
     } else if (error.code === 'UNAVAILABLE' || error.message.includes('unavailable')) {
       console.log('⚠️ Firebase service unavailable (using fallback)');
       showFirebaseNotification('Using offline mode for better reliability', 'warning');
+      return false;
+    } else if (error.message.includes('timeout')) {
+      console.log('⚠️ Firebase connection timeout (using fallback)');
+      showFirebaseNotification('Connection timeout - using local storage', 'warning');
       return false;
     } else {
       console.error('❌ Firebase connection test failed:', error);
@@ -426,5 +437,12 @@ window.signOutUser = signOutUser;
 window.testFirebaseConnection = testFirebaseConnection;
 window.handleFirebaseError = handleFirebaseError;
 window.showFirebaseNotification = showFirebaseNotification;
+
+// Export functions for global access
+window.testFirebaseConnection = testFirebaseConnection;
+window.saveToFirebase = saveToFirebase;
+window.getFromFirebase = getFromFirebase;
+window.authenticateUser = authenticateUser;
+window.signOutUser = signOutUser;
 
 console.log('✅ Cross-platform Firebase configuration loaded successfully'); 

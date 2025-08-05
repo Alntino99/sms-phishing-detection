@@ -381,4 +381,36 @@ window.analyzeSMS = analyzeSMS;
 window.initializeCrossPlatformML = initializeCrossPlatformML;
 window.createFallbackModels = createFallbackModels;
 
+// Ensure analyzeSMS is always available with fallback
+if (typeof window.analyzeSMS !== 'function') {
+  window.analyzeSMS = async function(smsContent) {
+    console.log('Using fallback analyzeSMS function from cross-platform-ml.js');
+    
+    // Simple fallback analysis
+    const suspiciousKeywords = [
+      'urgent', 'bank', 'password', 'click', 'verify', 'suspended', 
+      'locked', 'prize', 'won', 'claim', 'security', 'alert', 
+      'expired', 'identity', 'reward', 'limited', 'time'
+    ];
+    
+    const text = smsContent.toLowerCase();
+    const foundKeywords = suspiciousKeywords.filter(keyword => text.includes(keyword));
+    
+    const threatLevel = foundKeywords.length > 2 ? 'high' : 
+                      foundKeywords.length > 0 ? 'medium' : 'low';
+    
+    return {
+      isPhishing: threatLevel === 'high',
+      confidence: threatLevel === 'high' ? 0.9 : threatLevel === 'medium' ? 0.6 : 0.3,
+      threatLevel: threatLevel,
+      suspiciousKeywords: foundKeywords,
+      recommendations: threatLevel === 'high' ? 
+        ['This message appears to be phishing. Do not click any links.', 'Delete this message immediately.'] :
+        threatLevel === 'medium' ? 
+        ['Be cautious with this message.', 'Verify the sender before responding.'] :
+        ['This message appears safe.', 'No immediate action required.']
+    };
+  };
+}
+
 console.log('✅ Cross-platform ML models loaded successfully'); 
