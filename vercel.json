@@ -120,6 +120,14 @@
       "destination": "/sms-detector-test.html"
     },
     {
+      "source": "/manifest.json",
+      "destination": "/manifest.json"
+    },
+    {
+      "source": "/favicon.svg",
+      "destination": "/favicon.svg"
+    },
+    {
       "source": "/mobile-sms-detector.js",
       "destination": "/mobile-sms-detector.js"
     },
