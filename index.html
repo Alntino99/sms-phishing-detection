@@ -1254,11 +1254,48 @@
   <script src="script.js"></script>
   <script src="sms-security-rules.js"></script>
       <script src="ml-classifiers.js"></script>
+    <script src="cross-platform-ml.js"></script>
     <script src="real-time-sms-monitor.js"></script>
     <script src="comprehensive-test.js"></script>
     <script src="ai-training-system.js"></script>
   <script src="mobile-sms-detector-fixed-v2.js"></script>
   <script src="chatbot.js"></script>
+  
+  <!-- Fallback analyzeSMS function -->
+  <script>
+    // Ensure analyzeSMS is always available
+    if (typeof window.analyzeSMS !== 'function') {
+      window.analyzeSMS = async function(smsContent) {
+        console.log('Using fallback analyzeSMS function');
+        
+        // Simple fallback analysis
+        const suspiciousKeywords = [
+          'urgent', 'bank', 'password', 'click', 'verify', 'suspended', 
+          'locked', 'prize', 'won', 'claim', 'security', 'alert', 
+          'expired', 'identity', 'reward', 'limited', 'time'
+        ];
+        
+        const text = smsContent.toLowerCase();
+        const foundKeywords = suspiciousKeywords.filter(keyword => text.includes(keyword));
+        
+        const threatLevel = foundKeywords.length > 2 ? 'high' : 
+                          foundKeywords.length > 0 ? 'medium' : 'low';
+        
+        return {
+          isPhishing: threatLevel === 'high',
+          confidence: threatLevel === 'high' ? 0.9 : threatLevel === 'medium' ? 0.6 : 0.3,
+          threatLevel: threatLevel,
+          suspiciousKeywords: foundKeywords,
+          recommendations: threatLevel === 'high' ? 
+            ['This message appears to be phishing. Do not click any links.', 'Delete this message immediately.'] :
+            threatLevel === 'medium' ? 
+            ['Be cautious with this message.', 'Verify the sender before responding.'] :
+            ['This message appears safe.', 'No immediate action required.']
+        };
+      };
+      console.log('✅ Fallback analyzeSMS function loaded');
+    }
+  </script>
   
   <script>
     // Auth state management
