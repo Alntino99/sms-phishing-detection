@@ -180,6 +180,14 @@
       "destination": "/button-function-verifier.js"
     },
     {
+      "source": "/real-time-sms-monitor.js",
+      "destination": "/real-time-sms-monitor.js"
+    },
+    {
+      "source": "/sw-sms-monitor.js",
+      "destination": "/sw-sms-monitor.js"
+    },
+    {
       "source": "/webfonts/:file*",
       "destination": "/webfonts/:file*"
     },
@@ -266,6 +274,24 @@
     },
     {
       "source": "/cross-platform-css.css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/real-time-sms-monitor.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/sw-sms-monitor.js",
       "headers": [
         {
           "key": "Cache-Control",
