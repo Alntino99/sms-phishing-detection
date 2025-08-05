@@ -1128,7 +1128,7 @@
         <li><a href="contact.html">Contact</a></li>
         <li id="nav-login"><a href="login.html">Login</a></li>
         <li id="nav-signup"><a href="signup.html">Sign Up</a></li>
-        <li id="install-app-container" style="display: none;">
+        <li id="install-app-container" style="display: block;">
           <button id="install-app-btn" class="install-app-button" onclick="installApp()">
             📱 Install App
           </button>
@@ -1182,6 +1182,7 @@
         <a href="detect.html" class="btn btn-primary">🔍 Start Detection</a>
         <a href="about.html" class="btn btn-secondary">📚 Learn More</a>
         <button onclick="connectMobilePhone()" class="btn btn-mobile" style="background: linear-gradient(135deg, #17a2b8, #138496); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1rem 2rem; box-shadow: 0 8px 25px rgba(23, 162, 184, 0.3); margin: 0.5rem;">📱 Connect Mobile Phone</button>
+        <button onclick="installApp()" class="btn btn-install" style="background: linear-gradient(135deg, #28a745, #20c997); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1rem 2rem; box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3); margin: 0.5rem;">📱 Install App</button>
       </div>
     </section>
 
@@ -1368,8 +1369,6 @@
     }
 
     // PWA Installation Handler
-    let deferredPrompt;
-    
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
@@ -1573,28 +1572,52 @@
     const installBtn = document.getElementById('install-app-btn');
     const installPrompt = document.getElementById('install-prompt');
 
+    // Enhanced PWA installation logic
+    let deferredPrompt = null;
+
     // Listen for the beforeinstallprompt event
     window.addEventListener('beforeinstallprompt', (e) => {
       console.log('📱 Install prompt available');
       e.preventDefault();
       deferredPrompt = e;
       
-      // Show install button in navigation
+      // Show install button in navigation immediately
       if (installContainer) {
         installContainer.style.display = 'block';
+        console.log('✅ Install button shown');
       }
       
-      // Show install prompt after 3 seconds
+      // Show install prompt after 2 seconds
       setTimeout(() => {
         if (installPrompt && !localStorage.getItem('installPromptDismissed')) {
           installPrompt.classList.add('show');
+          console.log('✅ Install prompt shown');
         }
-      }, 3000);
+      }, 2000);
+    });
+
+    // Also check for PWA installability on page load
+    window.addEventListener('load', () => {
+      // Check if PWA can be installed
+      if ('serviceWorker' in navigator && 'PushManager' in window) {
+        console.log('📱 PWA features available');
+        
+        // Show install button if not already installed
+        if (!window.matchMedia('(display-mode: standalone)').matches) {
+          if (installContainer) {
+            installContainer.style.display = 'block';
+            console.log('✅ Install button shown on load');
+          }
+        }
+      }
     });
 
     // Handle install button click
     function installApp() {
+      console.log('📱 Install app clicked');
+      
       if (deferredPrompt) {
+        console.log('📱 Using deferred prompt');
         installBtn.classList.add('installing');
         installBtn.textContent = 'Installing...';
         
@@ -1614,6 +1637,7 @@
           deferredPrompt = null;
         });
       } else {
+        console.log('📱 No deferred prompt, showing instructions');
         // Fallback for browsers that don't support beforeinstallprompt
         showInstallInstructions();
       }
