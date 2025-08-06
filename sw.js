@@ -18,7 +18,7 @@ const STATIC_FILES = [
   '/chatbot.js',
   '/mobile-sms-detector.js',
   '/mobile-sms-detector.css',
-  '/logo.png',
+  '/sms_shield_logo_new-removebg-preview.png',
   '/background.jpg',
   '/all.min.css',
   '/webfonts/fa-solid-900.woff2',

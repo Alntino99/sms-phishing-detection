@@ -1636,8 +1636,8 @@ async function setupNotifications() {
     try {
       const testNotification = new Notification('🔔 SMS Phishing Detection', {
         body: 'Notification system is working! You will receive alerts for suspicious SMS messages.',
-        icon: '/logo.png',
-        badge: '/logo.png',
+        icon: '/sms_shield_logo_new-removebg-preview.png',
+        badge: '/sms_shield_logo_new-removebg-preview.png',
         tag: 'test-notification'
       });
       
@@ -1665,11 +1665,11 @@ function sendPhishingNotification(title, message, riskLevel = 'medium') {
   }
   
   const icon = riskLevel === 'high' ? '🚨' : riskLevel === 'medium' ? '⚠️' : '✅';
-  const badge = '/logo.png';
+  const badge = '/sms_shield_logo_new-removebg-preview.png';
   
   const notification = new Notification(`${icon} ${title}`, {
     body: message,
-    icon: '/logo.png',
+    icon: '/sms_shield_logo_new-removebg-preview.png',
     badge: badge,
     tag: 'phishing-alert',
     requireInteraction: riskLevel === 'high',

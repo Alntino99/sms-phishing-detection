@@ -271,7 +271,7 @@ const fallbackFunctions = {
         if ('Notification' in window && Notification.permission === 'granted') {
             new Notification('Test Notification', {
                 body: 'This is a test notification from SMS Phishing Detection System',
-                icon: '/logo.png'
+                icon: '/sms_shield_logo_new-removebg-preview.png'
             });
             showNotification('Test notification sent', 'success');
         } else {
