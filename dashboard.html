@@ -2,226 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Dashboard - SMS Phishing Detection System</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="mobile-sms-detector.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics Dashboard - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
   <link rel="stylesheet" href="all.min.css">
-  <link rel="stylesheet" href="font-fix.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <script src="index.js"></script>
-  <script src="darkMode.js"></script>
-  <script src="universal-button-handler.js"></script>
-  <script src="complete-button-functions.js"></script>
   
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-image: url('background.jpg');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-attachment: fixed;
-      color: #fff;
-      line-height: 1.6;
-      min-height: 100vh;
-      position: relative;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: brightness(0.6);
-      z-index: -1;
-    }
-
-    /* Modern Header */
-    header {
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-      color: white;
-      padding: 1.5rem 0;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-      opacity: 0.3;
-    }
-
-    .header-content {
-      max-width: 1200px;
+    .dashboard-container {
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 0 2rem;
-      position: relative;
-      z-index: 2;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 2rem 1.5rem;
     }
 
-    .logo-title {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .logo {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s ease;
-    }
-
-    .logo:hover {
-      transform: scale(1.1);
-    }
-
-    .main-title {
-      font-size: 2rem;
-      font-weight: 700;
-      background: linear-gradient(45deg, #fff, #e3f2fd);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    /* Navigation */
-    nav {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      padding: 1rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .nav-brand {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #1e3c72;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .nav-brand::before {
-      content: '🛡️';
-      font-size: 1.8rem;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: #1e3c72 !important;
-      text-decoration: none;
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      border-radius: 25px;
-      transition: all 0.3s ease;
-      position: relative;
-      background: rgba(255, 255, 255, 0.9) !important;
-      border: 1px solid rgba(30, 60, 114, 0.2) !important;
-      display: inline-block;
-    }
-
-    .nav-links a:hover {
-      background: linear-gradient(135deg, #667eea, #764ba2) !important;
-      color: white !important;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-      border-color: transparent !important;
-    }
-
-    .nav-links a.active {
-      background: linear-gradient(135deg, #667eea, #764ba2) !important;
-      color: white !important;
-      border-color: transparent !important;
-    }
-
-    /* Main Content */
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
-    /* Dashboard Hero Section */
-    .dashboard-hero {
+    .dashboard-header {
       text-align: center;
-      padding: 3rem 2rem;
       margin-bottom: 3rem;
     }
 
-    .dashboard-hero h1 {
-      font-size: 3.5rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      background: linear-gradient(135deg, #fff, #e3f2fd);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .dashboard-hero p {
-      font-size: 1.3rem;
-      color: #e2e8f0;
-      max-width: 600px;
-      margin: 0 auto 2rem;
-    }
-
-    /* Stats Grid */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      margin: 3rem 0;
+      gap: var(--space-lg);
+      margin-bottom: var(--space-2xl);
     }
 
     .stat-card {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(40px);
-      border-radius: 20px;
-      padding: 2rem;
-      text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.3s ease;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      box-shadow: var(--glass-shadow);
+      transition: all var(--transition-normal);
       position: relative;
       overflow: hidden;
     }
@@ -230,1084 +46,562 @@
       content: '';
       position: absolute;
       top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-      border-radius: 20px 20px 0 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.6s ease-in-out;
+    }
+
+    .stat-card:hover::before {
+      left: 100%;
     }
 
     .stat-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-      background: rgba(255, 255, 255, 0.15);
+      box-shadow: var(--shadow-2xl);
     }
 
-    .stat-card h3 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: #e2e8f0;
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: var(--space-md);
+      background: var(--gradient-primary);
     }
 
-    .stat-number {
+    .stat-value {
       font-size: 2.5rem;
       font-weight: 700;
-      color: #667eea;
-      margin-bottom: 0.5rem;
+      color: white;
+      margin-bottom: var(--space-xs);
     }
 
-    /* Achievements Section */
-    .achievements-section {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(40px);
-      border-radius: 20px;
-      padding: 2.5rem;
-      margin: 3rem 0;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      position: relative;
-      overflow: hidden;
+    .stat-label {
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+      margin-bottom: var(--space-sm);
     }
 
-    .achievements-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #f093fb, #f5576c, #667eea);
-      border-radius: 20px 20px 0 0;
-    }
-
-    .achievements-section h2 {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 2rem;
-      color: #fff;
-      text-align: center;
-    }
-
-    .badges-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .achievement-card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      padding: 1.5rem;
-      text-align: center;
-      transition: all 0.3s ease;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .achievement-card.unlocked {
-      background: rgba(34, 197, 94, 0.2);
-      border-color: rgba(34, 197, 94, 0.3);
-    }
-
-    .achievement-card.locked {
-      opacity: 0.6;
-    }
-
-    .achievement-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    }
-
-    .achievement-icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-
-    .achievement-card h4 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: #fff;
-    }
-
-    .achievement-card p {
-      font-size: 0.9rem;
-      color: #e2e8f0;
-      margin-bottom: 1rem;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 8px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
-      overflow: hidden;
-      margin-bottom: 0.5rem;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      transition: width 0.3s ease;
-    }
-
-    .progress-text {
-      font-size: 0.8rem;
-      color: #e2e8f0;
-    }
-
-    /* Chart Section */
-    .chart-section {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(40px);
-      border-radius: 20px;
-      padding: 2.5rem;
-      margin: 3rem 0;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .chart-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-      border-radius: 20px 20px 0 0;
-    }
-
-    .chart-section h2 {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 2rem;
-      color: #fff;
-      text-align: center;
-    }
-
-    #analysisChart {
-      max-width: 100%;
-      height: 300px;
-    }
-
-    /* Recent Activity Section */
-    .recent-activity {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(40px);
-      border-radius: 20px;
-      padding: 2.5rem;
-      margin: 3rem 0;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .recent-activity::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #f093fb, #f5576c, #667eea);
-      border-radius: 20px 20px 0 0;
-    }
-
-    .recent-activity h2 {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 2rem;
-      color: #fff;
-      text-align: center;
-    }
-
-    .activity-list {
+    .stat-trend {
       display: flex;
-      flex-direction: column;
-      gap: 1rem;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .trend-up {
+      color: var(--success-color);
+    }
+
+    .trend-down {
+      color: var(--danger-color);
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: var(--space-xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .chart-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      box-shadow: var(--glass-shadow);
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-lg);
+    }
+
+    .chart-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .chart-controls {
+      display: flex;
+      gap: var(--space-sm);
+    }
+
+    .chart-control-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+
+    .chart-control-btn:hover,
+    .chart-control-btn.active {
+      background: var(--gradient-primary);
+      border-color: transparent;
+    }
+
+    .recent-activity {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      box-shadow: var(--glass-shadow);
+    }
+
+    .activity-header {
+      display: flex;
+      justify-content: between;
+      align-items: center;
+      margin-bottom: var(--space-lg);
     }
 
     .activity-item {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      transition: all 0.3s ease;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--space-sm);
+      background: rgba(255, 255, 255, 0.05);
+      transition: all var(--transition-normal);
     }
 
     .activity-item:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: translateX(5px);
+      background: rgba(255, 255, 255, 0.1);
     }
 
     .activity-icon {
-      font-size: 1.5rem;
       width: 40px;
       height: 40px;
+      border-radius: var(--radius-md);
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
-    }
-
-    .activity-icon.phishing {
-      background: rgba(239, 68, 68, 0.2);
-      color: #ef4444;
-    }
-
-    .activity-icon.safe {
-      background: rgba(34, 197, 94, 0.2);
-      color: #22c55e;
+      font-size: 1.2rem;
+      flex-shrink: 0;
     }
 
     .activity-content {
       flex: 1;
     }
 
-    .activity-text {
-      font-weight: 500;
-      margin-bottom: 0.25rem;
-      color: #fff;
+    .activity-title {
+      color: white;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
     }
 
-    .activity-result {
+    .activity-details {
+      color: rgba(255, 255, 255, 0.7);
       font-size: 0.9rem;
-      color: #e2e8f0;
-      margin-bottom: 0.25rem;
     }
 
     .activity-time {
+      color: rgba(255, 255, 255, 0.6);
       font-size: 0.8rem;
-      color: #a0aec0;
+      white-space: nowrap;
     }
 
-    .no-activity {
-      text-align: center;
-      color: #e2e8f0;
-      font-style: italic;
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-2xl);
     }
 
-    /* Dark Mode Toggle */
-    .theme-toggle {
-      position: fixed;
-      top: 2rem;
-      right: 2rem;
-      z-index: 1000;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      color: white;
-    }
-
-    .theme-toggle:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    /* Dark Mode Styles */
-    body.dark-mode {
-      color: #e2e8f0;
-    }
-
-    body.dark-mode::before {
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: brightness(0.3);
-    }
-
-    body.dark-mode header {
-      background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-    }
-
-    body.dark-mode .stat-card,
-    body.dark-mode .achievements-section,
-    body.dark-mode .chart-section,
-    body.dark-mode .recent-activity {
-      background: rgba(45, 55, 72, 0.8);
-      color: #e2e8f0;
-    }
-
-    body.dark-mode .main-title {
-      background: linear-gradient(45deg, #e2e8f0, #cbd5e0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    body.dark-mode .nav-links a {
-      color: #e2e8f0;
-      background: rgba(45, 55, 72, 0.9);
-      border: 1px solid rgba(226, 232, 240, 0.3);
-    }
-
-    body.dark-mode .nav-links a:hover {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border-color: transparent;
-    }
-
-    /* User Account Section */
-    .user-account {
-      position: relative;
-      display: none;
-    }
-
-    .user-account.show {
-      display: block;
-    }
-
-    .user-button {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border: none;
-      border-radius: 25px;
-      padding: 0.5rem 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    }
-
-    .user-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    .user-avatar {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-    }
-
-    .user-dropdown {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background: rgba(255, 255, 255, 0.95);
+    .action-card {
+      background: var(--glass-bg);
       backdrop-filter: blur(20px);
-      border-radius: 15px;
-      padding: 1rem;
-      min-width: 250px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-10px);
-      transition: all 0.3s ease;
-      z-index: 1001;
-    }
-
-    .user-dropdown.show {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    .user-info {
-      padding: 1rem;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      margin-bottom: 1rem;
-    }
-
-    .user-name {
-      font-weight: 700;
-      color: #1e3c72;
-      font-size: 1.1rem;
-      margin-bottom: 0.25rem;
-    }
-
-    .user-email {
-      color: #666;
-      font-size: 0.9rem;
-    }
-
-    .user-menu {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .user-menu li {
-      margin-bottom: 0.5rem;
-    }
-
-    .user-menu a {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1rem;
-      color: #1e3c72;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-lg);
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-normal);
       text-decoration: none;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      background: transparent;
-      border: none;
-      width: 100%;
-      text-align: left;
+      color: white;
     }
 
-    .user-menu a:hover {
-      background: rgba(102, 126, 234, 0.1);
-      color: #667eea;
+    .action-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-xl);
+      background: rgba(255, 255, 255, 0.15);
     }
 
-    .user-menu a.logout {
-      color: #ef4444;
+    .action-icon {
+      font-size: 2rem;
+      margin-bottom: var(--space-sm);
     }
 
-    .user-menu a.logout:hover {
-      background: rgba(239, 68, 68, 0.1);
-      color: #ef4444;
+    .action-title {
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
     }
 
-    /* Dark Mode Styles for User Account */
-    body.dark-mode .user-dropdown {
-      background: rgba(45, 55, 72, 0.95);
-      border-color: rgba(226, 232, 240, 0.2);
-    }
-
-    body.dark-mode .user-name {
-      color: #e2e8f0;
-    }
-
-    body.dark-mode .user-email {
-      color: #a0aec0;
-    }
-
-    body.dark-mode .user-menu a {
-      color: #e2e8f0;
-    }
-
-    body.dark-mode .user-menu a:hover {
-      background: rgba(102, 126, 234, 0.2);
-      color: #667eea;
-    }
-
-    body.dark-mode .user-info {
-      border-bottom-color: rgba(226, 232, 240, 0.2);
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .dashboard-hero h1 {
-        font-size: 2.5rem;
-      }
-      
-      .stats-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-      
-      .badges-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .header-content {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      
-      .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      
-      .stat-card,
-      .achievements-section,
-      .chart-section,
-      .recent-activity {
-        padding: 1.5rem;
-    }
+    .action-description {
+      font-size: 0.9rem;
+      opacity: 0.8;
     }
   </style>
 </head>
 <body>
-  <!-- Dark Mode Toggle -->
-  <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+  <!-- Enhanced Theme Toggle -->
+  <button class="theme-toggle-enhanced" onclick="toggleTheme()" aria-label="Toggle theme">
     🌙
   </button>
-  
-<header>
-    <div class="header-content">
-      <div class="logo-title">
-        <img src="logo.png" alt="SMS Phishing Logo" class="logo">
-        <h1 class="main-title">SMS Phishing Detection</h1>
-      </div>
-  </div>
-</header>
-  
-  <nav>
-    <div class="nav-container">
-      <a href="#" class="nav-brand">SMS Phishing Detection</a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="detect.html">Detection</a></li>
-        <li><a href="sms.html">SMS Alerts</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="dashboard.html" class="active">Dashboard</a></li>
-        <li id="nav-login"><a href="login.html">Login</a></li>
-        <li id="nav-signup"><a href="signup.html">Sign Up</a></li>
-        <li class="user-account" id="user-account">
-          <button class="user-button" onclick="toggleUserDropdown()">
-            <div class="user-avatar" id="user-avatar">👤</div>
-            <span id="user-display-name">User</span>
-            <span>▼</span>
-          </button>
-          <div class="user-dropdown" id="user-dropdown">
-            <div class="user-info">
-              <div class="user-name" id="dropdown-user-name">User Name</div>
-              <div class="user-email" id="dropdown-user-email">user@example.com</div>
-            </div>
-            <ul class="user-menu">
-              <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-              <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
-              <li><a href="create.html"><i class="fas fa-plus"></i> Create Post</a></li>
-              <li><a href="#" onclick="logoutUser()" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-            </ul>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </nav>
 
-  <main>
-    <!-- Dashboard Hero Section -->
-    <section class="dashboard-hero">
-      <h1>Your Security Dashboard</h1>
-      <p>Track your analysis progress, achievements, and security insights</p>
-      <div class="dashboard-actions">
-        <button onclick="connectMobilePhone()" class="btn btn-mobile" style="background: linear-gradient(135deg, #17a2b8, #138496); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; padding: 1rem 2rem; box-shadow: 0 8px 25px rgba(23, 162, 184, 0.3); margin: 0.5rem;">📱 Connect Mobile Phone</button>
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
       </div>
-    </section>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link" style="background: var(--gradient-primary); color: white;">Dashboard</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="login.html" class="nav-link">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Dashboard Container -->
+  <div class="dashboard-container" style="margin-top: 120px;">
+    
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+      <h1 style="font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, #fff, #f0f0f0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        📊 Security Analytics Dashboard
+      </h1>
+      <p style="font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto;">
+        Real-time insights into your SMS security and threat detection performance
+      </p>
+    </div>
 
     <!-- Stats Grid -->
     <div class="stats-grid">
-      <div class="stat-card">
-        <h3>📊 Total Analyses</h3>
-        <div id="totalAnalyses" class="stat-number">0</div>
+      <div class="stat-card animate-slide-up">
+        <div class="stat-icon" style="background: var(--gradient-success);">📈</div>
+        <div class="stat-value">1,247</div>
+        <div class="stat-label">Messages Analyzed</div>
+        <div class="stat-trend trend-up">
+          <i class="fas fa-arrow-up"></i>
+          <span>+12% this week</span>
+        </div>
       </div>
-      <div class="stat-card">
-        <h3>🛡️ Phishing Detected</h3>
-        <div id="phishingDetected" class="stat-number">0</div>
+
+      <div class="stat-card animate-slide-up" style="animation-delay: 0.1s;">
+        <div class="stat-icon" style="background: var(--gradient-danger);">🚨</div>
+        <div class="stat-value">23</div>
+        <div class="stat-label">Threats Detected</div>
+        <div class="stat-trend trend-down">
+          <i class="fas fa-arrow-down"></i>
+          <span>-8% this week</span>
+        </div>
       </div>
-      <div class="stat-card">
-        <h3>🎯 Accuracy Rate</h3>
-        <div id="accuracyRate" class="stat-number">0%</div>
+
+      <div class="stat-card animate-slide-up" style="animation-delay: 0.2s;">
+        <div class="stat-icon" style="background: var(--gradient-accent);">🎯</div>
+        <div class="stat-value">98.7%</div>
+        <div class="stat-label">Detection Accuracy</div>
+        <div class="stat-trend trend-up">
+          <i class="fas fa-arrow-up"></i>
+          <span>+0.3% this week</span>
+        </div>
       </div>
-      <div class="stat-card">
-        <h3>⭐ Current Streak</h3>
-        <div id="currentStreak" class="stat-number">0 days</div>
+
+      <div class="stat-card animate-slide-up" style="animation-delay: 0.3s;">
+        <div class="stat-icon" style="background: var(--gradient-secondary);">⚡</div>
+        <div class="stat-value">0.3s</div>
+        <div class="stat-label">Avg. Analysis Time</div>
+        <div class="stat-trend trend-down">
+          <i class="fas fa-arrow-down"></i>
+          <span>-15% faster</span>
+        </div>
       </div>
     </div>
 
-    <!-- Achievements Section -->
-    <section class="achievements-section">
-      <h2>🏆 Achievements</h2>
-      <div id="badgeInfo" class="badges-grid"></div>
-    </section>
+    <!-- Charts Grid -->
+    <div class="charts-grid">
+      <!-- Threat Detection Chart -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3 class="chart-title">Threat Detection Trends</h3>
+          <div class="chart-controls">
+            <button class="chart-control-btn active">7D</button>
+            <button class="chart-control-btn">30D</button>
+            <button class="chart-control-btn">90D</button>
+          </div>
+        </div>
+        <canvas id="threatChart" width="400" height="200"></canvas>
+      </div>
 
-    <!-- Chart Section -->
-    <section class="chart-section">
-      <h2>📈 Analysis Trends</h2>
-    <canvas id="analysisChart"></canvas>
-  </section>
+      <!-- Message Types Chart -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3 class="chart-title">Message Categories</h3>
+          <div class="chart-controls">
+            <button class="chart-control-btn active">Today</button>
+            <button class="chart-control-btn">Week</button>
+            <button class="chart-control-btn">Month</button>
+          </div>
+        </div>
+        <canvas id="categoriesChart" width="400" height="200"></canvas>
+      </div>
+    </div>
 
-    <!-- Recent Activity Section -->
-    <section class="recent-activity">
-      <h2>🕒 Recent Activity</h2>
-      <div id="recentActivity" class="activity-list"></div>
-    </section>
-  </main>
+    <!-- Recent Activity -->
+    <div class="recent-activity">
+      <div class="activity-header">
+        <h3 style="color: white; font-size: 1.5rem; margin: 0;">Recent Activity</h3>
+        <a href="#" style="color: var(--accent-color); text-decoration: none; font-weight: 500;">View All</a>
+      </div>
+
+      <div class="activity-item">
+        <div class="activity-icon" style="background: var(--gradient-danger);">🚨</div>
+        <div class="activity-content">
+          <div class="activity-title">High-risk SMS detected</div>
+          <div class="activity-details">Phishing attempt from unknown sender blocked</div>
+        </div>
+        <div class="activity-time">2 min ago</div>
+      </div>
+
+      <div class="activity-item">
+        <div class="activity-icon" style="background: var(--gradient-success);">✅</div>
+        <div class="activity-content">
+          <div class="activity-title">Safe message verified</div>
+          <div class="activity-details">Legitimate bank notification confirmed</div>
+        </div>
+        <div class="activity-time">15 min ago</div>
+      </div>
+
+      <div class="activity-item">
+        <div class="activity-icon" style="background: var(--gradient-accent);">🔄</div>
+        <div class="activity-content">
+          <div class="activity-title">AI model updated</div>
+          <div class="activity-details">Detection accuracy improved to 98.7%</div>
+        </div>
+        <div class="activity-time">1 hour ago</div>
+      </div>
+
+      <div class="activity-item">
+        <div class="activity-icon" style="background: var(--gradient-secondary);">📊</div>
+        <div class="activity-content">
+          <div class="activity-title">Weekly report generated</div>
+          <div class="activity-details">Security summary for past 7 days available</div>
+        </div>
+        <div class="activity-time">2 hours ago</div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <a href="detect.html" class="action-card">
+        <div class="action-icon">🔍</div>
+        <div class="action-title">Analyze SMS</div>
+        <div class="action-description">Check a new message for threats</div>
+      </a>
+
+      <a href="profile.html" class="action-card">
+        <div class="action-icon">⚙️</div>
+        <div class="action-title">Settings</div>
+        <div class="action-description">Configure detection preferences</div>
+      </a>
+
+      <a href="#" class="action-card">
+        <div class="action-icon">📱</div>
+        <div class="action-title">SMS Integration</div>
+        <div class="action-description">Connect your messaging app</div>
+      </a>
+
+      <a href="#" class="action-card">
+        <div class="action-icon">📈</div>
+        <div class="action-title">Reports</div>
+        <div class="action-description">View detailed analytics</div>
+      </a>
+    </div>
+  </div>
 
   <!-- Scripts -->
-
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script src="firebase.js"></script>
-  <script src="mobile-sms-detector.js"></script>
-  
+  <script src="darkMode.js"></script>
   <script>
-    // Enhanced dashboard with real-time stats
-    auth.onAuthStateChanged(async user => {
-      if (!user) {
-        window.location.href = 'login.html';
-        return;
+    // Enhanced theme toggle
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const themeToggle = document.querySelector('.theme-toggle-enhanced');
+      const isDark = document.body.classList.contains('dark-mode');
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('darkMode', isDark);
+    }
+
+    // Load saved theme
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('darkMode');
+      if (savedTheme === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.theme-toggle-enhanced').textContent = '☀️';
       }
       
-      // Load user statistics
-      loadUserStats(user.uid);
-      
-      // Load achievements
-      loadAchievements(user.uid);
-      
-      // Load recent activity
-      loadRecentActivity(user.uid);
-      
-      // Load analysis trends
-      loadAnalysisTrends(user.uid);
+      // Initialize charts
+      initializeCharts();
     });
 
-    async function loadUserStats(userId) {
-      try {
-        const historyRef = db.ref(`users/${userId}/history`);
-        const snapshot = await historyRef.once('value');
-        const analyses = snapshot.val();
-        
-        if (analyses) {
-          const totalAnalyses = Object.keys(analyses).length;
-          let phishingCount = 0;
-          let totalScore = 0;
-          
-          Object.values(analyses).forEach(analysis => {
-            if (analysis.result && analysis.result.includes('PHISHING')) {
-              phishingCount++;
-            }
-            if (analysis.score) {
-              totalScore += analysis.score;
-            }
-          });
-          
-          const accuracyRate = totalAnalyses > 0 ? Math.round(((totalAnalyses - phishingCount) / totalAnalyses) * 100) : 0;
-          const averageScore = totalAnalyses > 0 ? Math.round(totalScore / totalAnalyses) : 0;
-          
-          document.getElementById('totalAnalyses').textContent = totalAnalyses;
-          document.getElementById('phishingDetected').textContent = phishingCount;
-          document.getElementById('accuracyRate').textContent = accuracyRate + '%';
-          document.getElementById('currentStreak').textContent = calculateStreak(analyses) + ' days';
-        }
-      } catch (err) {
-        console.error('Error loading stats:', err);
-      }
-    }
-
-    async function loadAchievements(userId) {
-      try {
-        const historyRef = db.ref(`users/${userId}/history`);
-        const snapshot = await historyRef.once('value');
-        const total = snapshot.numChildren();
-        
-        const achievements = [
-          { 
-            name: '🔰 First Step', 
-            threshold: 1, 
-            description: 'Completed your first analysis',
-            icon: '🔰'
-          },
-          { 
-            name: '📊 Data Detective', 
-            threshold: 5, 
-            description: 'Analyzed 5 messages',
-            icon: '📊'
-          },
-          { 
-            name: '🛡️ Security Expert', 
-            threshold: 10, 
-            description: 'Analyzed 10 messages',
-            icon: '🛡️'
-          },
-          { 
-            name: '🔍 Phishing Hunter', 
-            threshold: 25, 
-            description: 'Analyzed 25 messages',
-            icon: '🔍'
-          },
-          { 
-            name: '👑 Phishing Master', 
-            threshold: 50, 
-            description: 'Analyzed 50 messages',
-            icon: '👑'
-          },
-          { 
-            name: '🎯 Perfect Score', 
-            threshold: 1, 
-            description: 'Achieved 100% accuracy',
-            icon: '🎯'
-          }
-        ];
-        
-        const badgeInfo = document.getElementById('badgeInfo');
-        badgeInfo.innerHTML = '';
-        
-        achievements.forEach(achievement => {
-          const isUnlocked = total >= achievement.threshold;
-          const achievementCard = `
-            <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}">
-              <div class="achievement-icon">${achievement.icon}</div>
-              <h4>${achievement.name}</h4>
-              <p>${achievement.description}</p>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: ${Math.min((total / achievement.threshold) * 100, 100)}%"></div>
-              </div>
-              <span class="progress-text">${total}/${achievement.threshold}</span>
-            </div>
-          `;
-          badgeInfo.innerHTML += achievementCard;
-        });
-      } catch (err) {
-        console.error('Error loading achievements:', err);
-      }
-    }
-
-    async function loadRecentActivity(userId) {
-      try {
-        const historyRef = db.ref(`users/${userId}/history`);
-        const snapshot = await historyRef.orderByChild('timestamp').limitToLast(5).once('value');
-        const activities = snapshot.val();
-        
-        const activityList = document.getElementById('recentActivity');
-        activityList.innerHTML = '';
-        
-        if (activities) {
-          const sortedActivities = Object.entries(activities)
-            .sort(([,a], [,b]) => b.timestamp - a.timestamp)
-            .slice(0, 5);
-          
-          sortedActivities.forEach(([key, activity]) => {
-            const activityItem = `
-              <div class="activity-item">
-                <div class="activity-icon ${activity.result.includes('PHISHING') ? 'phishing' : 'safe'}">
-                  ${activity.result.includes('PHISHING') ? '⚠️' : '✅'}
-                </div>
-                <div class="activity-content">
-                  <p class="activity-text">${activity.sms.substring(0, 50)}${activity.sms.length > 50 ? '...' : ''}</p>
-                  <p class="activity-result">${activity.result}</p>
-                  <p class="activity-time">${formatTime(activity.timestamp)}</p>
-                </div>
-              </div>
-            `;
-            activityList.innerHTML += activityItem;
-          });
-        } else {
-          activityList.innerHTML = '<p class="no-activity">No recent activity</p>';
-        }
-      } catch (err) {
-        console.error('Error loading recent activity:', err);
-      }
-    }
-
-    async function loadAnalysisTrends(userId) {
-      try {
-        const historyRef = db.ref(`users/${userId}/history`);
-        const snapshot = await historyRef.once('value');
-        const analyses = snapshot.val();
-        
-        if (analyses) {
-          const monthlyData = {};
-          
-          Object.values(analyses).forEach(analysis => {
-            if (analysis.timestamp) {
-              const date = new Date(analysis.timestamp);
-              const monthKey = `${date.getFullYear()}-${date.getMonth() + 1}`;
-              monthlyData[monthKey] = (monthlyData[monthKey] || 0) + 1;
-            }
-          });
-          
-          const labels = Object.keys(monthlyData).sort();
-          const data = labels.map(key => monthlyData[key]);
-          
-          const ctx = document.getElementById('analysisChart').getContext('2d');
-          new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: labels,
-              datasets: [{
-                label: 'Analyses per Month',
-                data: data,
-                borderColor: '#667eea',
-                backgroundColor: 'rgba(102, 126, 234, 0.2)',
-                tension: 0.4
-              }]
-            },
-            options: {
-              responsive: true,
-              plugins: {
-                legend: {
-                  labels: {
-                    color: '#fff'
-                  }
-                }
-              },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  ticks: {
-                    color: '#fff'
-                  }
-                },
-                x: {
-                  ticks: {
-                    color: '#fff'
-                  }
-                }
+    // Initialize Chart.js charts
+    function initializeCharts() {
+      // Threat Detection Trend Chart
+      const threatCtx = document.getElementById('threatChart').getContext('2d');
+      new Chart(threatCtx, {
+        type: 'line',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Threats Detected',
+            data: [12, 8, 15, 6, 11, 4, 9],
+            borderColor: '#ef4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4
+          }, {
+            label: 'Safe Messages',
+            data: [145, 167, 134, 178, 156, 189, 142],
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              labels: {
+                color: 'white'
               }
             }
-          });
+          },
+          scales: {
+            x: {
+              ticks: { color: 'rgba(255, 255, 255, 0.7)' },
+              grid: { color: 'rgba(255, 255, 255, 0.1)' }
+            },
+            y: {
+              ticks: { color: 'rgba(255, 255, 255, 0.7)' },
+              grid: { color: 'rgba(255, 255, 255, 0.1)' }
+            }
+          }
         }
-      } catch (err) {
-        console.error('Error loading trends:', err);
-      }
-    }
+      });
 
-    function calculateStreak(analyses) {
-      // Simple streak calculation - can be enhanced
-      return Object.keys(analyses).length > 0 ? 1 : 0;
-    }
-
-    function formatTime(timestamp) {
-      const date = new Date(timestamp);
-      return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-    }
-
-    // User Account Management
-    auth.onAuthStateChanged(async user => {
-      if (user) {
-        // Hide login/signup, show user account
-        document.getElementById('nav-login').style.display = 'none';
-        document.getElementById('nav-signup').style.display = 'none';
-        document.getElementById('user-account').classList.add('show');
-        
-        // Get user data from Firebase
-        try {
-          const userRef = db.ref(`users/${user.uid}`);
-          const snapshot = await userRef.once('value');
-          const userData = snapshot.val();
-          
-          // Update user display
-          const displayName = userData?.username || user.email.split('@')[0];
-          const userEmail = user.email;
-          
-          document.getElementById('user-display-name').textContent = displayName;
-          document.getElementById('dropdown-user-name').textContent = displayName;
-          document.getElementById('dropdown-user-email').textContent = userEmail;
-          
-          // Set avatar with first letter of username
-          const avatar = document.getElementById('user-avatar');
-          avatar.textContent = displayName.charAt(0).toUpperCase();
-          
-        } catch (error) {
-          console.error('Error loading user data:', error);
-          // Fallback to email
-          const displayName = user.email.split('@')[0];
-          document.getElementById('user-display-name').textContent = displayName;
-          document.getElementById('dropdown-user-name').textContent = displayName;
-          document.getElementById('dropdown-user-email').textContent = user.email;
-          
-          const avatar = document.getElementById('user-avatar');
-          avatar.textContent = displayName.charAt(0).toUpperCase();
+      // Message Categories Doughnut Chart
+      const categoriesCtx = document.getElementById('categoriesChart').getContext('2d');
+      new Chart(categoriesCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Safe Messages', 'Phishing', 'Spam', 'Suspicious'],
+          datasets: [{
+            data: [78, 12, 7, 3],
+            backgroundColor: [
+              '#10b981',
+              '#ef4444',
+              '#f59e0b',
+              '#8b5cf6'
+            ],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: 'white',
+                padding: 20,
+                usePointStyle: true
+              }
+            }
+          }
         }
-      } else {
-        // Show login/signup, hide user account
-        document.getElementById('nav-login').style.display = '';
-        document.getElementById('nav-signup').style.display = '';
-        document.getElementById('user-account').classList.remove('show');
-      }
-    });
-
-    // Toggle user dropdown
-    function toggleUserDropdown() {
-      const dropdown = document.getElementById('user-dropdown');
-      dropdown.classList.toggle('show');
-    }
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(event) {
-      const userAccount = document.getElementById('user-account');
-      const dropdown = document.getElementById('user-dropdown');
-      
-      if (!userAccount.contains(event.target)) {
-        dropdown.classList.remove('show');
-      }
-    });
-
-    function logoutUser() {
-      auth.signOut().then(() => {
-        window.location.reload();
-      }).catch(error => {
-        console.error('Error signing out:', error);
       });
     }
 
-    // Mobile Phone Connection Function
-    // Enhanced mobile connection function with proper initialization
-    async function connectMobilePhone() {
-      console.log('📱 Mobile Phone Connection initiated...');
-      
-      try {
-        // Show loading status
-        showMobileConnectionStatus('🔄 Loading mobile detector...', 'info');
-        
-        // Wait a bit for scripts to load
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // First, ensure the mobile SMS detector script is loaded
-        if (typeof MobileSMSDetector === 'undefined') {
-          console.log('⚠️ MobileSMSDetector class not found, loading script...');
-          await loadMobileSMSDetector();
-          
-          // Wait for script to load
-          await new Promise(resolve => setTimeout(resolve, 1000));
-        }
-        
-        // Check if mobile SMS detector is available
-        if (typeof MobileSMSDetector !== 'undefined') {
-          console.log('✅ MobileSMSDetector class found, creating instance...');
-          
-          // Create new instance
-          window.mobileSMSDetector = new MobileSMSDetector();
-          console.log('✅ Mobile SMS Detector created successfully');
-          
-          // Wait for initialization
-          await new Promise(resolve => setTimeout(resolve, 500));
-          
-          // Setup mobile integration
-          if (window.mobileSMSDetector.setupMobileIntegration) {
-            await window.mobileSMSDetector.setupMobileIntegration();
-          }
-          
-          // Show mobile interface
-          if (window.mobileSMSDetector.showMobileInterface) {
-            window.mobileSMSDetector.showMobileInterface();
-          }
-          
-          // Request mobile permissions
-          if (window.mobileSMSDetector.requestMobilePermissions) {
-            await window.mobileSMSDetector.requestMobilePermissions();
-          }
-          
-          // Show success message
-          showMobileConnectionStatus('✅ Mobile phone connected successfully!', 'success');
-          
-        } else {
-          console.log('❌ MobileSMSDetector class still not available');
-          showMobileConnectionStatus('❌ Mobile detector not loaded. Please refresh and try again.', 'error');
-        }
-      } catch (error) {
-        console.error('❌ Mobile connection failed:', error);
-        showMobileConnectionStatus('❌ Mobile connection failed: ' + error.message, 'error');
-      }
-    }
+    // Enhanced scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
 
-    // Function to load mobile SMS detector script with fallback
-    function loadMobileSMSDetector() {
-      return new Promise((resolve, reject) => {
-        // Check if script is already loaded
-        if (document.querySelector('script[src="mobile-sms-detector.js"]')) {
-          console.log('✅ Mobile SMS Detector script already loaded');
-          resolve();
-          return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
         }
-        
-        // Try multiple paths for the script
-        const scriptPaths = [
-          'mobile-sms-detector.js',
-          '/mobile-sms-detector.js',
-          './mobile-sms-detector.js'
-        ];
-        
-        let currentPathIndex = 0;
-        
-        function tryLoadScript() {
-          if (currentPathIndex >= scriptPaths.length) {
-            console.error('❌ All script paths failed');
-            reject(new Error('Failed to load mobile SMS detector script from all paths'));
-            return;
-          }
-          
-          const script = document.createElement('script');
-          script.src = scriptPaths[currentPathIndex];
-          
-          script.onload = function() {
-            console.log('✅ Mobile SMS Detector script loaded successfully from:', scriptPaths[currentPathIndex]);
-            resolve();
-          };
-          
-          script.onerror = function() {
-            console.error('❌ Failed to load script from:', scriptPaths[currentPathIndex]);
-            currentPathIndex++;
-            tryLoadScript();
-          };
-          
-          document.head.appendChild(script);
-        }
-        
-        tryLoadScript();
       });
-    }
-    
-    function showMobileConnectionStatus(message, type) {
-      // Create status element
-      const statusDiv = document.createElement('div');
-      statusDiv.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 1rem 1.5rem;
-        border-radius: 10px;
-        color: white;
-        font-weight: 600;
-        z-index: 10000;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        animation: slideIn 0.3s ease;
-      `;
-      
-      if (type === 'success') {
-        statusDiv.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
-      } else if (type === 'info') {
-        statusDiv.style.background = 'linear-gradient(135deg, #17a2b8, #138496)';
-      } else if (type === 'warning') {
-        statusDiv.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
-      } else {
-        statusDiv.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
-      }
-      
-      statusDiv.textContent = message;
-      document.body.appendChild(statusDiv);
-      
-      // Auto-remove after 3 seconds
-      setTimeout(() => {
-        statusDiv.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => {
-          if (statusDiv.parentNode) {
-            statusDiv.parentNode.removeChild(statusDiv);
+    }, observerOptions);
+
+    // Observe all stat cards for animation
+    document.addEventListener('DOMContentLoaded', () => {
+      const statCards = document.querySelectorAll('.stat-card');
+      statCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+        observer.observe(card);
+      });
+    });
+
+    // Chart control buttons
+    document.querySelectorAll('.chart-control-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Remove active class from siblings
+        this.parentNode.querySelectorAll('.chart-control-btn').forEach(sibling => {
+          sibling.classList.remove('active');
+        });
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Here you would typically update the chart data based on the selected period
+        console.log('Chart period changed to:', this.textContent);
+      });
+    });
+
+    // Simulate real-time updates
+    setInterval(() => {
+      // Update random stat values slightly to simulate real-time data
+      const statValues = document.querySelectorAll('.stat-value');
+      statValues.forEach(stat => {
+        if (Math.random() < 0.1) { // 10% chance to update each stat
+          const currentValue = parseInt(stat.textContent.replace(/[^\d]/g, ''));
+          if (!isNaN(currentValue)) {
+            const change = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+            const newValue = Math.max(0, currentValue + change);
+            stat.textContent = stat.textContent.replace(/\d+/, newValue);
           }
-        }, 300);
-      }, 3000);
-    }
-    
-    // Add CSS animations for status messages
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-      }
-      @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
-      }
-    `;
-    document.head.appendChild(style);
-</script>
+        }
+      });
+    }, 5000); // Update every 5 seconds
+  </script>
 </body>
 </html>

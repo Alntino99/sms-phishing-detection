@@ -2,4416 +2,1152 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMS Analysis - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="all.min.css">
   <link rel="stylesheet" href="chatbot.css">
   <link rel="stylesheet" href="mobile-sms-detector.css">
-  <link rel="stylesheet" href="font-fix.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <title>Phishing Fraud Detection System</title>
-
-  <link rel="stylesheet" href="all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
-      * {
-      margin: 0;
-      padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-image: url('pagg.jpg');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-attachment: fixed;
-        color: #333;
-        line-height: 1.6;
-        overflow-x: hidden;
-        position: relative;
-      }
-
-      body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: brightness(0.6);
-        z-index: -1;
-      }
-
-      /* Modern Header */
-    header {
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        color: white;
-        padding: 1.5rem 0;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        position: relative;
-        overflow: hidden;
-      }
-
-      header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-        opacity: 0.3;
-      }
-
-      .header-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 2rem;
-        position: relative;
-        z-index: 2;
-      }
-
-      .header-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-      text-align: center;
-        margin-bottom: 0.5rem;
-        background: linear-gradient(45deg, #fff, #e3f2fd);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-
-      .header-subtitle {
-      text-align: center;
-        font-size: 1.1rem;
-        opacity: 0.9;
-        font-weight: 300;
-      }
-
-      /* Notification Button Styles */
-      .notification-button {
-        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-        color: white;
-        border: none;
-        border-radius: 25px;
-        padding: 0.5rem 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-        font-size: 0.9rem;
-        position: relative;
-      }
-
-      .notification-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-        background: linear-gradient(135deg, #ee5a52, #d63031);
-      }
-
-      .notification-button .notification-badge {
-        position: absolute;
-        top: -5px;
-        right: -5px;
-        background: #e74c3c;
-        color: white;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        font-size: 0.7rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-      }
-
-      /* Monitoring Button Styles */
-      .monitoring-button {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        border: none;
-        border-radius: 25px;
-        padding: 0.5rem 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        font-size: 0.9rem;
-      }
-
-      .monitoring-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        background: linear-gradient(135deg, #764ba2, #f093fb);
-      }
-
-      .monitoring-button.active {
-        background: linear-gradient(135deg, #28a745, #20c997);
-      }
-
-      .monitoring-button.active:hover {
-        background: linear-gradient(135deg, #20c997, #17a2b8);
-      }
-
-      /* Notification Center Styles */
-      .notification-center {
-        position: fixed;
-        top: 0;
-        right: -400px;
-        width: 400px;
-        height: 100vh;
-        background: white;
-        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-        z-index: 10000;
-        transition: right 0.3s ease;
-        overflow-y: auto;
-        padding: 20px;
-      }
-
-      .notification-item {
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 10px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border-left: 4px solid #ddd;
-      }
-
-      .notification-item.unread {
-        background: rgba(102, 126, 234, 0.1);
-        border-left-color: #667eea;
-      }
-
-      .notification-item.read {
-        background: #f8f9fa;
-        opacity: 0.7;
-      }
-
-      .notification-item:hover {
-        transform: translateX(5px);
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      }
-
-      .notification-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-      }
-
-      .notification-title {
-        font-weight: bold;
-        color: #333;
-      }
-
-      .notification-time {
-        font-size: 0.8rem;
-        color: #666;
-      }
-
-      .notification-sender {
-        font-size: 0.9rem;
-        color: #666;
-        margin-bottom: 5px;
-      }
-
-      .notification-message {
-        font-size: 0.9rem;
-        color: #333;
-        margin-bottom: 10px;
-        word-wrap: break-word;
-      }
-
-      .notification-analysis {
-        display: flex;
-        gap: 10px;
-        font-size: 0.8rem;
-      }
-
-      .risk-level.high {
-        color: #e74c3c;
-        font-weight: bold;
-      }
-
-      .risk-level.low {
-        color: #27ae60;
-        font-weight: bold;
-      }
-
-          .confidence {
-      color: #666;
+    /* Mobile-First Responsive Design */
+    .detection-wrapper {
+      min-height: 100vh;
+      padding-top: 80px;
+      background: var(--gradient-primary);
+      background-attachment: fixed;
     }
 
-    /* Test Button Styles */
-    .test-button {
-      background: linear-gradient(135deg, #6f42c1, #e83e8c);
-      color: white;
-      border: none;
-      border-radius: 25px;
-      padding: 0.5rem 1rem;
+    .detection-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    /* Mobile Header */
+    .mobile-header {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      margin-bottom: 2rem;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      box-shadow: var(--glass-shadow);
+    }
+
+    .mobile-header h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff, #f0f0f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .mobile-header p {
+      opacity: 0.9;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    /* Analysis Form - Mobile Optimized */
+    .analysis-form {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      box-shadow: var(--glass-shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
       font-weight: 600;
-      cursor: pointer;
+      color: white;
+      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+    }
+
+    .sms-textarea {
+      width: 100%;
+      min-height: 140px;
+      padding: 1rem;
+      border: 2px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      color: white;
+      font-family: var(--font-primary);
+      font-size: 1rem;
+      resize: vertical;
+      transition: all var(--transition-normal);
+      line-height: 1.5;
+    }
+
+    .sms-textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .sms-textarea::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.4;
+    }
+
+    /* Mobile-Optimized Action Buttons */
+    .analysis-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .btn-analyze {
+      background: var(--gradient-primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-full);
+      padding: 1rem 2rem;
+      font-family: var(--font-primary);
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 54px;
+    }
+
+    .btn-analyze:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .btn-analyze:active {
+      transform: translateY(0);
+    }
+
+    .btn-analyze.loading {
+      background: var(--gradient-secondary);
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 2px solid var(--glass-border);
+      border-radius: var(--radius-full);
+      padding: 0.75rem 1.5rem;
+      font-family: var(--font-primary);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: var(--primary-color);
+    }
+
+    /* Results Container - Mobile Optimized */
+    .results-wrapper {
+      display: none;
+      animation: slideInUp 0.6s ease-out;
+    }
+
+    .results-wrapper.show {
+      display: block;
+    }
+
+    .threat-alert {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      box-shadow: var(--glass-shadow);
+    }
+
+    .threat-indicator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      font-weight: 700;
+    }
+
+    .threat-safe {
+      background: var(--gradient-success);
+      color: white;
+    }
+
+    .threat-warning {
+      background: var(--gradient-danger);
+      color: white;
+    }
+
+    .threat-icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .threat-text {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .threat-score {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    /* Confidence Display - Mobile Optimized */
+    .confidence-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--glass-shadow);
+    }
+
+    .confidence-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .confidence-label {
+      font-weight: 600;
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    .confidence-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .confidence-bar-container {
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .confidence-bar {
+      height: 100%;
+      background: var(--gradient-accent);
+      border-radius: var(--radius-full);
+      transition: width 1.5s ease-out;
+      position: relative;
+    }
+
+    .confidence-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    /* Stats Grid - Mobile Responsive */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .stat-item {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      color: white;
+    }
+
+    /* Indicators Section */
+    .indicators-section {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--glass-shadow);
+    }
+
+    .section-title {
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .indicator-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .indicator-item {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      border-left: 4px solid var(--accent-color);
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Recommendations */
+    .recommendations-section {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--glass-shadow);
+    }
+
+    .recommendation-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.4;
+    }
+
+    .recommendation-item:last-child {
+      border-bottom: none;
+    }
+
+    /* Quick Examples - Mobile Optimized */
+    .examples-section {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--glass-shadow);
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .example-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+
+    .example-card:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+    }
+
+    .example-label {
+      font-weight: 600;
+      color: white;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       font-size: 0.9rem;
     }
 
-    .test-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(111, 66, 193, 0.4);
-      background: linear-gradient(135deg, #e83e8c, #fd7e14);
+    .example-text {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      line-height: 1.3;
+      color: rgba(255, 255, 255, 0.8);
     }
 
-      /* Navigation */
-      nav {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        padding: 1rem 0;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-      }
-
-      .nav-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .nav-brand {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #1e3c72;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .nav-brand::before {
-        content: '🛡️';
-        font-size: 1.8rem;
-      }
-
-      .nav-links {
-        display: flex;
-        gap: 2rem;
-        list-style: none;
-      }
-
-      .nav-links a {
-        color: #333;
-        text-decoration: none;
-        font-weight: 500;
-        padding: 0.5rem 1rem;
-        border-radius: 25px;
-        transition: all 0.3s ease;
-        position: relative;
-      }
-
-      .nav-links a:hover {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-      }
-
-      .nav-links a.active {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-      }
-
-      /* Logo and Title Styles */
-      .logo-title {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 1rem;
-        margin-bottom: 1rem;
-      }
-
-      .logo {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease;
-      }
-
-      .logo:hover {
-        transform: scale(1.1);
-      }
-
-      .main-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        background: linear-gradient(45deg, #fff, #e3f2fd);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin: 0;
-      }
-
-      /* Dark Mode Toggle */
-      .theme-toggle {
-        position: fixed;
-        top: 2rem;
-        right: 2rem;
-        z-index: 1000;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-      border: none;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        color: white;
-      }
-
-      .theme-toggle:hover {
-        transform: scale(1.1);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-      }
-
-      /* Dark Mode Styles */
-      body.dark-mode {
-        color: #e2e8f0;
-      }
-
-      body.dark-mode::before {
-        background: rgba(0, 0, 0, 0.7);
-        backdrop-filter: brightness(0.3);
-      }
-
-      body.dark-mode header {
-        background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-      }
-
-      body.dark-mode .detect-forms {
-        background: rgba(45, 55, 72, 0.8);
-        color: #e2e8f0;
-      }
-
-      body.dark-mode .result-container {
-        background: rgba(45, 55, 72, 0.8);
-        color: #e2e8f0;
-      }
-
-      body.dark-mode .main-title {
-        background: linear-gradient(45deg, #e2e8f0, #cbd5e0);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      body.dark-mode .nav-links a {
-        color: #e2e8f0;
-        background: rgba(45, 55, 72, 0.9);
-        border: 1px solid rgba(226, 232, 240, 0.3);
-      }
-
-      body.dark-mode .nav-links a:hover {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-        border-color: transparent;
-      }
-
-      /* Navigation Styles - Ensure Visibility */
-      .nav-links a {
-        color: #1e3c72 !important;
-        text-decoration: none;
-        font-weight: 600;
-        padding: 0.5rem 1rem;
-        border-radius: 25px;
-        transition: all 0.3s ease;
-        position: relative;
-        background: rgba(255, 255, 255, 0.9) !important;
-        border: 1px solid rgba(30, 60, 114, 0.2) !important;
-        display: inline-block;
-      }
-
-      .nav-links a:hover {
-        background: linear-gradient(135deg, #667eea, #764ba2) !important;
-        color: white !important;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        border-color: transparent !important;
-      }
-
-      .nav-links a.active {
-        background: linear-gradient(135deg, #667eea, #764ba2) !important;
-        color: white !important;
-        border-color: transparent !important;
-      }
-
-      /* Modern SMS Alerts Button */
-      .go-to-msg {
-        display: flex;
-        justify-content: center;
-        margin: 3rem 0;
-        padding: 0 2rem;
-      }
-
-      .navigate-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        text-decoration: none;
-        padding: 1rem 2rem;
-        border-radius: 50px;
-        font-weight: 600;
-        font-size: 1.1rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        position: relative;
-        overflow: hidden;
-      border: none;
-      cursor: pointer;
-      }
-
-      .navigate-link::before {
-        content: '🔔';
-        font-size: 1.2rem;
-      }
-
-      .navigate-link:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
-        background: linear-gradient(135deg, #5a67d8, #6b46c1);
-      }
-
-      .navigate-link:active {
-        transform: translateY(-1px);
-      }
-
-      /* Dark mode styles for the button */
-      body.dark-mode .navigate-link {
-        background: linear-gradient(135deg, #4c51bf, #553c9a);
-        box-shadow: 0 8px 25px rgba(76, 81, 191, 0.4);
-      }
-
-      body.dark-mode .navigate-link:hover {
-        background: linear-gradient(135deg, #434190, #4c1d95);
-        box-shadow: 0 12px 35px rgba(76, 81, 191, 0.5);
-      }
-
-      /* Main Content */
-      .detect-page {
-        max-width: 1200px;
-        margin: 2rem auto;
-        padding: 0 2rem;
-      }
-
-      .detect-forms {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(40px);
-        border-radius: 20px;
-        padding: 3rem;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        position: relative;
-        overflow: hidden;
-      }
-
-      .detect-forms::before {
-        content: '';
+    /* Loading Overlay */
+    .loading-overlay {
       position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-        border-radius: 20px 20px 0 0;
-      }
-
-      .detect-forms h1 {
-        text-align: center;
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #1e3c72;
-        margin-bottom: 1rem;
-        background: linear-gradient(135deg, #1e3c72, #2a5298);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      .detect-forms p {
-        text-align: center;
-        color: #666;
-        font-size: 1.1rem;
-        margin-bottom: 2rem;
-        line-height: 1.6;
-      }
-
-      /* Analysis Modes */
-      .analysis-modes {
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
       display: flex;
-        gap: 1rem;
-        margin-bottom: 2rem;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      .mode-btn {
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        border: 2px solid #dee2e6;
-        padding: 1rem 1.5rem;
-        border-radius: 15px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-weight: 600;
-        color: #495057;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .mode-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-      width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-        transition: left 0.5s ease;
-      }
-
-      .mode-btn:hover::before {
-        left: 100%;
-      }
-
-      .mode-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        border-color: #667eea;
-        color: #667eea;
-      }
-
-      .mode-btn.active {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-        border-color: #667eea;
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-      }
-
-      /* Input Area */
-      .input-section {
-        margin-bottom: 2rem;
-      }
-
-      .input-section label {
-        display: block;
-        font-weight: 600;
-        color: #495057;
-        margin-bottom: 0.5rem;
-        font-size: 1.1rem;
-      }
-
-      #smsInput {
-        width: 100%;
-        min-height: 120px;
-        padding: 1.5rem;
-        border: 2px solid #e9ecef;
-        border-radius: 15px;
-        font-size: 1rem;
-        font-family: inherit;
-        resize: vertical;
-        transition: all 0.3s ease;
-        background: #f8f9fa;
-      }
-
-      #smsInput:focus {
-        outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        background: white;
-      }
-
-      #smsInput::placeholder {
-        color: #adb5bd;
-        font-style: italic;
-      }
-
-      /* Stats Display */
-      .input-stats {
-        display: flex;
-        justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-        padding: 1rem;
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        border-radius: 10px;
-        margin-top: 1rem;
-        font-size: 0.9rem;
-        color: #6c757d;
-      }
+      justify-content: center;
+      border-radius: var(--radius-xl);
+      z-index: 10;
+      color: white;
+    }
 
-      .stat-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
 
-      .stat-value {
-        font-weight: 600;
-        color: #495057;
-      }
+    .loading-text {
+      text-align: center;
+    }
 
-      /* Buttons */
-      .btn {
-        display: flex;
-      gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-bottom: 2rem;
-      }
+    .loading-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
 
-      .btn button {
-        padding: 1rem 2rem;
-      border: none;
-        border-radius: 50px;
-        font-weight: 600;
-        font-size: 1rem;
-      cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-        min-width: 150px;
-      }
+    .loading-subtitle {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
 
-      .btn button::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        transition: width 0.6s ease, height 0.6s ease;
-      }
-
-      .btn button:hover::before {
-        width: 300px;
-        height: 300px;
-      }
-
-      #analyzeButton {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-      }
-
-      #analyzeButton:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
-      }
-
-      #clearButton {
-        background: linear-gradient(135deg, #6c757d, #495057);
-        color: white;
-        box-shadow: 0 8px 25px rgba(108, 117, 125, 0.3);
-      }
-
-      #clearButton:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(108, 117, 125, 0.4);
-      }
-
-      #bulkButton {
-        background: linear-gradient(135deg, #28a745, #20c997);
-        color: white;
-        box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
-      }
-
-      #bulkButton:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(40, 167, 69, 0.4);
-      }
-
-      /* Results Container */
-      .result-container {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(40px);
-        border-radius: 15px;
+    /* Desktop Responsive Adjustments */
+    @media (min-width: 768px) {
+      .detection-container {
         padding: 2rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        margin-top: 2rem;
-        position: relative;
-        overflow: hidden;
       }
 
-      .result-container::before {
-        content: '';
-      position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #667eea, #764ba2);
-        border-radius: 15px 15px 0 0;
+      .mobile-header {
+        padding: 3rem 2rem;
       }
 
-      /* Analysis Results */
-      .analysis-result {
-        padding: 2rem;
-        border-radius: 15px;
-        margin-bottom: 1.5rem;
-        position: relative;
-        overflow: hidden;
-        animation: slideIn 0.5s ease;
+      .mobile-header h1 {
+        font-size: 3rem;
       }
 
-      @keyframes slideIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .analysis-result.phishing {
-        background: linear-gradient(135deg, #fff5f5, #fed7d7);
-        border: 2px solid #feb2b2;
-        border-left: 5px solid #e53e3e;
-      }
-
-      .analysis-result.safe {
-        background: linear-gradient(135deg, #f0fff4, #c6f6d5);
-        border: 2px solid #9ae6b4;
-        border-left: 5px solid #38a169;
-      }
-
-      .analysis-result h3 {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        color: #2d3748;
-      }
-
-      .analysis-result p {
-        margin-bottom: 0.8rem;
-        font-size: 1rem;
-        line-height: 1.6;
-      }
-
-      .analysis-result strong {
-        color: #2d3748;
-        font-weight: 600;
-      }
-
-      .analysis-result ul {
-        margin: 1rem 0;
-        padding-left: 1.5rem;
-      }
-
-      .analysis-result li {
-        margin-bottom: 0.5rem;
-        color: #4a5568;
-      }
-
-      .analysis-result em {
-        font-style: italic;
-        color: #718096;
-      }
-
-      /* ML Results */
-      .ml-results {
-        background: linear-gradient(135deg, #f7fafc, #edf2f7);
-        border-radius: 10px;
-        padding: 1.5rem;
-        margin: 1rem 0;
-        border: 1px solid #e2e8f0;
-      }
-
-      .ml-results h4 {
-        color: #2d3748;
-        font-weight: 600;
-        margin-bottom: 1rem;
+      .mobile-header p {
         font-size: 1.2rem;
       }
 
-      .ml-prediction {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-        margin-bottom: 1rem;
-        padding: 1rem;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      }
-
-      .ml-prediction.phishing {
-        border-left: 4px solid #e53e3e;
-        background: linear-gradient(135deg, #fff5f5, #fed7d7);
-      }
-
-      .ml-prediction.safe {
-        border-left: 4px solid #38a169;
-        background: linear-gradient(135deg, #f0fff4, #c6f6d5);
-      }
-
-      .ml-model {
-        font-weight: 600;
-        color: #2d3748;
-      }
-
-      .ml-confidence {
-        color: #718096;
-        font-size: 0.9rem;
-      }
-
-      .ml-probabilities {
- display: flex;
- flex-direction: column;
-        gap: 0.8rem;
-      }
-
-      .prob-bar {
-        position: relative;
-        height: 25px;
-        background: #e2e8f0;
-        border-radius: 12px;
-        overflow: hidden;
-      }
-
-      .prob-fill {
-        height: 100%;
-        transition: width 0.8s ease;
-        border-radius: 12px;
-      }
-
-      .prob-fill.phishing {
-        background: linear-gradient(90deg, #e53e3e, #fc8181);
-      }
-
-      .prob-fill.safe {
-        background: linear-gradient(90deg, #38a169, #68d391);
-      }
-
-      .prob-bar span {
-        position: absolute;
-        top: 50%;
-        left: 15px;
-        transform: translateY(-50%);
-        color: white;
-        font-weight: 600;
-        font-size: 0.9rem;
-        z-index: 1;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-      }
-
-      .feature-importance {
-        margin-top: 1.5rem;
-      }
-
-      .feature-importance h5 {
-        color: #2d3748;
-        margin-bottom: 1rem;
-        font-weight: 600;
-      }
-
-      .feature-importance ul {
-        list-style: none;
-        padding: 0;
-      }
-
-      .feature-item {
-        display: flex;
- align-items: center;
-        gap: 1rem;
-        padding: 0.8rem;
-        margin: 0.5rem 0;
-        border-radius: 8px;
-        background: white;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        transition: transform 0.2s ease;
-      }
-
-      .feature-item:hover {
-        transform: translateX(5px);
-      }
-
-      .feature-item.phishing {
-        border-left: 3px solid #e53e3e;
-      }
-
-      .feature-item.safe {
-        border-left: 3px solid #38a169;
-      }
-
-      .feature-word {
-        font-weight: 600;
-        color: #2d3748;
-      }
-
-      .feature-indicator {
-        color: #718096;
-        font-size: 0.9rem;
-      }
-
-      .feature-importance {
-        color: #a0aec0;
-        font-size: 0.8rem;
-      }
-
-      .error {
-        color: #e53e3e;
-        text-align: center;
-        padding: 1.5rem;
-        background: linear-gradient(135deg, #fff5f5, #fed7d7);
-        border-radius: 10px;
-        border: 2px solid #feb2b2;
-        font-weight: 500;
-      }
-
-      /* Threat Intelligence */
-      .threat-intelligence {
-        background: linear-gradient(135deg, #1a202c, #2d3748);
-        color: white;
-        border-radius: 15px;
+      .analysis-form {
         padding: 2rem;
-        margin-top: 2rem;
-        position: relative;
-        overflow: hidden;
       }
 
-      .threat-intelligence::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-        opacity: 0.3;
-      }
-
-      .threat-intelligence h3 {
-        color: #f7fafc;
- margin-bottom: 1rem;
-        font-size: 1.5rem;
-        font-weight: 600;
-        position: relative;
-        z-index: 1;
-      }
-
-      .threat-intelligence p {
-        color: #e2e8f0;
-        margin-bottom: 1rem;
-        position: relative;
-        z-index: 1;
-      }
-
-      /* Bulk Analysis Styles */
-      .bulk-analysis-modal {
-        background: rgba(0, 0, 0, 0.8);
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1000;
-      display: flex;
+      .analysis-actions {
+        flex-direction: row;
         justify-content: center;
-        align-items: center;
-        backdrop-filter: blur(10px);
       }
 
-      .modal-content {
-        background: linear-gradient(135deg, #ffffff, #f7fafc);
-        border: none;
-        border-radius: 20px;
-        padding: 3rem;
-        max-width: 800px;
-        width: 90%;
-        max-height: 90vh;
-        overflow-y: auto;
-        color: #2d3748;
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-        position: relative;
-      }
-
-      .modal-content::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-        border-radius: 20px 20px 0 0;
-      }
-
-      .upload-section {
-        margin-bottom: 2rem;
-      }
-
-      .upload-section label {
-        display: block;
-        margin-bottom: 1rem;
-        font-weight: 600;
-        color: #2d3748;
-        font-size: 1.1rem;
-      }
-
-      .upload-section input[type="file"] {
-        width: 100%;
-        padding: 1.5rem;
-        border: 2px dashed #cbd5e0;
-        border-radius: 15px;
-        background: linear-gradient(135deg, #f7fafc, #edf2f7);
-        color: #4a5568;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 1rem;
-      }
-
-      .upload-section input[type="file"]:hover {
-        border-color: #667eea;
-        background: linear-gradient(135deg, #edf2f7, #e2e8f0);
-      }
-
-      .help-text {
-        font-size: 0.9rem;
-        color: #718096;
-        margin-top: 0.5rem;
-        font-style: italic;
-      }
-
-      .sample-csv {
-        margin-bottom: 2rem;
-        padding: 1.5rem;
-        background: linear-gradient(135deg, #f7fafc, #edf2f7);
-        border-radius: 15px;
-        border: 1px solid #e2e8f0;
-      }
-
-      .sample-csv h4 {
-        color: #2d3748;
-        margin-bottom: 1rem;
-        font-weight: 600;
-      }
-
-      .sample-csv pre {
-        background: #2d3748;
-        color: #e2e8f0;
-        padding: 1rem;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        overflow-x: auto;
-        margin-bottom: 1rem;
-        border: 1px solid #4a5568;
-      }
-
-      .sample-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        border: none;
-        padding: 0.8rem 1.5rem;
-        border-radius: 25px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-      }
-
-      .sample-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-      }
-
-      .analysis-options {
-        margin-bottom: 2rem;
-      }
-
-      .analysis-options h4 {
-        color: #2d3748;
-        margin-bottom: 1rem;
-        font-weight: 600;
-      }
-
-      .analysis-options label {
-        display: block;
-        margin-bottom: 0.8rem;
-        cursor: pointer;
-        font-weight: 500;
-        color: #4a5568;
-      }
-
-      .analysis-options input[type="checkbox"] {
-        margin-right: 0.8rem;
-        transform: scale(1.2);
-        accent-color: #667eea;
-      }
-
-      .bulk-actions {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      .bulk-actions button {
-        padding: 1rem 2rem;
-        border: none;
-        border-radius: 25px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        min-width: 150px;
-      }
-
-      .bulk-actions button:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none !important;
-      }
-
-      .bulk-preview {
-        margin-bottom: 2rem;
-        padding: 1.5rem;
-        background: linear-gradient(135deg, #f7fafc, #edf2f7);
-        border-radius: 15px;
-        border: 1px solid #e2e8f0;
-      }
-
-      .bulk-preview h4 {
-        color: #2d3748;
-        margin-bottom: 1rem;
-        font-weight: 600;
-      }
-
-      .preview-item {
-        padding: 0.8rem;
-        margin: 0.5rem 0;
-        background: white;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      }
-
-      .preview-more {
-        color: #718096;
-        font-style: italic;
-        margin-top: 0.8rem;
-        text-align: center;
-      }
-
-      .bulk-progress {
-        text-align: center;
-        padding: 2rem;
-        background: linear-gradient(135deg, #f7fafc, #edf2f7);
-        border-radius: 15px;
-        border: 1px solid #e2e8f0;
-        margin: 2rem 0;
-      }
-
-      .progress-bar {
-        width: 100%;
-        height: 20px;
-        background: #e2e8f0;
-        border-radius: 10px;
-        overflow: hidden;
-        margin: 1rem 0;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-
-      .progress-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #667eea, #764ba2);
-        width: 0%;
-        transition: width 0.5s ease;
-        border-radius: 10px;
-      }
-
-      .progress-text {
-        font-weight: 600;
-        color: #2d3748;
-        margin-bottom: 0.8rem;
-        font-size: 1.1rem;
-      }
-
-      .current-item {
-        color: #718096;
-        font-size: 0.9rem;
-        font-style: italic;
-      }
-
-      .bulk-results {
-        padding: 2rem;
-        background: linear-gradient(135deg, #f7fafc, #edf2f7);
-        border-radius: 15px;
-        border: 1px solid #e2e8f0;
-      }
-
-      .bulk-results h3 {
-        color: #2d3748;
-        text-align: center;
-        margin-bottom: 2rem;
-        font-weight: 700;
-        font-size: 1.8rem;
-      }
-
-      .results-summary {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-      }
-
-      .summary-item {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 12px;
-        text-align: center;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        border: 1px solid #e2e8f0;
-      }
-
-      .summary-label {
-        display: block;
-        color: #718096;
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-        font-weight: 500;
-      }
-
-      .summary-value {
-        display: block;
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #2d3748;
-      }
-
-      .summary-value.phishing {
-        color: #e53e3e;
-      }
-
-      .summary-value.safe {
-        color: #38a169;
-      }
-
-      .detailed-stats {
-        margin-bottom: 2rem;
-      }
-
-      .detailed-stats h4 {
-        color: #2d3748;
-        margin-bottom: 1.5rem;
-        font-weight: 600;
-        font-size: 1.3rem;
+      .examples-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       }
 
       .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .btn-analyze {
+        font-size: 1.2rem;
+        padding: 1.25rem 2.5rem;
+      }
+    }
+
+    /* Large Desktop */
+    @media (min-width: 1200px) {
+      .detection-container {
+        padding: 3rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
         gap: 1.5rem;
       }
+    }
 
-      .stat-card {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    /* Animations */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
       }
-
-      .stat-card h5 {
-        color: #2d3748;
-        margin-bottom: 1rem;
-        font-size: 1.1rem;
-        font-weight: 600;
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
+    }
 
-      .stat-item {
-        padding: 0.5rem 0;
-        color: #4a5568;
-        font-size: 0.9rem;
-        border-bottom: 1px solid #f7fafc;
-      }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
 
-      .stat-item:last-child {
-        border-bottom: none;
-      }
+    /* Mobile Menu Toggle */
+    .mobile-menu-toggle {
+      display: none;
+    }
 
-      .sample-results {
-        margin-bottom: 2rem;
-      }
-
-      .sample-results h4 {
-        color: #2d3748;
-        margin-bottom: 1.5rem;
-        font-weight: 600;
-      }
-
-      .results-table {
-        background: white;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        border: 1px solid #e2e8f0;
-      }
-
-      .result-row {
-        padding: 1rem;
-        border-bottom: 1px solid #f7fafc;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .result-row:last-child {
-        border-bottom: none;
-      }
-
-      .result-row.phishing {
-        border-left: 4px solid #e53e3e;
-        background: linear-gradient(135deg, #fff5f5, #fed7d7);
-      }
-
-      .result-row.safe {
-        border-left: 4px solid #38a169;
-        background: linear-gradient(135deg, #f0fff4, #c6f6d5);
-      }
-
-      .result-message {
-        flex: 1;
-        color: #2d3748;
-        font-size: 0.9rem;
-        line-height: 1.4;
-      }
-
-      .result-details {
-        display: flex;
-        gap: 1rem;
-        font-size: 0.8rem;
-      }
-
-      .result-score {
-        color: #667eea;
-        font-weight: 600;
-      }
-
-      .result-risk {
-        color: #718096;
-      }
-
-      .result-type {
-        color: #a0aec0;
-        font-style: italic;
-      }
-
-      .export-section {
-        text-align: center;
-        margin-top: 2rem;
-      }
-
-      .export-btn {
-        background: linear-gradient(135deg, #38a169, #48bb78);
-        color: white;
-        border: none;
-        padding: 1rem 2rem;
-        border-radius: 25px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 1rem;
-      }
-
-      .export-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(56, 161, 105, 0.3);
-      }
-
-      /* Responsive Design */
-      @media (max-width: 768px) {
-        .header-title {
-          font-size: 2rem;
-        }
-
-        .detect-forms {
-          padding: 2rem 1.5rem;
-        }
-
-        .detect-forms h1 {
-          font-size: 2rem;
-        }
-
-        .analysis-modes {
-          grid-template-columns: 1fr;
-        }
-
-        .btn {
-      flex-direction: column;
-          align-items: center;
-        }
-
-        .btn button {
-          width: 100%;
-          max-width: 300px;
-        }
-
-        .nav-links {
-          flex-direction: column;
-          gap: 1rem;
-        }
-
-        .nav-container {
-          flex-direction: column;
-          gap: 1rem;
-        }
-
-        .results-summary {
-          grid-template-columns: 1fr;
-        }
-
-        .stats-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .result-details {
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-      }
-
-      /* Animations */
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .analysis-result {
-        animation: fadeIn 0.6s ease;
-      }
-
-      /* Loading Animation */
-      @keyframes pulse {
-        0%, 100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.5;
-        }
-      }
-
-      .loading {
-        animation: pulse 1.5s ease-in-out infinite;
-      }
-
-      /* User Account Section */
-      .user-account {
-        position: relative;
+    @media (max-width: 767px) {
+      .enhanced-nav {
         display: none;
       }
 
-      .user-account.show {
+      .mobile-menu-toggle {
         display: block;
-      }
-
-      .user-button {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: none;
+        border: none;
         color: white;
-        border: none;
-        border-radius: 25px;
-        padding: 0.5rem 1rem;
-        font-weight: 600;
+        font-size: 1.5rem;
         cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
       }
-
-      .user-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-      }
-
-      .user-avatar {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.8rem;
-      }
-
-      .user-dropdown {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
-        border-radius: 15px;
-        padding: 1rem;
-        min-width: 250px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-10px);
-        transition: all 0.3s ease;
-        z-index: 1001;
-      }
-
-      .user-dropdown.show {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-      }
-
-      .user-info {
-        padding: 1rem;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        margin-bottom: 1rem;
-      }
-
-      .user-name {
-        font-weight: 700;
-        color: #1e3c72;
-        font-size: 1.1rem;
-        margin-bottom: 0.25rem;
-      }
-
-      .user-email {
-        color: #666;
-        font-size: 0.9rem;
-      }
-
-      .user-menu {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      .user-menu li {
-        margin-bottom: 0.5rem;
-      }
-
-      .user-menu a {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1rem;
-        color: #1e3c72;
-      text-decoration: none;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        background: transparent;
-        border: none;
-        width: 100%;
-        text-align: left;
-      }
-
-      .user-menu a:hover {
-        background: rgba(102, 126, 234, 0.1);
-        color: #667eea;
-      }
-
-      .user-menu a.logout {
-        color: #ef4444;
-      }
-
-      .user-menu a.logout:hover {
-        background: rgba(239, 68, 68, 0.1);
-        color: #ef4444;
-      }
-
-      /* Dark Mode Styles for User Account */
-      body.dark-mode .user-dropdown {
-        background: rgba(45, 55, 72, 0.95);
-        border-color: rgba(226, 232, 240, 0.2);
-      }
-
-      body.dark-mode .user-name {
-        color: #e2e8f0;
-      }
-
-      body.dark-mode .user-email {
-        color: #a0aec0;
-      }
-
-      body.dark-mode .user-menu a {
-        color: #e2e8f0;
-      }
-
-      body.dark-mode .user-menu a:hover {
-        background: rgba(102, 126, 234, 0.2);
-        color: #667eea;
-      }
-
-      body.dark-mode .user-info {
-        border-bottom-color: rgba(226, 232, 240, 0.2);
-      }
-    </style>
-     </head>
+    }
+  </style>
+</head>
 <body>
-  <!-- Dark Mode Toggle -->
-  <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+  <!-- Enhanced Theme Toggle -->
+  <button class="theme-toggle-enhanced" onclick="toggleTheme()" aria-label="Toggle theme">
     🌙
   </button>
 
-  <header>
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
     <div class="header-content">
-      <div class="logo-title">
-        <img src="logo.png" alt="SMS Phishing Logo" class="logo">
-        <h1 class="main-title">SMS Phishing Detection</h1>
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link" style="background: var(--gradient-primary); color: white;">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="login.html" class="nav-link">Login</a>
+      </nav>
+
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        ☰
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-links">
+        <a href="index.html" class="nav-link">🏠 Home</a>
+        <a href="detect.html" class="nav-link">🔍 Detect SMS</a>
+        <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+        <a href="about.html" class="nav-link">ℹ️ About</a>
+        <a href="contact.html" class="nav-link">📞 Contact</a>
+        <a href="login.html" class="nav-link">👤 Login</a>
       </div>
     </div>
-    <nav>
-      <div class="nav-container">
-              <a href="#" class="nav-brand">SMS Phishing Detection</a>
-      <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
-      <ul class="nav-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="detect.html" class="active">Detection</a></li>
-          <li><a href="sms.html">SMS Alerts</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li id="nav-login"><a href="login.html">Login</a></li>
-                  <li id="nav-signup"><a href="signup.html">Sign Up</a></li>
-        <li id="install-app-container" style="display: block;">
-          <button id="install-app-btn" class="install-app-button" onclick="installApp()">
-            📱 Install App
-          </button>
-        </li>
-        <li id="notification-container">
-          <button id="notification-btn" class="notification-button" onclick="window.advancedSMSNotifications.openNotificationCenter()">
-            🔔 <span id="notification-count">0</span>
-          </button>
-        </li>
-        <li id="monitoring-container">
-          <button id="start-monitoring-btn" class="monitoring-button" onclick="window.smsMonitor.startMonitoringFromUI()">
-            🛡️ Start Monitoring
-          </button>
-        </li>
-        <li id="test-container">
-          <button id="test-btn" class="test-button" onclick="window.runComprehensiveTests()">
-            🧪 Test All
-          </button>
-        </li>
-        <li class="user-account" id="user-account">
-            <button class="user-button" onclick="toggleUserDropdown()">
-              <div class="user-avatar" id="user-avatar">👤</div>
-              <span id="user-display-name">User</span>
-              <span>▼</span>
-            </button>
-            <div class="user-dropdown" id="user-dropdown">
-              <div class="user-info">
-                <div class="user-name" id="dropdown-user-name">User Name</div>
-                <div class="user-email" id="dropdown-user-email">user@example.com</div>
-              </div>
-              <ul class="user-menu">
-                <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-                <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
-                <li><a href="create.html"><i class="fas fa-plus"></i> Create Post</a></li>
-                <li><a href="#" onclick="logoutUser()" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-              </ul>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </nav>
   </header>
 
-<div class="detect-page">
-<div class="detect-forms">
-      <h1>Advanced SMS Phishing Detection</h1>
+  <!-- Main Detection Interface -->
+  <div class="detection-wrapper">
+    <div class="detection-container">
       
-      <div class="analysis-modes">
-        <button class="mode-btn active" onclick="setAnalysisMode('basic')">Basic Analysis</button>
-        <button class="mode-btn" onclick="setAnalysisMode('advanced')">Advanced Analysis</button>
-        <button class="mode-btn" onclick="setAnalysisMode('real-time')">Real-time Analysis</button>
-                    <button class="mode-btn" onclick="setAnalysisMode('ai-powered')">AI-Powered Analysis</button>
-            <button class="mode-btn" onclick="setAnalysisMode('gemini-ai')">Gemini AI Analysis</button>
-
-            <button class="mode-btn" onclick="setAnalysisMode('deepseek-ai')">DeepSeek AI Analysis</button>
+      <!-- Mobile-Optimized Header -->
+      <div class="mobile-header">
+        <h1>🔍 SMS Threat Analyzer</h1>
+        <p>Advanced AI-powered detection system that analyzes SMS messages in real-time to protect you from phishing attacks and scams.</p>
       </div>
-      
-      <!-- Mobile Phone Connection Section -->
-      <div class="mobile-connection-section" style="
-        margin: 2rem 0;
-        padding: 2rem;
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-        border-radius: 20px;
-        border: 2px solid rgba(102, 126, 234, 0.3);
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-      ">
-        <div style="
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 4px;
-          background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-        "></div>
-        
-        <h3 style="
-          color: #1e3c72;
-          font-size: 1.8rem;
-          font-weight: 700;
-          margin-bottom: 1rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-        ">
-          📱 Connect Your Mobile Phone
+
+      <!-- Analysis Form -->
+      <div class="analysis-form">
+        <div class="form-group">
+          <label for="smsInput" class="form-label">
+            📱 Enter SMS Message
+          </label>
+          <textarea 
+            id="smsInput" 
+            class="sms-textarea" 
+            placeholder="Paste your SMS message here for instant analysis...
+
+Example messages:
+• 'URGENT: Your bank account suspended! Click to verify'
+• 'Congratulations! You've won $1000! Claim now'
+• 'Hi John, coffee at 3pm tomorrow?'"
+            rows="6"
+          ></textarea>
+        </div>
+
+        <div class="analysis-actions">
+          <button onclick="performAnalysis()" class="btn-analyze" id="analyzeBtn">
+            <i class="fas fa-shield-alt"></i>
+            <span id="btnText">Analyze for Threats</span>
+          </button>
+          <button onclick="clearForm()" class="btn-secondary">
+            <i class="fas fa-eraser"></i>
+            Clear
+          </button>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div id="resultsSection" class="results-wrapper">
+        <!-- Threat Alert -->
+        <div class="threat-alert">
+          <div id="threatIndicator" class="threat-indicator">
+            <div class="threat-icon" id="threatIcon">🔍</div>
+            <div class="threat-text" id="threatText">Analyzing...</div>
+            <div class="threat-score" id="threatScore"></div>
+          </div>
+        </div>
+
+        <!-- Confidence Display -->
+        <div class="confidence-card">
+          <div class="confidence-header">
+            <span class="confidence-label">Detection Confidence</span>
+            <span class="confidence-value" id="confidenceValue">0%</span>
+          </div>
+          <div class="confidence-bar-container">
+            <div class="confidence-bar" id="confidenceBar" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value" id="threatScore">0</div>
+            <div class="stat-label">Threat Score</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="riskLevel">Unknown</div>
+            <div class="stat-label">Risk Level</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="analysisTime">0ms</div>
+            <div class="stat-label">Analysis Time</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="mlModels">3</div>
+            <div class="stat-label">AI Models</div>
+          </div>
+        </div>
+
+        <!-- Indicators Section -->
+        <div id="indicatorsSection" class="indicators-section" style="display: none;">
+          <h3 class="section-title">
+            🔍 Detection Indicators
+          </h3>
+          <ul id="indicatorsList" class="indicator-list"></ul>
+        </div>
+
+        <!-- Recommendations Section -->
+        <div class="recommendations-section">
+          <h3 class="section-title">
+            💡 Security Recommendations
+          </h3>
+          <div id="recommendationsList"></div>
+        </div>
+      </div>
+
+      <!-- Quick Examples -->
+      <div class="examples-section">
+        <h3 class="section-title">
+          🚀 Quick Test Examples
         </h3>
-        
-        <p style="
-          color: #666;
-          font-size: 1.1rem;
-          margin-bottom: 2rem;
-          line-height: 1.6;
-        ">
-          Enable real-time SMS monitoring and automatic phishing detection on your mobile device
-        </p>
-        
-        <div class="mobile-connection-buttons" style="
-          display: flex;
-          gap: 1rem;
-          justify-content: center;
-          flex-wrap: wrap;
-          margin-bottom: 1.5rem;
-        ">
-          <button onclick="connectMobilePhone()" class="mobile-connect-btn" style="
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 1rem 2rem;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-          ">
-            🔗 Connect Mobile Phone
-          </button>
+        <div class="examples-grid">
+          <div class="example-card" onclick="loadExample('phishing')">
+            <div class="example-label">
+              🚨 Phishing Example
+            </div>
+            <div class="example-text">
+              "URGENT: Your bank account has been SUSPENDED! Click here to verify immediately: bit.ly/bank-verify"
+            </div>
+          </div>
           
-          <button onclick="requestMobilePermissions()" class="mobile-permission-btn" style="
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 1rem 2rem;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-          ">
-            🔐 Request Permissions
-          </button>
+          <div class="example-card" onclick="loadExample('safe')">
+            <div class="example-label">
+              ✅ Safe Message Example
+            </div>
+            <div class="example-text">
+              "Hi Sarah, can we reschedule our meeting to Thursday at 2pm? Let me know if that works for you."
+            </div>
+          </div>
           
-          <button onclick="testMobileFeatures()" class="mobile-test-btn" style="
-            background: linear-gradient(135deg, #ffc107, #ff9800);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 1rem 2rem;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-          ">
-            🧪 Test Mobile Features
-          </button>
-        </div>
-        
-        <div class="mobile-status" id="mobileStatus" style="
-          padding: 1rem;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 12px;
-          font-size: 0.9rem;
-          color: #666;
-          text-align: center;
-          display: none;
-        ">
-          <p><strong>📱 Mobile Status:</strong> <span id="mobileStatusText">Checking mobile connection...</span></p>
-        </div>
-        
-        <div class="mobile-features-info" style="
-          margin-top: 1.5rem;
-          padding: 1rem;
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 12px;
-          font-size: 0.9rem;
-          color: #666;
-        ">
-          <p><strong>✨ Mobile Features Available:</strong></p>
-          <ul style="margin: 0.5rem 0; padding-left: 1.5rem; text-align: left;">
-            <li>📱 Real-time SMS monitoring</li>
-            <li>🔔 Push notifications for threats</li>
-            <li>👥 Contact integration for context</li>
-            <li>📍 Location-based analysis</li>
-            <li>📲 PWA installation for app-like experience</li>
-            <li>🔄 Background processing</li>
-          </ul>
+          <div class="example-card" onclick="loadExample('scam')">
+            <div class="example-label">
+              ⚠️ Scam Example
+            </div>
+            <div class="example-text">
+              "CONGRATULATIONS! You've won $50,000! Reply CLAIM with your SSN and bank details to receive your prize!"
+            </div>
+          </div>
         </div>
       </div>
-      
-      <div class="input-section">
-        <textarea id="smsInput" placeholder="Paste your SMS message here..." oninput="if(currentMode === 'real-time') analyzeRealTime()"></textarea>
-        <div class="input-stats">
-          <span id="charCount">0 characters</span>
-          <span id="wordCount">0 words</span>
-        </div>
-      </div>
-      
-  <div class="btn">
-        <button id="analyzeButton" onclick="handleAnalyzeWithFallback()">🔍 Analyze Message</button>
-        <button id="clearButton" onclick="clearResults()">🗑️ Clear</button>
-        <button id="bulkButton" onclick="bulkAnalysis()">📊 Bulk Analysis</button>
-                          <button id="notificationButton" onclick="testNotification()" style="background: linear-gradient(135deg, #ffc107, #ff9800);">🔔 Test Notifications</button>
-                  <button id="mobileConnectButton" onclick="connectMobilePhone()" style="background: linear-gradient(135deg, #17a2b8, #138496); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; min-width: 150px; padding: 1rem 2rem; box-shadow: 0 8px 25px rgba(23, 162, 184, 0.3);">📱 Connect Mobile Phone</button>
-                  <button id="testSMSButton" onclick="testSMSAnalysis()" style="background: linear-gradient(135deg, #28a745, #20c997); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; min-width: 150px; padding: 1rem 2rem; box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);">🧪 Test SMS Analysis</button>
-                  <button id="testPermissionsButton" onclick="testMobilePermissions()" style="background: linear-gradient(135deg, #6f42c1, #5a2d91); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; min-width: 150px; padding: 1rem 2rem; box-shadow: 0 8px 25px rgba(111, 66, 193, 0.3);">🔐 Test Permissions</button>
+    </div>
   </div>
 
-      <div id="result" class="result-container"></div>
-  
-  <!-- SMS Integration Section -->
-  <div id="smsIntegration" class="sms-integration" style="
-    margin-top: 2rem;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    display: none;
-  ">
-    <h4 style="color: #667eea; margin-bottom: 1rem; text-align: center;">
-      <i class="fas fa-mobile-alt"></i> Share Results via SMS
-    </h4>
-    
-    <div class="sms-buttons" style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-      <button onclick="shareResultsViaSMS()" class="sms-btn" style="
-        background: linear-gradient(135deg, #28a745, #20c997);
-        color: white;
-        border: none;
-        border-radius: 12px;
-        padding: 0.8rem 1.5rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      ">
-        <i class="fas fa-share"></i> Share Results via SMS
-      </button>
-      
-      <button onclick="openSMSApp()" class="sms-btn" style="
-        background: linear-gradient(135deg, #007bff, #0056b3);
-        color: white;
-        border: none;
-        border-radius: 12px;
-        padding: 0.8rem 1.5rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      ">
-        <i class="fas fa-sms"></i> Open SMS App
-      </button>
-      
-      <button onclick="installAsApp()" class="sms-btn" style="
-        background: linear-gradient(135deg, #6f42c1, #5a32a3);
-        color: white;
-        border: none;
-        border-radius: 12px;
-        padding: 0.8rem 1.5rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      ">
-        <i class="fas fa-download"></i> Install as App
-      </button>
-</div>
-    
-    <div class="sms-info" style="
-      margin-top: 1rem;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.8);
-      text-align: center;
-    ">
-      <p><strong>📱 Mobile Features:</strong></p>
-      <ul style="margin: 0.5rem 0; padding-left: 1.5rem; text-align: left;">
-        <li>Share analysis results directly via SMS</li>
-        <li>Open your phone's SMS app with pre-filled results</li>
-        <li>Install this web app on your phone's home screen</li>
-        <li>Access SMS phishing detection on the go</li>
-      </ul>
-</div>
+  <!-- Loading Overlay Template -->
+  <div id="loadingTemplate" class="loading-overlay" style="display: none;">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">
+      <div class="loading-title">Analyzing Message...</div>
+      <div class="loading-subtitle">Running AI threat detection models</div>
+    </div>
   </div>
 
-      <div class="threat-intelligence">
-        <h3>🛡️ Threat Intelligence</h3>
-        <div id="threatFeed" class="threat-feed">
-          <p>Loading latest threat data...</p>
-</div>
-</div>
-</div>
-</div>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script src="firebase.js"></script>
-  <script src="gemini-ai.js"></script>
-  <script src="gemini-config.js"></script>
-  <script src="deepseek-ai.js"></script>
-  <script src="deepseek-config.js"></script>
-  <script src="api-manager.js"></script>
+  <!-- Scripts -->
   <script src="script.js"></script>
+  <script src="firebase.js"></script>
   <script src="darkMode.js"></script>
-  <script src="chatbot.js"></script>
-  <script src="mobile-sms-detector.js" onerror="console.error('Failed to load mobile-sms-detector.js from HTML')"></script>
-  <script src="universal-button-handler.js"></script>
-      <script src="ml-classifiers.js"></script>
-    <script src="cross-platform-ml.js"></script>
-    <script src="real-time-sms-monitor.js"></script>
-    <script src="comprehensive-test.js"></script>
-    <script src="enhanced-pwa-install.js"></script>
-    <script src="advanced-sms-notifications.js"></script>
-    <script src="complete-button-functions.js"></script>
-  
   <script>
-    let currentMode = 'basic';
-    let threatDatabase = {};
-
-    // Initialize threat intelligence
-    function initializeThreatIntelligence() {
-      threatDatabase = {
-        knownPhishingDomains: [
-          'bit.ly', 'tinyurl.com', 'goo.gl', 't.co', 'is.gd', 'v.gd',
-          'free-gift.com', 'secure-verify.net', 'bank-update.org'
-        ],
-        suspiciousKeywords: [
-          'urgent', 'immediate', 'verify', 'confirm', 'update', 'secure',
-          'suspended', 'locked', 'compromised', 'fraud', 'unauthorized'
-        ],
-        knownScamPatterns: [
-          'bank security alert',
-          'tax refund',
-          'package delivery',
-          'prize winner',
-          'inheritance',
-          'crypto investment'
-        ]
-      };
-      
-      updateThreatFeed();
+    // Enhanced theme toggle
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const themeToggle = document.querySelector('.theme-toggle-enhanced');
+      const isDark = document.body.classList.contains('dark-mode');
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('darkMode', isDark);
     }
 
-    function setAnalysisMode(mode) {
-      currentMode = mode;
-      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      
-      const input = document.getElementById('smsInput');
-      switch(mode) {
-        case 'real-time':
-          input.placeholder = 'Type or paste SMS for real-time analysis...';
-          break;
-        case 'ai-powered':
-          input.placeholder = 'Paste SMS for AI-powered deep analysis...';
-          break;
-        case 'advanced':
-          input.placeholder = 'Paste SMS for advanced pattern analysis...';
-          break;
-        default:
-          input.placeholder = 'Paste your SMS message here...';
-      }
-    }
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
 
-    function updateInputStats() {
-      const input = document.getElementById('smsInput');
-      const text = input.value;
-      const charCount = text.length;
-      const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
-      
-      document.getElementById('charCount').textContent = `${charCount} characters`;
-      document.getElementById('wordCount').textContent = `${wordCount} words`;
-    }
-
-    function analyzeRealTime() {
-      const text = document.getElementById('smsInput').value;
-      if (text.length > 10) {
-        performRealTimeAnalysis(text);
-      }
-    }
-
-    function updateRealTimeResults(analysis) {
-      const resultElement = document.getElementById('result');
-      if (analysis.score > 20) {
-        resultElement.innerHTML = `
-          <div class="realtime-warning">
-            ⚠️ Suspicious elements detected in real-time
-          </div>
-        `;
-      }
-    }
-
-    function handleAnalyzeWithFallback() {
-      const text = document.getElementById('smsInput').value;
-      const resultElement = document.getElementById('result');
-      
-      if (!text.trim()) {
-        resultElement.innerHTML = '<div class="error">Please enter a message to analyze.</div>';
-        return;
-      }
-      
-      // Use different analysis based on selected mode
-      switch(currentMode) {
-        case 'advanced':
-          performAdvancedAnalysis(text);
-          break;
-        case 'real-time':
-          performRealTimeAnalysis(text);
-          break;
-        case 'ai-powered':
-          performAIPoweredAnalysis(text);
-          break;
-        case 'gemini-ai':
-          performGeminiAIAnalysis(text);
-          break;
-
-        case 'deepseek-ai':
-          performDeepSeekAIAnalysis(text);
-          break;
-        default: // basic
-          performBasicAnalysis(text);
-          break;
-      }
-    }
-
-    function performBasicAnalysis(text) {
-      const resultElement = document.getElementById('result');
-      let score = 0;
-      const indicators = [];
-      
-      // Basic phishing detection
-      const phishingWords = ['urgent', 'bank', 'verify', 'suspended', 'compromised', 'fraud', 'refund', 'tax', 'prize', 'winner', 'inheritance'];
-      const urgencyWords = ['immediate', 'now', 'asap', 'quickly', 'hurry', 'expires'];
-      
-      phishingWords.forEach(word => {
-        if (text.toLowerCase().includes(word)) {
-          score += 10;
-          indicators.push(`Contains "${word}"`);
-        }
-      });
-      
-      urgencyWords.forEach(word => {
-        if (text.toLowerCase().includes(word)) {
-          score += 5;
-          indicators.push(`Urgency: "${word}"`);
-        }
-      });
-      
-      // URL detection
-      if (text.match(/https?:\/\//)) {
-        score += 15;
-        indicators.push('Contains URL');
-      }
-      
-      // ALL CAPS detection
-      const capsRatio = (text.match(/[A-Z]/g) || []).length / text.length;
-      if (capsRatio > 0.3) {
-        score += 8;
-        indicators.push('Excessive capitalization');
-      }
-      
-      const isPhishing = score > 20;
-      const riskLevel = score > 40 ? 'High' : score > 20 ? 'Medium' : 'Low';
-      
-      resultElement.innerHTML = `
-        <div class="analysis-result ${isPhishing ? 'phishing' : 'safe'}">
-          <h3>🔍 Basic Analysis Result</h3>
-          <p><strong>Score:</strong> ${score}/100</p>
-          <p><strong>Risk Level:</strong> ${riskLevel}</p>
-          <p><strong>Is Phishing:</strong> ${isPhishing ? '🚨 YES' : '✅ NO'}</p>
-          ${indicators.length > 0 ? `<p><strong>Indicators:</strong> ${indicators.join(', ')}</p>` : ''}
-          <p><em>Note: This is a basic analysis. For full ML analysis, ensure script.js is loaded properly.</em></p>
-        </div>
-      `;
-      
-      // Show SMS integration after analysis
-      const smsIntegration = document.getElementById('smsIntegration');
-      if (smsIntegration) {
-        smsIntegration.style.display = 'block';
-      }
-    }
-
-    function performAdvancedAnalysis(text) {
-      const resultElement = document.getElementById('result');
-      let score = 0;
-      const indicators = [];
-      const patterns = [];
-      
-      // Advanced pattern recognition
-      const advancedPatterns = {
-        'Bank Security': {
-          patterns: [/bank.*security/i, /account.*suspended/i, /fraud.*detected/i],
-          score: 25,
-          description: 'Bank security alert scam'
-        },
-        'Tax Refund': {
-          patterns: [/tax.*refund/i, /irs.*payment/i, /government.*payment/i],
-          score: 20,
-          description: 'Tax refund scam'
-        },
-        'Package Delivery': {
-          patterns: [/package.*delivery/i, /shipping.*update/i, /track.*order/i],
-          score: 15,
-          description: 'Package delivery scam'
-        },
-        'Prize Winner': {
-          patterns: [/congratulations.*winner/i, /prize.*claim/i, /lottery.*winner/i],
-          score: 22,
-          description: 'Prize winner scam'
-        },
-        'Crypto Investment': {
-          patterns: [/crypto.*investment/i, /bitcoin.*profit/i, /double.*money/i],
-          score: 18,
-          description: 'Cryptocurrency investment scam'
-        }
-      };
-
-      // Check for advanced patterns
-      Object.entries(advancedPatterns).forEach(([name, pattern]) => {
-        pattern.patterns.forEach(regex => {
-          if (regex.test(text)) {
-            score += pattern.score;
-            patterns.push(pattern.description);
-          }
-        });
-      });
-
-      // Advanced language analysis
-      const grammarErrors = [/ur\b/g, /u\b/g, /r\b/g, /2\b/g, /4\b/g, /b4\b/g];
-      let errorCount = 0;
-      grammarErrors.forEach(pattern => {
-        const matches = text.match(pattern);
-        if (matches) errorCount += matches.length;
-      });
-      
-      if (errorCount > 0) {
-        score += errorCount * 3;
-        indicators.push(`Grammar errors: ${errorCount} instances`);
-      }
-
-      // URL analysis
-      const urlRegex = /https?:\/\/[^\s]+/g;
-      const urls = text.match(urlRegex);
-      if (urls) {
-        urls.forEach(url => {
-          if (url.includes('bit.ly') || url.includes('tinyurl') || url.includes('goo.gl')) {
-            score += 20;
-            indicators.push('Shortened URL detected');
-          }
-          if (url.startsWith('http://')) {
-            score += 15;
-            indicators.push('Insecure HTTP connection');
-          }
-        });
-      }
-
-      // Behavioral analysis
-      const urgencyWords = ['urgent', 'immediate', 'now', 'asap', 'quickly'];
-      let urgencyCount = 0;
-      urgencyWords.forEach(word => {
-        const regex = new RegExp(`\\b${word}\\b`, 'gi');
-        const matches = text.match(regex);
-        if (matches) urgencyCount += matches.length;
-      });
-      
-      if (urgencyCount > 2) {
-        score += urgencyCount * 3;
-        indicators.push(`Urgency indicators: ${urgencyCount}`);
-      }
-
-      const isPhishing = score > 25;
-      const riskLevel = score > 50 ? 'High' : score > 25 ? 'Medium' : 'Low';
-      
-      resultElement.innerHTML = `
-        <div class="analysis-result ${isPhishing ? 'phishing' : 'safe'}">
-          <h3>🔍 Advanced Analysis Result</h3>
-          <p><strong>Score:</strong> ${score}/100</p>
-          <p><strong>Risk Level:</strong> ${riskLevel}</p>
-          <p><strong>Is Phishing:</strong> ${isPhishing ? '🚨 YES' : '✅ NO'}</p>
-          ${patterns.length > 0 ? `<p><strong>Detected Patterns:</strong> ${patterns.join(', ')}</p>` : ''}
-          ${indicators.length > 0 ? `<p><strong>Indicators:</strong> ${indicators.join(', ')}</p>` : ''}
-          <p><em>Advanced analysis includes pattern recognition, language analysis, and behavioral assessment.</em></p>
-        </div>
-      `;
-    }
-
-    function performRealTimeAnalysis(text) {
-      const resultElement = document.getElementById('result');
-      let score = 0;
-      const indicators = [];
-      
-      // Real-time quick checks
-      const realTimeChecks = [
-        { word: 'urgent', score: 8, desc: 'Urgency detected' },
-        { word: 'bank', score: 6, desc: 'Bank reference' },
-        { word: 'verify', score: 5, desc: 'Verification request' },
-        { word: 'suspended', score: 10, desc: 'Account suspension' },
-        { word: 'compromised', score: 12, desc: 'Security breach' },
-        { word: 'fraud', score: 15, desc: 'Fraud alert' },
-        { word: 'refund', score: 7, desc: 'Refund offer' },
-        { word: 'prize', score: 9, desc: 'Prize notification' },
-        { word: 'winner', score: 8, desc: 'Winner notification' },
-        { word: 'inheritance', score: 11, desc: 'Inheritance claim' }
-      ];
-
-      realTimeChecks.forEach(check => {
-        if (text.toLowerCase().includes(check.word)) {
-          score += check.score;
-          indicators.push(check.desc);
-        }
-      });
-
-      // URL check
-      if (text.match(/https?:\/\//)) {
-        score += 12;
-        indicators.push('URL detected');
-      }
-
-      // ALL CAPS check
-      const capsRatio = (text.match(/[A-Z]/g) || []).length / text.length;
-      if (capsRatio > 0.3) {
-        score += 6;
-        indicators.push('Excessive capitalization');
-      }
-
-      const isPhishing = score > 15;
-      const riskLevel = score > 30 ? 'High' : score > 15 ? 'Medium' : 'Low';
-      
-      resultElement.innerHTML = `
-        <div class="analysis-result ${isPhishing ? 'phishing' : 'safe'}">
-          <h3>⚡ Real-Time Analysis Result</h3>
-          <p><strong>Score:</strong> ${score}/100</p>
-          <p><strong>Risk Level:</strong> ${riskLevel}</p>
-          <p><strong>Is Phishing:</strong> ${isPhishing ? '🚨 YES' : '✅ NO'}</p>
-          ${indicators.length > 0 ? `<p><strong>Quick Indicators:</strong> ${indicators.join(', ')}</p>` : ''}
-          <p><em>Real-time analysis provides instant feedback with quick threat assessment.</em></p>
-        </div>
-      `;
-    }
-
-    function performAIPoweredAnalysis(text) {
-      const resultElement = document.getElementById('result');
-      
-      // Check if real ML models are available and ready
-      if (typeof areMLModelsReady === 'function' && areMLModelsReady()) {
-        console.log('✅ Using real AI models...');
-        performRealAIAnalysis(text);
+      if (mobileMenu.classList.contains('show')) {
+        mobileMenu.classList.remove('show');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
       } else {
-        console.log('⚠️ Using simulated AI analysis...');
-        console.log('ML models status:', {
-          areMLModelsReady: typeof areMLModelsReady === 'function' ? areMLModelsReady() : 'function not available',
-          naiveBayesClassifier: typeof naiveBayesClassifier,
-          lstmClassifier: typeof lstmClassifier,
-          mlModelsReady: typeof mlModelsReady !== 'undefined' ? mlModelsReady : 'undefined'
-        });
-        performSimulatedAIAnalysis(text);
-      }
-         }
-
-     async function performMLEnhancedAIAnalysis(text) {
-       const resultElement = document.getElementById('result');
-       
-       // Show loading animation
-       resultElement.innerHTML = `
-         <div class="loading-container">
-           <div class="loading-spinner"></div>
-           <p>🤖 Analyzing with ML Models + Gemini AI...</p>
-         </div>
-       `;
-       
-       try {
-         // Check if ML models are ready
-         if (!window.geminiAnalyzer || !window.geminiAnalyzer.isAvailable()) {
-           resultElement.innerHTML = `
-             <div class="analysis-result">
-               <h3>🤖 ML + AI Enhanced Analysis</h3>
-               <p><strong>Status:</strong> ⚠️ Gemini AI not configured</p>
-               <p><strong>Action Required:</strong> Add your Gemini AI API key to enable this feature.</p>
-               <p><em>This mode combines Naive Bayes, LSTM, and Gemini AI for maximum accuracy.</em></p>
-             </div>
-           `;
-           return;
-         }
-
-         // Check if ML models are trained
-         const mlModelsReady = (window.naiveBayesClassifier && window.naiveBayesClassifier.isTrained) || 
-                              (window.lstmClassifier && window.lstmClassifier.isTrained);
-         
-         if (!mlModelsReady) {
-           resultElement.innerHTML = `
-             <div class="analysis-result">
-               <h3>🤖 ML + AI Enhanced Analysis</h3>
-               <p><strong>Status:</strong> ⚠️ ML models not ready</p>
-               <p><strong>Action Required:</strong> Wait for ML models to finish training, then try again.</p>
-               <p><em>This mode requires both ML models and AI to be available.</em></p>
-             </div>
-           `;
-           return;
-         }
-
-         // Perform ML-enhanced AI analysis
-         const enhancedResult = await window.geminiAnalyzer.performMLEnhancedAnalysis(text);
-         
-         if (enhancedResult.success) {
-           const analysis = enhancedResult.analysis;
-           const mlResults = enhancedResult.mlResults;
-           const isPhishing = analysis.isPhishing;
-           const confidence = analysis.confidence;
-           const riskLevel = analysis.riskLevel;
-           const threatType = analysis.threatType;
-           const hybridScore = enhancedResult.hybridScore;
-           
-           resultElement.innerHTML = `
-             <div class="analysis-result ${isPhishing ? 'phishing' : 'safe'}">
-               <h3>🤖 ML + AI Enhanced Analysis Result</h3>
-               <div class="enhanced-result-header">
-                 <p><strong>Combined Prediction:</strong> ${isPhishing ? '🚨 PHISHING' : '✅ SAFE'}</p>
-                 <p><strong>Hybrid Score:</strong> ${hybridScore}/100</p>
-                 <p><strong>AI Confidence:</strong> ${confidence}%</p>
-                 <p><strong>Risk Level:</strong> ${riskLevel}</p>
-                 <p><strong>Threat Type:</strong> ${threatType}</p>
-               </div>
-               
-               <div class="ml-models-section">
-                 <h4>🧠 Machine Learning Models:</h4>
-                 ${mlResults.naiveBayes ? `
-                   <div class="ml-model">
-                     <h5>📊 Naive Bayes:</h5>
-                     <p>${mlResults.naiveBayes.isPhishing ? '🚨 PHISHING' : '✅ SAFE'} (${(mlResults.naiveBayes.confidence * 100).toFixed(1)}% confidence)</p>
-                   </div>
-                 ` : ''}
-                 
-                 ${mlResults.lstm ? `
-                   <div class="ml-model">
-                     <h5>🧠 LSTM Neural Network:</h5>
-                     <p>${mlResults.lstm.isPhishing ? '🚨 PHISHING' : '✅ SAFE'} (${(mlResults.lstm.confidence * 100).toFixed(1)}% confidence)</p>
-                   </div>
-                 ` : ''}
-               </div>
-               
-               ${analysis.reasoning ? `
-                 <div class="ai-reasoning">
-                   <h4>💭 AI Reasoning (with ML insights):</h4>
-                   <p>${analysis.reasoning}</p>
-                 </div>
-               ` : ''}
-               
-               ${analysis.keyIndicators && analysis.keyIndicators.length > 0 ? `
-                 <div class="ai-indicators">
-                   <h4>🔍 Key Indicators:</h4>
-                   <ul>
-                     ${analysis.keyIndicators.map(indicator => `<li>• ${indicator}</li>`).join('')}
-                   </ul>
-                 </div>
-               ` : ''}
-               
-               ${analysis.psychologicalTactics && analysis.psychologicalTactics.length > 0 ? `
-                 <div class="ai-tactics">
-                   <h4>🎭 Psychological Tactics:</h4>
-                   <ul>
-                     ${analysis.psychologicalTactics.map(tactic => `<li>• ${tactic}</li>`).join('')}
-                   </ul>
-                 </div>
-               ` : ''}
-               
-               ${analysis.recommendations && analysis.recommendations.length > 0 ? `
-                 <div class="ai-recommendations">
-                   <h4>💡 Recommendations:</h4>
-                   <ul>
-                     ${analysis.recommendations.map(rec => `<li>• ${rec}</li>`).join('')}
-                   </ul>
-                 </div>
-               ` : ''}
-               
-               ${analysis.educationalNote ? `
-                 <div class="ai-education">
-                   <h4>📚 Educational Note:</h4>
-                   <p>${analysis.educationalNote}</p>
-                 </div>
-               ` : ''}
-               
-               <div class="enhanced-summary">
-                 <h4>🎯 Analysis Summary:</h4>
-                 <p><strong>This analysis combines:</strong></p>
-                 <ul>
-                   <li>📊 Naive Bayes Classifier (Pattern-based detection)</li>
-                   <li>🧠 LSTM Neural Network (Sequence analysis)</li>
-                   <li>🤖 Gemini AI (Contextual reasoning)</li>
-                 </ul>
-                 <p><em>✅ Maximum accuracy through hybrid ML + AI approach</em></p>
-               </div>
-             </div>
-           `;
-           
-           // Send notification if phishing detected
-           if (isPhishing && 'Notification' in window && Notification.permission === 'granted') {
-             const notification = new Notification('🚨 Phishing Threat Detected!', {
-               body: `High-risk SMS detected with ${confidence}% confidence. Risk Level: ${riskLevel}`,
-               icon: '/logo.png',
-               badge: '/logo.png',
-               tag: 'phishing-alert',
-               requireInteraction: true,
-               actions: [
-                 {
-                   action: 'view',
-                   title: 'View Details'
-                 },
-                 {
-                   action: 'block',
-                   title: 'Block Sender'
-                 }
-               ]
-             });
-             
-             notification.onclick = function() {
-               window.focus();
-               notification.close();
-             };
-           }
-         } else {
-           resultElement.innerHTML = `
-             <div class="analysis-result">
-               <h3>🤖 ML + AI Enhanced Analysis</h3>
-               <p><strong>Status:</strong> ⚠️ Analysis failed</p>
-               <p><strong>Error:</strong> ${enhancedResult.analysis.reasoning || 'Unknown error'}</p>
-               <p><em>Try using other analysis modes for immediate results.</em></p>
-             </div>
-           `;
-         }
-       } catch (error) {
-         console.error('ML-Enhanced AI analysis error:', error);
-         resultElement.innerHTML = `
-           <div class="analysis-result">
-             <h3>🤖 ML + AI Enhanced Analysis</h3>
-             <p><strong>Status:</strong> ❌ Analysis error</p>
-             <p><strong>Error:</strong> ${error.message}</p>
-             <p><em>Try using other analysis modes for immediate results.</em></p>
-           </div>
-         `;
-               }
-      }
-
-      async function performDeepSeekAIAnalysis(text) {
-        const resultElement = document.getElementById('result');
-        
-        // Show loading animation
-        resultElement.innerHTML = `
-          <div class="loading-container">
-            <div class="loading-spinner"></div>
-            <p>🤖 Analyzing with DeepSeek AI...</p>
-          </div>
-        `;
-        
-        try {
-          // Check if DeepSeek AI is available
-          if (!window.deepseekAnalyzer || !window.deepseekAnalyzer.isAvailable()) {
-            resultElement.innerHTML = `
-              <div class="analysis-result">
-                <h3>🤖 DeepSeek AI Analysis</h3>
-                <p><strong>Status:</strong> ⚠️ DeepSeek AI not configured</p>
-                <p><strong>Action Required:</strong> Add your DeepSeek AI API key to enable this feature.</p>
-                <p><em>To use DeepSeek AI analysis, you need to:</em></p>
-                <ol>
-                  <li>Get a free API key from <a href="https://platform.deepseek.com/" target="_blank">DeepSeek Platform</a></li>
-                  <li>Add the API key to your configuration</li>
-                  <li>Reload the page</li>
-                </ol>
-                <p><strong>Alternative:</strong> Use other analysis modes for immediate results.</p>
-              </div>
-            `;
-            return;
-          }
-
-          // Perform DeepSeek AI analysis
-          const aiResult = await window.deepseekAnalyzer.analyzeSMSWithAI(text);
-          
-          if (aiResult.success) {
-            const analysis = aiResult.analysis;
-            const isPhishing = analysis.isPhishing;
-            const confidence = analysis.confidence;
-            const riskLevel = analysis.riskLevel;
-            const threatType = analysis.threatType;
-            
-            resultElement.innerHTML = `
-              <div class="analysis-result ${isPhishing ? 'phishing' : 'safe'}">
-                <h3>🤖 DeepSeek AI Analysis Result</h3>
-                <div class="ai-result-header">
-                  <p><strong>AI Prediction:</strong> ${isPhishing ? '🚨 PHISHING' : '✅ SAFE'}</p>
-                  <p><strong>Confidence:</strong> ${confidence}%</p>
-                  <p><strong>Risk Level:</strong> ${riskLevel}</p>
-                  <p><strong>Threat Type:</strong> ${threatType}</p>
-                </div>
-                
-                ${analysis.reasoning ? `
-                  <div class="ai-reasoning">
-                    <h4>💭 AI Reasoning:</h4>
-                    <p>${analysis.reasoning}</p>
-                  </div>
-                ` : ''}
-                
-                ${analysis.keyIndicators && analysis.keyIndicators.length > 0 ? `
-                  <div class="ai-indicators">
-                    <h4>🔍 Key Indicators:</h4>
-                    <ul>
-                      ${analysis.keyIndicators.map(indicator => `<li>• ${indicator}</li>`).join('')}
-                    </ul>
-                  </div>
-                ` : ''}
-                
-                ${analysis.psychologicalTactics && analysis.psychologicalTactics.length > 0 ? `
-                  <div class="ai-tactics">
-                    <h4>🎭 Psychological Tactics:</h4>
-                    <ul>
-                      ${analysis.psychologicalTactics.map(tactic => `<li>• ${tactic}</li>`).join('')}
-                    </ul>
-                  </div>
-                ` : ''}
-                
-                ${analysis.recommendations && analysis.recommendations.length > 0 ? `
-                  <div class="ai-recommendations">
-                    <h4>💡 Recommendations:</h4>
-                    <ul>
-                      ${analysis.recommendations.map(rec => `<li>• ${rec}</li>`).join('')}
-                    </ul>
-                  </div>
-                ` : ''}
-                
-                ${analysis.educationalNote ? `
-                  <div class="ai-education">
-                    <h4>📚 Educational Note:</h4>
-                    <p>${analysis.educationalNote}</p>
-                  </div>
-                ` : ''}
-                
-                <p><em>✅ This analysis uses DeepSeek AI for advanced threat detection and explanation.</em></p>
-              </div>
-            `;
-          } else {
-            resultElement.innerHTML = `
-              <div class="analysis-result">
-                <h3>🤖 DeepSeek AI Analysis</h3>
-                <p><strong>Status:</strong> ⚠️ Analysis failed</p>
-                <p><strong>Error:</strong> ${aiResult.analysis.reasoning || 'Unknown error'}</p>
-                <p><em>Try using other analysis modes for immediate results.</em></p>
-              </div>
-            `;
-          }
-        } catch (error) {
-          console.error('DeepSeek AI analysis error:', error);
-          resultElement.innerHTML = `
-            <div class="analysis-result">
-              <h3>🤖 DeepSeek AI Analysis</h3>
-              <p><strong>Status:</strong> ❌ Analysis error</p>
-              <p><strong>Error:</strong> ${error.message}</p>
-              <p><em>Try using other analysis modes for immediate results.</em></p>
-            </div>
-          `;
-        }
-      }
-
-      async function performGeminiAIAnalysis(text) {
-      const resultElement = document.getElementById('result');
-      
-      // Show loading animation
-      resultElement.innerHTML = `
-        <div class="loading-container">
-          <div class="loading-spinner"></div>
-          <p>🤖 Analyzing with Gemini AI...</p>
-        </div>
-      `;
-      
-      try {
-        // Check if Gemini AI is available
-        if (!window.geminiAnalyzer || !window.geminiAnalyzer.isAvailable()) {
-          resultElement.innerHTML = `
-            <div class="analysis-result">
-              <h3>🤖 Gemini AI Analysis</h3>
-              <p><strong>Status:</strong> ⚠️ Gemini AI not configured</p>
-              <p><strong>Action Required:</strong> Add your Gemini AI API key to enable this feature.</p>
-              <p><em>To use Gemini AI analysis, you need to:</em></p>
-              <ol>
-                <li>Get a free API key from <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a></li>
-                <li>Add the API key to your configuration</li>
-                <li>Reload the page</li>
-              </ol>
-              <p><strong>Alternative:</strong> Use other analysis modes for immediate results.</p>
-            </div>
-          `;
-          return;
-        }
-
-        // Perform Gemini AI analysis
-        const aiResult = await window.geminiAnalyzer.analyzeSMSWithAI(text);
-        
-        if (aiResult.success) {
-          const analysis = aiResult.analysis;
-          const isPhishing = analysis.isPhishing;
-          const confidence = analysis.confidence;
-          const riskLevel = analysis.riskLevel;
-          const threatType = analysis.threatType;
-          
-          resultElement.innerHTML = `
-            <div class="analysis-result ${isPhishing ? 'phishing' : 'safe'}">
-              <h3>🤖 Gemini AI Analysis Result</h3>
-              <div class="ai-result-header">
-                <p><strong>AI Prediction:</strong> ${isPhishing ? '🚨 PHISHING' : '✅ SAFE'}</p>
-                <p><strong>Confidence:</strong> ${confidence}%</p>
-                <p><strong>Risk Level:</strong> ${riskLevel}</p>
-                <p><strong>Threat Type:</strong> ${threatType}</p>
-              </div>
-              
-              ${analysis.reasoning ? `
-                <div class="ai-reasoning">
-                  <h4>💭 AI Reasoning:</h4>
-                  <p>${analysis.reasoning}</p>
-                </div>
-              ` : ''}
-              
-              ${analysis.keyIndicators && analysis.keyIndicators.length > 0 ? `
-                <div class="ai-indicators">
-                  <h4>🔍 Key Indicators:</h4>
-                  <ul>
-                    ${analysis.keyIndicators.map(indicator => `<li>• ${indicator}</li>`).join('')}
-                  </ul>
-                </div>
-              ` : ''}
-              
-              ${analysis.psychologicalTactics && analysis.psychologicalTactics.length > 0 ? `
-                <div class="ai-tactics">
-                  <h4>🎭 Psychological Tactics:</h4>
-                  <ul>
-                    ${analysis.psychologicalTactics.map(tactic => `<li>• ${tactic}</li>`).join('')}
-                  </ul>
-                </div>
-              ` : ''}
-              
-              ${analysis.recommendations && analysis.recommendations.length > 0 ? `
-                <div class="ai-recommendations">
-                  <h4>💡 Recommendations:</h4>
-                  <ul>
-                    ${analysis.recommendations.map(rec => `<li>• ${rec}</li>`).join('')}
-                  </ul>
-                </div>
-              ` : ''}
-              
-              ${analysis.educationalNote ? `
-                <div class="ai-education">
-                  <h4>📚 Educational Note:</h4>
-                  <p>${analysis.educationalNote}</p>
-                </div>
-              ` : ''}
-              
-              <p><em>✅ This analysis uses Google's Gemini AI for advanced threat detection and explanation.</em></p>
-            </div>
-          `;
-        } else {
-          resultElement.innerHTML = `
-            <div class="analysis-result">
-              <h3>🤖 Gemini AI Analysis</h3>
-              <p><strong>Status:</strong> ⚠️ Analysis failed</p>
-              <p><strong>Error:</strong> ${aiResult.analysis.reasoning || 'Unknown error'}</p>
-              <p><em>Try using other analysis modes for immediate results.</em></p>
-            </div>
-          `;
-        }
-      } catch (error) {
-        console.error('Gemini AI analysis error:', error);
-        resultElement.innerHTML = `
-          <div class="analysis-result">
-            <h3>🤖 Gemini AI Analysis</h3>
-            <p><strong>Status:</strong> ❌ Analysis error</p>
-            <p><strong>Error:</strong> ${error.message}</p>
-            <p><em>Try using other analysis modes for immediate results.</em></p>
-          </div>
-        `;
+        mobileMenu.classList.add('show');
+        menuBtn.textContent = '✕';
+        document.body.style.overflow = 'hidden';
       }
     }
 
-    function performRealAIAnalysis(text) {
-      const resultElement = document.getElementById('result');
-      let score = 0;
-      const indicators = [];
-      const aiInsights = [];
+    // Close mobile menu when clicking outside or on links
+    document.addEventListener('click', (e) => {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+
+      if (!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+        mobileMenu.classList.remove('show');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Close menu when clicking on menu links
+    document.querySelectorAll('.mobile-menu-links .nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        mobileMenu.classList.remove('show');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Load saved theme
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('darkMode');
+      if (savedTheme === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.theme-toggle-enhanced').textContent = '☀️';
+      }
+    });
+
+    // Enhanced SMS analysis function
+    async function performAnalysis() {
+      const smsInput = document.getElementById('smsInput');
+      const smsContent = smsInput.value.trim();
       
-      try {
-        // Real Naive Bayes ML Analysis
-        const nbResult = naiveBayesClassifier.predict(text);
-        score += nbResult.isPhishing ? 30 : -15;
-        indicators.push(`Naive Bayes: ${nbResult.isPhishing ? 'Phishing' : 'Safe'} (${(nbResult.confidence * 100).toFixed(1)}% confidence)`);
-        aiInsights.push(`🤖 Naive Bayes ML: ${nbResult.isPhishing ? '🚨 PHISHING' : '✅ SAFE'} - ${(nbResult.confidence * 100).toFixed(1)}% confidence`);
-        
-        // Real LSTM Neural Network Analysis
-        const lstmResult = lstmClassifier.predict(text);
-        score += lstmResult.isPhishing ? 35 : -18;
-        indicators.push(`LSTM Neural Network: ${lstmResult.isPhishing ? 'Phishing' : 'Safe'} (${(lstmResult.confidence * 100).toFixed(1)}% confidence)`);
-        aiInsights.push(`🧠 LSTM Neural Network: ${lstmResult.isPhishing ? '🚨 PHISHING' : '✅ SAFE'} - ${(lstmResult.confidence * 100).toFixed(1)}% confidence`);
-        
-        // Get feature importance from Naive Bayes
-        const features = naiveBayesClassifier.getFeatureImportance();
-        const textWords = naiveBayesClassifier.preprocessText(text);
-        const relevantFeatures = features.filter(f => textWords.includes(f.word));
-        
-        if (relevantFeatures.length > 0) {
-          aiInsights.push(`🔍 Key ML Features: ${relevantFeatures.slice(0, 3).map(f => `"${f.word}" (${f.indicator})`).join(', ')}`);
-        }
-        
-      } catch (error) {
-        console.error('Real AI analysis error:', error);
-        aiInsights.push('⚠️ Real AI models encountered an error, using fallback analysis');
-        // Fallback to simulated AI
-        performSimulatedAIAnalysis(text);
+      if (!smsContent) {
+        showNotification('⚠️ Please enter an SMS message to analyze', 'warning');
+        smsInput.focus();
         return;
       }
-
-      // Additional AI-powered analysis
-      const manipulativeWords = ['urgent', 'immediate', 'free', 'limited', 'exclusive', 'guaranteed', 'secret'];
-      let manipulativeScore = 0;
-      manipulativeWords.forEach(word => {
-        if (text.toLowerCase().includes(word)) {
-          manipulativeScore += 5;
-        }
-      });
       
-      if (manipulativeScore > 0) {
-        score += manipulativeScore;
-        aiInsights.push(`Sentiment analysis: Manipulative language detected (${manipulativeScore} points)`);
-      }
-
-      const isPhishing = score > 20;
-      const riskLevel = score > 40 ? 'High' : score > 20 ? 'Medium' : 'Low';
+      const startTime = Date.now();
+      showLoading(true);
       
-      resultElement.innerHTML = `
-        <div class="analysis-result ${isPhishing ? 'phishing' : 'safe'}">
-          <h3>🤖 Real AI-Powered Analysis Result</h3>
-          <p><strong>Score:</strong> ${score}/100</p>
-          <p><strong>Risk Level:</strong> ${riskLevel}</p>
-          <p><strong>Is Phishing:</strong> ${isPhishing ? '🚨 YES' : '✅ NO'}</p>
-          ${indicators.length > 0 ? `<p><strong>ML Predictions:</strong> ${indicators.join(', ')}</p>` : ''}
-          ${aiInsights.length > 0 ? `<p><strong>AI Insights:</strong></p><ul>${aiInsights.map(insight => `<li>${insight}</li>`).join('')}</ul>` : ''}
-          <p><em>✅ This analysis uses REAL machine learning models (Naive Bayes + LSTM Neural Network)</em></p>
-        </div>
-      `;
-    }
-
-    function performSimulatedAIAnalysis(text) {
-      const resultElement = document.getElementById('result');
-      let score = 0;
-      const indicators = [];
-      const aiInsights = [];
-      
-      // Simulated AI sentiment analysis
-      const manipulativeWords = ['urgent', 'immediate', 'free', 'limited', 'exclusive', 'guaranteed', 'secret'];
-      let manipulativeScore = 0;
-      manipulativeWords.forEach(word => {
-        if (text.toLowerCase().includes(word)) {
-          manipulativeScore += 5;
-        }
-      });
-      
-      if (manipulativeScore > 0) {
-        score += manipulativeScore;
-        aiInsights.push(`Sentiment analysis: Manipulative language detected (${manipulativeScore} points)`);
-      }
-
-      // Simulated AI complexity analysis
-      const words = text.split(/\s+/);
-      const avgLength = words.reduce((sum, word) => sum + word.length, 0) / words.length;
-      if (avgLength < 4) {
-        score += 10;
-        aiInsights.push('Text complexity: Suspiciously simple language');
-      }
-
-      // Simulated AI consistency analysis
-      const hasMixedCase = /[a-z].*[A-Z]|[A-Z].*[a-z]/.test(text);
-      const hasNumbers = /\d/.test(text);
-      const hasSymbols = /[!@#$%^&*]/.test(text);
-      
-      if (hasMixedCase && hasNumbers && hasSymbols) {
-        score += 15;
-        aiInsights.push('Consistency analysis: Mixed formatting patterns detected');
-      }
-
-      // Simulated AI threat intelligence
-      const knownThreats = [
-        { pattern: /bank.*security/i, score: 20, desc: 'Bank security scam pattern' },
-        { pattern: /tax.*refund/i, score: 18, desc: 'Tax refund scam pattern' },
-        { pattern: /prize.*winner/i, score: 16, desc: 'Prize winner scam pattern' },
-        { pattern: /crypto.*investment/i, score: 14, desc: 'Crypto investment scam pattern' },
-        { pattern: /inheritance.*money/i, score: 17, desc: 'Inheritance scam pattern' }
-      ];
-
-      knownThreats.forEach(threat => {
-        if (threat.pattern.test(text)) {
-          score += threat.score;
-          aiInsights.push(`Threat intelligence: ${threat.desc}`);
-        }
-      });
-
-      // Simulated AI behavioral analysis
-      const urgencyCount = (text.match(/urgent|immediate|now|asap|quickly/gi) || []).length;
-      if (urgencyCount > 2) {
-        score += urgencyCount * 4;
-        aiInsights.push(`Behavioral analysis: High urgency indicators (${urgencyCount})`);
-      }
-
-      const isPhishing = score > 20;
-      const riskLevel = score > 40 ? 'High' : score > 20 ? 'Medium' : 'Low';
-      
-      resultElement.innerHTML = `
-        <div class="analysis-result ${isPhishing ? 'phishing' : 'safe'}">
-          <h3>🤖 Simulated AI-Powered Analysis Result</h3>
-          <p><strong>Score:</strong> ${score}/100</p>
-          <p><strong>Risk Level:</strong> ${riskLevel}</p>
-          <p><strong>Is Phishing:</strong> ${isPhishing ? '🚨 YES' : '✅ NO'}</p>
-          ${aiInsights.length > 0 ? `<p><strong>AI Insights:</strong></p><ul>${aiInsights.map(insight => `<li>${insight}</li>`).join('')}</ul>` : ''}
-          <p><em>⚠️ This is simulated AI analysis. For real AI, ensure script.js ML models are loaded.</em></p>
-        </div>
-      `;
-    }
-
-    function bulkAnalysis() {
-      const resultElement = document.getElementById('result');
-      
-      // Create bulk analysis modal
-      resultElement.innerHTML = `
-        <div class="bulk-analysis-modal">
-          <div class="modal-content">
-            <h3>📊 Bulk SMS Analysis</h3>
-            
-            <div class="upload-section">
-              <label for="csvFile">Upload CSV File:</label>
-              <input type="file" id="csvFile" accept=".csv" onchange="handleCSVUpload(event)">
-              <p class="help-text">CSV should have columns: message, sender (optional), timestamp (optional)</p>
-            </div>
-            
-            <div class="sample-csv">
-              <h4>📋 Sample CSV Format:</h4>
-              <pre>message,sender,timestamp
-"URGENT: Your bank account suspended!",unknown,2024-01-15
-"Hi John, meeting tomorrow at 3 PM",+1234567890,2024-01-15
-"CONGRATULATIONS! You won $1000!",spam,2024-01-15</pre>
-              <button onclick="downloadSampleCSV()" class="sample-btn">📥 Download Sample CSV</button>
-            </div>
-            
-            <div class="analysis-options">
-              <h4>🔧 Analysis Options:</h4>
-              <label><input type="checkbox" id="useRealAI" checked> Use Real AI Models (if available)</label>
-              <label><input type="checkbox" id="includeStats" checked> Include Statistical Analysis</label>
-              <label><input type="checkbox" id="exportResults" checked> Export Results to CSV</label>
-            </div>
-            
-            <div class="bulk-actions">
-              <button onclick="startBulkAnalysis()" id="startBulkBtn" disabled>🚀 Start Analysis</button>
-              <button onclick="clearBulkResults()" id="clearBulkBtn">🗑️ Clear</button>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function handleCSVUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const csvData = parseCSV(e.target.result);
-          window.bulkData = csvData;
-          
-          document.getElementById('startBulkBtn').disabled = false;
-          document.getElementById('startBulkBtn').textContent = `🚀 Start Analysis (${csvData.length} messages)`;
-          
-          // Show preview
-          showBulkPreview(csvData);
-        } catch (error) {
-          alert('Error reading CSV file: ' + error.message);
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    function parseCSV(csvText) {
-      const lines = csvText.split('\n').filter(line => line.trim());
-      if (lines.length < 2) throw new Error('CSV must have at least a header and one data row');
-      
-      const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-      const data = [];
-      
-      for (let i = 1; i < lines.length; i++) {
-        const values = parseCSVLine(lines[i]);
-        if (values.length >= 1) {
-          const row = {
-            message: values[0] || '',
-            sender: values[1] || 'unknown',
-            timestamp: values[2] || new Date().toISOString()
-          };
-          if (row.message.trim()) {
-            data.push(row);
-          }
-        }
-      }
-      
-      return data;
-    }
-
-    function parseCSVLine(line) {
-      const values = [];
-      let current = '';
-      let inQuotes = false;
-      
-      for (let i = 0; i < line.length; i++) {
-        const char = line[i];
-        if (char === '"') {
-          inQuotes = !inQuotes;
-        } else if (char === ',' && !inQuotes) {
-          values.push(current.trim());
-          current = '';
+      try {
+        // Show analyzing state
+        document.getElementById('analyzeBtn').classList.add('loading');
+        document.getElementById('btnText').textContent = 'Analyzing...';
+        
+        // Simulate realistic analysis time
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Use existing analyzeSMS function if available, otherwise use fallback
+        let analysis;
+        if (typeof analyzeSMS === 'function' && typeof window.naiveBayesClassifier !== 'undefined') {
+          analysis = await analyzeSMS(smsContent);
         } else {
-          current += char;
+          analysis = performBasicAnalysis(smsContent);
         }
+        
+        const analysisTime = Date.now() - startTime;
+        analysis.analysisTime = analysisTime;
+        
+        displayResults(analysis);
+        
+        // Save to history if possible
+        if (typeof saveAnalysisHistory === 'function') {
+          saveAnalysisHistory(smsContent, analysis);
+        }
+        
+      } catch (error) {
+        console.error('Analysis error:', error);
+        showNotification('❌ Error analyzing message. Please try again.', 'error');
+      } finally {
+        showLoading(false);
+        document.getElementById('analyzeBtn').classList.remove('loading');
+        document.getElementById('btnText').textContent = 'Analyze for Threats';
       }
-      values.push(current.trim());
-      
-      return values;
     }
 
-    function showBulkPreview(data) {
-      const preview = data.slice(0, 3).map((row, index) => 
-        `<div class="preview-item">${index + 1}. "${row.message.substring(0, 50)}${row.message.length > 50 ? '...' : ''}"</div>`
+    // Enhanced basic analysis fallback
+    function performBasicAnalysis(text) {
+      const phishingKeywords = {
+        urgent: 20, suspended: 25, verify: 15, winner: 20, claim: 18,
+        prize: 16, bitcoin: 22, click: 12, immediately: 15, account: 10,
+        bank: 15, security: 12, congratulations: 18, refund: 20, tax: 18,
+        expired: 15, limited: 12, offer: 10, free: 8, guaranteed: 15
+      };
+      
+      const suspiciousPatterns = [
+        { pattern: /bit\.ly|tinyurl|t\.co/i, score: 25, desc: 'Shortened URL detected' },
+        { pattern: /click.*here|click.*now/i, score: 20, desc: 'Click-bait language' },
+        { pattern: /\$\d+,?\d*|\d+\$|\d+ dollars/i, score: 15, desc: 'Money amounts mentioned' },
+        { pattern: /verify.*account|confirm.*details/i, score: 22, desc: 'Account verification request' },
+        { pattern: /urgent|asap|immediate/i, score: 18, desc: 'Urgency tactics' },
+        { pattern: /suspended|locked|blocked/i, score: 25, desc: 'Account threat language' },
+        { pattern: /\b1-8\d{2}-\d{3}-\d{4}\b/i, score: 15, desc: 'Suspicious phone number' }
+      ];
+      
+      let score = 0;
+      let indicators = [];
+      
+      // Check keywords
+      const words = text.toLowerCase().split(/\W+/);
+      words.forEach(word => {
+        if (phishingKeywords[word]) {
+          score += phishingKeywords[word];
+          indicators.push(`Suspicious keyword: "${word}"`);
+        }
+      });
+      
+      // Check patterns
+      suspiciousPatterns.forEach(item => {
+        if (item.pattern.test(text)) {
+          score += item.score;
+          indicators.push(item.desc);
+        }
+      });
+      
+      // Check capitalization
+      const capsRatio = (text.match(/[A-Z]/g) || []).length / text.length;
+      if (capsRatio > 0.3) {
+        score += 12;
+        indicators.push('Excessive capitalization detected');
+      }
+      
+      // Check exclamation marks
+      const exclamationCount = (text.match(/!/g) || []).length;
+      if (exclamationCount > 2) {
+        score += exclamationCount * 3;
+        indicators.push(`Multiple exclamation marks (${exclamationCount})`);
+      }
+      
+      const isPhishing = score >= 30;
+      const confidence = Math.min(score * 1.5, 100);
+      
+      let riskLevel, recommendations;
+      
+      if (score >= 60) {
+        riskLevel = 'Critical';
+        recommendations = [
+          '🚨 HIGH ALERT: This appears to be a phishing attempt',
+          '❌ Do not click any links',
+          '❌ Do not provide personal information',
+          '❌ Do not call any numbers provided',
+          '✅ Delete this message immediately',
+          '✅ Report to your carrier (forward to 7726)'
+        ];
+      } else if (score >= 40) {
+        riskLevel = 'High';
+        recommendations = [
+          '⚠️ This message appears suspicious',
+          '❌ Avoid clicking links',
+          '❌ Do not provide personal information',
+          '✅ Verify sender through official channels',
+          '✅ When in doubt, delete the message'
+        ];
+      } else if (score >= 20) {
+        riskLevel = 'Medium';
+        recommendations = [
+          '⚠️ Some suspicious elements detected',
+          '✅ Exercise caution',
+          '✅ Verify sender independently',
+          '✅ Be wary of any requests for information'
+        ];
+      } else {
+        riskLevel = 'Low';
+        recommendations = [
+          '✅ This message appears safe',
+          '✅ Standard security practices still apply',
+          '✅ Stay vigilant for future messages'
+        ];
+      }
+      
+      return {
+        isPhishing,
+        score: Math.min(score, 100),
+        confidence,
+        indicators,
+        riskLevel,
+        recommendations,
+        threatType: isPhishing ? 'Phishing/Scam' : 'Safe Message'
+      };
+    }
+
+    // Display results with enhanced mobile UI
+    function displayResults(analysis) {
+      const resultsSection = document.getElementById('resultsSection');
+      const threatIndicator = document.getElementById('threatIndicator');
+      const threatIcon = document.getElementById('threatIcon');
+      const threatText = document.getElementById('threatText');
+      const threatScore = document.getElementById('threatScore');
+      const confidenceValue = document.getElementById('confidenceValue');
+      const confidenceBar = document.getElementById('confidenceBar');
+      
+      // Update threat indicator
+      threatIndicator.className = `threat-indicator ${analysis.isPhishing ? 'threat-warning' : 'threat-safe'}`;
+      threatIcon.textContent = analysis.isPhishing ? '🚨' : '✅';
+      threatText.textContent = analysis.isPhishing ? 'THREAT DETECTED' : 'MESSAGE SAFE';
+      threatScore.textContent = `Risk Score: ${analysis.score}/100`;
+      
+      // Update confidence
+      confidenceValue.textContent = `${Math.round(analysis.confidence)}%`;
+      confidenceBar.style.width = `${analysis.confidence}%`;
+      
+      // Update stats
+      document.getElementById('threatScore').textContent = analysis.score;
+      document.getElementById('riskLevel').textContent = analysis.riskLevel;
+      document.getElementById('analysisTime').textContent = `${analysis.analysisTime || 1200}ms`;
+      
+      // Update indicators
+      const indicatorsSection = document.getElementById('indicatorsSection');
+      const indicatorsList = document.getElementById('indicatorsList');
+      
+      if (analysis.indicators && analysis.indicators.length > 0) {
+        indicatorsSection.style.display = 'block';
+        indicatorsList.innerHTML = analysis.indicators.map(indicator => 
+          `<li class="indicator-item">${indicator}</li>`
+        ).join('');
+      } else {
+        indicatorsSection.style.display = 'none';
+      }
+      
+      // Update recommendations
+      const recommendationsList = document.getElementById('recommendationsList');
+      recommendationsList.innerHTML = analysis.recommendations.map(rec => 
+        `<div class="recommendation-item">${rec}</div>`
       ).join('');
       
-      const previewHtml = `
-        <div class="bulk-preview">
-          <h4>📋 Preview (${data.length} messages):</h4>
-          ${preview}
-          ${data.length > 3 ? `<div class="preview-more">... and ${data.length - 3} more messages</div>` : ''}
-        </div>
-      `;
-      
-      // Insert preview after upload section
-      const uploadSection = document.querySelector('.upload-section');
-      const existingPreview = document.querySelector('.bulk-preview');
-      if (existingPreview) {
-        existingPreview.remove();
-      }
-      uploadSection.insertAdjacentHTML('afterend', previewHtml);
+      // Show results
+      resultsSection.classList.add('show');
+      resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    function downloadSampleCSV() {
-      const sampleData = `message,sender,timestamp
-"URGENT: Your bank account has been SUSPENDED! Click here to verify: bit.ly/fake-bank",unknown,2024-01-15
-"Hi John, can we meet for coffee tomorrow at 3 PM?",+1234567890,2024-01-15
-"CONGRATULATIONS! You've won $1000! Claim your prize now at free-gift.com",spam,2024-01-15
-"Your order #12345 has been shipped. Expected delivery: Friday",support@store.com,2024-01-15
-"Your account has been compromised. Verify your identity immediately at secure-verify.net",security@bank.com,2024-01-15
-"Thank you for your payment of $25.50. Your account is up to date",billing@service.com,2024-01-15
-"Tax refund available. Click here to claim your payment: irs-payment.gov",irs@government.gov,2024-01-15
-"Your appointment with Dr. Smith is confirmed for Tuesday at 2:30 PM",appointments@clinic.com,2024-01-15`;
-      
-      const blob = new Blob([sampleData], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'sample_sms_data.csv';
-      a.click();
-      window.URL.revokeObjectURL(url);
-    }
-
-    function startBulkAnalysis() {
-      if (!window.bulkData || window.bulkData.length === 0) {
-        alert('Please upload a CSV file first');
-        return;
-      }
-      
-      const useRealAI = document.getElementById('useRealAI').checked;
-      const includeStats = document.getElementById('includeStats').checked;
-      const exportResults = document.getElementById('exportResults').checked;
-      
-      // Disable start button and show progress
-      const startBtn = document.getElementById('startBulkBtn');
-      startBtn.disabled = true;
-      startBtn.textContent = '⏳ Processing...';
-      
-      // Create progress container
-      const resultElement = document.getElementById('result');
-      const progressHtml = `
-        <div class="bulk-progress">
-          <h4>📊 Processing ${window.bulkData.length} messages...</h4>
-          <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-          <div class="progress-text" id="progressText">0% (0/${window.bulkData.length})</div>
-          <div class="current-item" id="currentItem"></div>
-        </div>
-      `;
-      
-      resultElement.insertAdjacentHTML('beforeend', progressHtml);
-      
-      // Process messages in batches
-      const batchSize = 5;
-      const results = [];
-      let processed = 0;
-      
-      function processBatch(startIndex) {
-        const endIndex = Math.min(startIndex + batchSize, window.bulkData.length);
-        const batch = window.bulkData.slice(startIndex, endIndex);
-        
-        batch.forEach((item, batchIndex) => {
-          const index = startIndex + batchIndex;
-          const message = item.message;
-          
-          // Update progress
-          const progressFill = document.getElementById('progressFill');
-          const progressText = document.getElementById('progressText');
-          const currentItem = document.getElementById('currentItem');
-          
-          const progress = ((index + 1) / window.bulkData.length) * 100;
-          progressFill.style.width = progress + '%';
-          progressText.textContent = `${Math.round(progress)}% (${index + 1}/${window.bulkData.length})`;
-          currentItem.textContent = `Analyzing: "${message.substring(0, 40)}${message.length > 40 ? '...' : ''}"`;
-          
-          // Analyze message
-          let analysis;
-          if (useRealAI && typeof areMLModelsReady === 'function' && areMLModelsReady()) {
-            analysis = performRealAIAnalysisForBulk(message);
-          } else {
-            analysis = performSimulatedAIAnalysisForBulk(message);
-          }
-          
-          results.push({
-            ...item,
-            analysis: analysis,
-            processedAt: new Date().toISOString()
-          });
-          
-          processed++;
-        });
-        
-        // Process next batch or finish
-        if (endIndex < window.bulkData.length) {
-          setTimeout(() => processBatch(endIndex), 100); // Small delay to show progress
-        } else {
-          finishBulkAnalysis(results, includeStats, exportResults);
-        }
-      }
-      
-      // Start processing
-      processBatch(0);
-    }
-
-    function performRealAIAnalysisForBulk(text) {
-      let score = 0;
-      const indicators = [];
-      
-      try {
-        // Real Naive Bayes ML Analysis
-        const nbResult = naiveBayesClassifier.predict(text);
-        score += nbResult.isPhishing ? 30 : -15;
-        indicators.push(`Naive Bayes: ${nbResult.isPhishing ? 'Phishing' : 'Safe'} (${(nbResult.confidence * 100).toFixed(1)}%)`);
-        
-        // Real LSTM Neural Network Analysis
-        const lstmResult = lstmClassifier.predict(text);
-        score += lstmResult.isPhishing ? 35 : -18;
-        indicators.push(`LSTM: ${lstmResult.isPhishing ? 'Phishing' : 'Safe'} (${(lstmResult.confidence * 100).toFixed(1)}%)`);
-        
-      } catch (error) {
-        console.error('Real AI analysis error:', error);
-        indicators.push('Real AI models encountered an error');
-      }
-      
-      // Additional analysis
-      const manipulativeWords = ['urgent', 'immediate', 'free', 'limited', 'exclusive', 'guaranteed', 'secret'];
-      let manipulativeScore = 0;
-      manipulativeWords.forEach(word => {
-        if (text.toLowerCase().includes(word)) {
-          manipulativeScore += 5;
-        }
-      });
-      
-      if (manipulativeScore > 0) {
-        score += manipulativeScore;
-        indicators.push(`Manipulative language: +${manipulativeScore} points`);
-      }
-      
-      return {
-        isPhishing: score > 20,
-        score: Math.max(0, Math.min(100, score)),
-        riskLevel: score > 40 ? 'High' : score > 20 ? 'Medium' : 'Low',
-        indicators: indicators,
-        analysisType: 'Real AI'
-      };
-    }
-
-    function performSimulatedAIAnalysisForBulk(text) {
-      let score = 0;
-      const indicators = [];
-      
-      // Simulated analysis (same as before)
-      const manipulativeWords = ['urgent', 'immediate', 'free', 'limited', 'exclusive', 'guaranteed', 'secret'];
-      let manipulativeScore = 0;
-      manipulativeWords.forEach(word => {
-        if (text.toLowerCase().includes(word)) {
-          manipulativeScore += 5;
-        }
-      });
-      
-      if (manipulativeScore > 0) {
-        score += manipulativeScore;
-        indicators.push(`Manipulative language: +${manipulativeScore} points`);
-      }
-      
-      // URL analysis
-      const urlPattern = /https?:\/\/[^\s]+/g;
-      const urls = text.match(urlPattern);
-      if (urls) {
-        score += urls.length * 10;
-        indicators.push(`Suspicious URLs: +${urls.length * 10} points`);
-      }
-      
-      // Urgency analysis
-      const urgencyCount = (text.match(/urgent|immediate|now|asap|quickly/gi) || []).length;
-      if (urgencyCount > 2) {
-        score += urgencyCount * 4;
-        indicators.push(`High urgency: +${urgencyCount * 4} points`);
-      }
-      
-      return {
-        isPhishing: score > 20,
-        score: Math.max(0, Math.min(100, score)),
-        riskLevel: score > 40 ? 'High' : score > 20 ? 'Medium' : 'Low',
-        indicators: indicators,
-        analysisType: 'Simulated AI'
-      };
-    }
-
-    function finishBulkAnalysis(results, includeStats, exportResults) {
-      const resultElement = document.getElementById('result');
-      
-      // Calculate statistics
-      const stats = calculateBulkStats(results);
-      
-      // Create results HTML
-      let resultsHtml = `
-        <div class="bulk-results">
-          <h3>📊 Bulk Analysis Complete!</h3>
-          <div class="results-summary">
-            <div class="summary-item">
-              <span class="summary-label">Total Messages:</span>
-              <span class="summary-value">${results.length}</span>
-            </div>
-            <div class="summary-item">
-              <span class="summary-label">Phishing Detected:</span>
-              <span class="summary-value phishing">${stats.phishingCount} (${stats.phishingPercentage}%)</span>
-            </div>
-            <div class="summary-item">
-              <span class="summary-label">Safe Messages:</span>
-              <span class="summary-value safe">${stats.safeCount} (${stats.safePercentage}%)</span>
-            </div>
-            <div class="summary-item">
-              <span class="summary-label">Average Risk Score:</span>
-              <span class="summary-value">${stats.averageScore.toFixed(1)}/100</span>
-            </div>
-          </div>
-      `;
-      
-      if (includeStats) {
-        resultsHtml += `
-          <div class="detailed-stats">
-            <h4>📈 Detailed Statistics</h4>
-            <div class="stats-grid">
-              <div class="stat-card">
-                <h5>Risk Level Distribution</h5>
-                <div class="stat-item">High Risk: ${stats.highRiskCount} (${stats.highRiskPercentage}%)</div>
-                <div class="stat-item">Medium Risk: ${stats.mediumRiskCount} (${stats.mediumRiskPercentage}%)</div>
-                <div class="stat-item">Low Risk: ${stats.lowRiskCount} (${stats.lowRiskPercentage}%)</div>
-              </div>
-              <div class="stat-card">
-                <h5>Analysis Type</h5>
-                <div class="stat-item">Real AI: ${stats.realAICount} (${stats.realAIPercentage}%)</div>
-                <div class="stat-item">Simulated AI: ${stats.simulatedAICount} (${stats.simulatedAIPercentage}%)</div>
-              </div>
-              <div class="stat-card">
-                <h5>Score Distribution</h5>
-                <div class="stat-item">0-20: ${stats.scoreRanges.low} messages</div>
-                <div class="stat-item">21-40: ${stats.scoreRanges.medium} messages</div>
-                <div class="stat-item">41-60: ${stats.scoreRanges.high} messages</div>
-                <div class="stat-item">61-100: ${stats.scoreRanges.critical} messages</div>
-              </div>
-            </div>
-          </div>
-        `;
-      }
-      
-      // Show sample results
-      resultsHtml += `
-        <div class="sample-results">
-          <h4>📋 Sample Results (First 5)</h4>
-          <div class="results-table">
-            ${results.slice(0, 5).map((result, index) => `
-              <div class="result-row ${result.analysis.isPhishing ? 'phishing' : 'safe'}">
-                <div class="result-message">${index + 1}. "${result.message.substring(0, 60)}${result.message.length > 60 ? '...' : ''}"</div>
-                <div class="result-details">
-                  <span class="result-score">Score: ${result.analysis.score}</span>
-                  <span class="result-risk">Risk: ${result.analysis.riskLevel}</span>
-                  <span class="result-type">${result.analysis.analysisType}</span>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-      
-      if (exportResults) {
-        resultsHtml += `
-          <div class="export-section">
-            <button onclick="exportBulkResults(${JSON.stringify(results).replace(/"/g, '&quot;')})" class="export-btn">
-              📥 Export Results to CSV
-            </button>
-          </div>
-        `;
-      }
-      
-      resultsHtml += '</div>';
-      
-      // Replace progress with results
-      const progressElement = document.querySelector('.bulk-progress');
-      if (progressElement) {
-        progressElement.remove();
-      }
-      
-      resultElement.innerHTML = resultsHtml;
-      
-      // Re-enable start button
-      const startBtn = document.getElementById('startBulkBtn');
-      if (startBtn) {
-        startBtn.disabled = false;
-        startBtn.textContent = '🚀 Start Analysis';
-      }
-    }
-
-    function calculateBulkStats(results) {
-      const phishingCount = results.filter(r => r.analysis.isPhishing).length;
-      const safeCount = results.length - phishingCount;
-      const totalScore = results.reduce((sum, r) => sum + r.analysis.score, 0);
-      
-      const highRiskCount = results.filter(r => r.analysis.riskLevel === 'High').length;
-      const mediumRiskCount = results.filter(r => r.analysis.riskLevel === 'Medium').length;
-      const lowRiskCount = results.filter(r => r.analysis.riskLevel === 'Low').length;
-      
-      const realAICount = results.filter(r => r.analysis.analysisType === 'Real AI').length;
-      const simulatedAICount = results.filter(r => r.analysis.analysisType === 'Simulated AI').length;
-      
-      const scores = results.map(r => r.analysis.score);
-      const scoreRanges = {
-        low: scores.filter(s => s <= 20).length,
-        medium: scores.filter(s => s > 20 && s <= 40).length,
-        high: scores.filter(s => s > 40 && s <= 60).length,
-        critical: scores.filter(s => s > 60).length
+    // Load example messages
+    function loadExample(type) {
+      const examples = {
+        phishing: "URGENT: Your bank account has been SUSPENDED! Click here to verify immediately: bit.ly/bank-verify",
+        safe: "Hi Sarah, can we reschedule our meeting to Thursday at 2pm? Let me know if that works for you.",
+        scam: "CONGRATULATIONS! You've won $50,000! Reply CLAIM with your SSN and bank details to receive your prize!"
       };
       
-      return {
-        phishingCount,
-        safeCount,
-        phishingPercentage: ((phishingCount / results.length) * 100).toFixed(1),
-        safePercentage: ((safeCount / results.length) * 100).toFixed(1),
-        averageScore: totalScore / results.length,
-        highRiskCount,
-        mediumRiskCount,
-        lowRiskCount,
-        highRiskPercentage: ((highRiskCount / results.length) * 100).toFixed(1),
-        mediumRiskPercentage: ((mediumRiskCount / results.length) * 100).toFixed(1),
-        lowRiskPercentage: ((lowRiskCount / results.length) * 100).toFixed(1),
-        realAICount,
-        simulatedAICount,
-        realAIPercentage: ((realAICount / results.length) * 100).toFixed(1),
-        simulatedAIPercentage: ((simulatedAICount / results.length) * 100).toFixed(1),
-        scoreRanges
-      };
-    }
-
-    function exportBulkResults(results) {
-      const csvHeaders = 'message,sender,timestamp,isPhishing,score,riskLevel,analysisType,processedAt\n';
-      const csvRows = results.map(result => {
-        return `"${result.message.replace(/"/g, '""')}","${result.sender}","${result.timestamp}","${result.analysis.isPhishing}","${result.analysis.score}","${result.analysis.riskLevel}","${result.analysis.analysisType}","${result.processedAt}"`;
-      }).join('\n');
+      const smsInput = document.getElementById('smsInput');
+      smsInput.value = examples[type];
+      smsInput.focus();
       
-      const csvContent = csvHeaders + csvRows;
-      const blob = new Blob([csvContent], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `bulk_analysis_results_${new Date().toISOString().split('T')[0]}.csv`;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    }
-
-    function clearBulkResults() {
-      const resultElement = document.getElementById('result');
-      resultElement.innerHTML = '';
-      window.bulkData = null;
-      
-      const startBtn = document.getElementById('startBulkBtn');
-      if (startBtn) {
-        startBtn.disabled = true;
-        startBtn.textContent = '🚀 Start Analysis';
-      }
-    }
-
-    function updateThreatFeed() {
-      const threatFeed = document.getElementById('threatFeed');
-      threatFeed.innerHTML = `
-        <div class="threat-item">
-          <span class="threat-time">2 min ago</span>
-          <span class="threat-text">New phishing campaign targeting bank customers</span>
-        </div>
-        <div class="threat-item">
-          <span class="threat-time">15 min ago</span>
-          <span class="threat-text">Suspicious domain detected: secure-verify.net</span>
-        </div>
-        <div class="threat-item">
-          <span class="threat-time">1 hour ago</span>
-          <span class="threat-text">Tax refund scam surge reported</span>
-        </div>
-      `;
-    }
-
-    function clearResults() {
-      document.getElementById('smsInput').value = '';
-      document.getElementById('result').innerHTML = '';
-      updateInputStats();
-    }
-
-    // SMS Integration Functions
-    function shareResultsViaSMS() {
-      const resultContainer = document.getElementById('result');
-      const analysisText = resultContainer.textContent || 'SMS analysis completed';
-      
-      const smsText = `🚨 SMS Phishing Analysis Results 🚨\n\n${analysisText}\n\nAnalyzed via SMS Phishing Detection System`;
-      
-      // Check if we're on mobile
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      
-      if (navigator.share && isMobile) {
-        // Use Web Share API on mobile devices
-        navigator.share({
-          title: 'SMS Phishing Analysis Results',
-          text: smsText,
-          url: window.location.href
-        }).then(() => {
-          console.log('Shared successfully via Web Share API');
-        }).catch(err => {
-          console.log('Share failed:', err);
-          openSMSApp(smsText);
-        });
-      } else {
-        // Fallback to SMS intent
-        openSMSApp(smsText);
-      }
-    }
-
-    function openSMSApp(message = '') {
-      if (!message) {
-        message = '🚨 SMS Phishing Analysis Results 🚨\n\nI analyzed a suspicious SMS message. Here are the results.\n\nAnalyzed via SMS Phishing Detection System';
-      }
-      
-      // Check if we're on mobile
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      
-      if (!isMobile) {
-        alert('SMS integration works best on mobile devices. Please open this web app on your phone to use SMS features.');
-        return;
-      }
-      
-      // Try different SMS URL formats for better compatibility
-      const smsUrls = [
-        `sms:?body=${encodeURIComponent(message)}`,
-        `sms:?message=${encodeURIComponent(message)}`,
-        `sms:?text=${encodeURIComponent(message)}`,
-        `sms:?body=${encodeURIComponent(message)}&to=`,
-        `sms://?body=${encodeURIComponent(message)}`,
-        `sms:?body=${encodeURIComponent(message)}&subject=SMS Phishing Analysis`
-      ];
-      
-      // Try to open SMS app with timeout
-      let opened = false;
-      let attempts = 0;
-      
-      function tryOpenSMS() {
-        if (attempts >= smsUrls.length) {
-          // All attempts failed, show fallback
-          showSMSFallback(message);
-          return;
-        }
-        
-        const url = smsUrls[attempts];
-        attempts++;
-        
-        try {
-          // Create a temporary link and click it
-          const link = document.createElement('a');
-          link.href = url;
-          link.style.display = 'none';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          
-          opened = true;
-          console.log('SMS app opened successfully with URL:', url);
-          
-          // Show success message
-          setTimeout(() => {
-            alert('✅ SMS app opened successfully! You can now send the analysis results.');
-          }, 500);
-          
-        } catch (e) {
-          console.log('SMS URL failed:', url, e);
-          // Try next URL after a short delay
-          setTimeout(tryOpenSMS, 100);
-        }
-      }
-      
-      // Start trying to open SMS app
-      tryOpenSMS();
-    }
-
-    function showSMSFallback(message) {
-      // Create a modal to show the message for copying
-      const modal = document.createElement('div');
-      modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 10000;
-      `;
-      
-      const modalContent = document.createElement('div');
-      modalContent.style.cssText = `
-        background: white;
-        padding: 2rem;
-        border-radius: 15px;
-        max-width: 90%;
-        max-height: 80%;
-        overflow-y: auto;
-        text-align: center;
-      `;
-      
-      modalContent.innerHTML = `
-        <h3 style="color: #1e3c72; margin-bottom: 1rem;">📱 SMS Analysis Results</h3>
-        <p style="margin-bottom: 1rem; color: #666;">Copy this message and send it via your SMS app:</p>
-        <textarea id="smsMessage" style="
-          width: 100%;
-          height: 150px;
-          padding: 1rem;
-          border: 2px solid #667eea;
-          border-radius: 10px;
-          font-family: monospace;
-          font-size: 0.9rem;
-          margin-bottom: 1rem;
-        ">${message}</textarea>
-        <div style="display: flex; gap: 1rem; justify-content: center;">
-          <button onclick="copySMSMessage()" style="
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 0.8rem 1.5rem;
-            font-weight: 600;
-            cursor: pointer;
-          ">📋 Copy Message</button>
-          <button onclick="closeSMSModal()" style="
-            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 0.8rem 1.5rem;
-            font-weight: 600;
-            cursor: pointer;
-          ">❌ Close</button>
-        </div>
-      `;
-      
-      modal.appendChild(modalContent);
-      document.body.appendChild(modal);
-    }
-
-    function copySMSMessage() {
-      const textarea = document.getElementById('smsMessage');
-      textarea.select();
-      document.execCommand('copy');
-      alert('✅ Message copied to clipboard! You can now paste it in your SMS app.');
-    }
-
-    function closeSMSModal() {
-      const modal = document.querySelector('div[style*="position: fixed"]');
-      if (modal) {
-        document.body.removeChild(modal);
-      }
-    }
-
-    function installAsApp() {
-      // Check if PWA is supported
-      if ('serviceWorker' in navigator && 'PushManager' in window) {
-        // Show installation prompt
-        if (window.deferredPrompt) {
-          window.deferredPrompt.prompt();
-          window.deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-              console.log('App installed successfully');
-              alert('✅ SMS Phishing Detection app installed successfully!');
-            }
-            window.deferredPrompt = null;
-          });
-        } else {
-          // Show manual installation instructions
-          const instructions = `
-📱 Install as App:
-
-Android (Chrome):
-1. Tap the menu (⋮)
-2. Select "Add to Home screen"
-3. Tap "Add"
-
-iPhone (Safari):
-1. Tap the share button (□↑)
-2. Select "Add to Home Screen"
-3. Tap "Add"
-
-This will install the app on your phone for quick access!
-          `;
-          alert(instructions);
-        }
-      } else {
-        alert('PWA installation is not supported on this device/browser.');
-      }
-    }
-
-    // PWA Installation Support
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      console.log('📱 PWA install prompt ready');
-      
-      // Show install button immediately
-      const installContainer = document.getElementById('install-app-container');
-      if (installContainer) {
-        installContainer.style.display = 'block';
-        console.log('✅ Install button shown in detect.html');
-      }
-    });
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('Page loaded, checking functions...');
-      console.log('handleSMSAnalysis available:', typeof handleSMSAnalysis);
-      console.log('analyzeSMS available:', typeof analyzeSMS);
-      console.log('naiveBayesClassifier available:', typeof naiveBayesClassifier);
-      console.log('lstmClassifier available:', typeof lstmClassifier);
-      console.log('areMLModelsReady available:', typeof areMLModelsReady);
-      console.log('ML models ready:', typeof areMLModelsReady === 'function' ? areMLModelsReady() : 'function not available');
-      
-      // Initialize mobile detector after page loads
+      // Add visual feedback
+      smsInput.style.background = 'rgba(99, 102, 241, 0.2)';
       setTimeout(() => {
-        console.log('🔄 Initializing mobile detector...');
-        if (typeof MobileSMSDetector !== 'undefined') {
-          console.log('✅ MobileSMSDetector class available, creating instance...');
-          window.mobileSMSDetector = new MobileSMSDetector();
-          console.log('✅ Mobile SMS Detector initialized successfully');
-        } else {
-          console.log('⚠️ MobileSMSDetector class not available yet');
-        }
-      }, 2000);
-
-      // Listen for when ML models become ready
-      window.addEventListener('mlModelsReady', () => {
-        console.log('🎉 ML models are now ready!');
-        // You could update UI here to show that real AI is available
-      });
-
-      initializeThreatIntelligence();
-      updateInputStats();
-
-      const input = document.getElementById('smsInput');
-      input.addEventListener('input', updateInputStats);
-
-      // User Account Management
-      auth.onAuthStateChanged(async user => {
-        if (user) {
-          // Hide login/signup, show user account
-          document.getElementById('nav-login').style.display = 'none';
-          document.getElementById('nav-signup').style.display = 'none';
-          document.getElementById('user-account').classList.add('show');
-          
-          // Get user data from Firebase
-          try {
-            const userRef = db.ref(`users/${user.uid}`);
-            const snapshot = await userRef.once('value');
-            const userData = snapshot.val();
-            
-            // Update user display
-            const displayName = userData?.username || user.email.split('@')[0];
-            const userEmail = user.email;
-            
-            document.getElementById('user-display-name').textContent = displayName;
-            document.getElementById('dropdown-user-name').textContent = displayName;
-            document.getElementById('dropdown-user-email').textContent = userEmail;
-            
-            // Set avatar with first letter of username
-            const avatar = document.getElementById('user-avatar');
-            avatar.textContent = displayName.charAt(0).toUpperCase();
-            
-          } catch (error) {
-            console.error('Error loading user data:', error);
-            // Fallback to email
-            const displayName = user.email.split('@')[0];
-            document.getElementById('user-display-name').textContent = displayName;
-            document.getElementById('dropdown-user-name').textContent = displayName;
-            document.getElementById('dropdown-user-email').textContent = user.email;
-            
-            const avatar = document.getElementById('user-avatar');
-            avatar.textContent = displayName.charAt(0).toUpperCase();
-          }
-        } else {
-          // Show login/signup, hide user account
-          document.getElementById('nav-login').style.display = '';
-          document.getElementById('nav-signup').style.display = '';
-          document.getElementById('user-account').classList.remove('show');
-        }
-      });
-
-      // Toggle user dropdown
-      function toggleUserDropdown() {
-        const dropdown = document.getElementById('user-dropdown');
-        dropdown.classList.toggle('show');
-      }
-
-      // Close dropdown when clicking outside
-      document.addEventListener('click', function(event) {
-        const userAccount = document.getElementById('user-account');
-        const dropdown = document.getElementById('user-dropdown');
-        
-        if (!userAccount.contains(event.target)) {
-          dropdown.classList.remove('show');
-        }
-      });
-
-      function logoutUser() {
-        auth.signOut().then(() => {
-          window.location.reload();
-        }).catch(error => {
-          console.error('Error signing out:', error);
-        });
-      }
-
-      // Add test SMS integration button
-      const testSMSBtn = document.createElement('button');
-      testSMSBtn.textContent = 'Show SMS Buttons';
-      testSMSBtn.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
-        background: linear-gradient(135deg, #28a745, #20c997);
-        color: white;
-        border: none;
-        border-radius: 25px;
-        padding: 0.8rem 1.5rem;
-        font-weight: 600;
-        cursor: pointer;
-        z-index: 1000;
-        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-      `;
-      testSMSBtn.onclick = () => {
-        const smsIntegration = document.getElementById('smsIntegration');
-        if (smsIntegration) {
-          smsIntegration.style.display = 'block';
-          alert('SMS integration buttons are now visible! Look below the analysis results.');
-        } else {
-          alert('SMS integration section not found!');
-        }
-      };
-      document.body.appendChild(testSMSBtn);
-
-      // Test notification functionality
-      function testNotification() {
-        if (!('Notification' in window)) {
-          alert('❌ Notifications not supported in this browser');
-          return;
-        }
-        
-        if (Notification.permission === 'default') {
-          Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-              showTestNotification();
-            } else {
-              alert('❌ Notification permission denied');
-            }
-          });
-        } else if (Notification.permission === 'granted') {
-          showTestNotification();
-        } else {
-          alert('❌ Notification permission denied');
-        }
-      }
+        smsInput.style.background = 'rgba(255, 255, 255, 0.1)';
+      }, 1000);
       
-      function showTestNotification() {
-        const notification = new Notification('🔔 SMS Phishing Detection', {
-          body: 'Notification system is working! You will receive alerts for suspicious SMS messages.',
-          icon: '/logo.png',
-          badge: '/logo.png',
-          tag: 'test-notification'
-        });
-        
-        notification.onclick = function() {
-          window.focus();
-          notification.close();
-        };
-        
-        // Auto-close after 3 seconds
-        setTimeout(() => {
-          notification.close();
-        }, 3000);
-      }
+      showNotification(`📋 ${type.charAt(0).toUpperCase() + type.slice(1)} example loaded`, 'info');
+    }
 
-      // Mobile Phone Connection Function
-      // Enhanced mobile connection function with proper initialization
-      async function connectMobilePhone() {
-        console.log('📱 Mobile Phone Connection initiated...');
-        
-        try {
-          // Show loading status
-          showMobileConnectionStatus('🔄 Loading mobile detector...', 'info');
-          
-          // Wait a bit for scripts to load
-          await new Promise(resolve => setTimeout(resolve, 500));
-          
-          // First, ensure the mobile SMS detector script is loaded
-          if (typeof MobileSMSDetector === 'undefined') {
-            console.log('⚠️ MobileSMSDetector class not found, loading script...');
-            await loadMobileSMSDetector();
-            
-            // Wait for script to load
-            await new Promise(resolve => setTimeout(resolve, 1000));
-          }
-          
-          // Check if mobile SMS detector is available
-          if (typeof MobileSMSDetector !== 'undefined') {
-            console.log('✅ MobileSMSDetector class found, creating instance...');
-            
-            // Create new instance
-            window.mobileSMSDetector = new MobileSMSDetector();
-            console.log('✅ Mobile SMS Detector created successfully');
-            
-            // Wait for initialization
-            await new Promise(resolve => setTimeout(resolve, 500));
-            
-            // Setup mobile integration
-            if (window.mobileSMSDetector.setupMobileIntegration) {
-              await window.mobileSMSDetector.setupMobileIntegration();
-            }
-            
-            // Show mobile interface
-            if (window.mobileSMSDetector.showMobileInterface) {
-              window.mobileSMSDetector.showMobileInterface();
-            }
-            
-            // Request mobile permissions
-            if (window.mobileSMSDetector.requestMobilePermissions) {
-              await window.mobileSMSDetector.requestMobilePermissions();
-            }
-            
-            // Show success message
-            showMobileConnectionStatus('✅ Mobile phone connected successfully!', 'success');
-            
-          } else {
-            console.log('❌ MobileSMSDetector class still not available');
-            showMobileConnectionStatus('❌ Mobile detector not loaded. Please refresh and try again.', 'error');
-          }
-        } catch (error) {
-          console.error('❌ Mobile connection failed:', error);
-          showMobileConnectionStatus('❌ Mobile connection failed: ' + error.message, 'error');
-        }
-      }
+    // Clear form
+    function clearForm() {
+      document.getElementById('smsInput').value = '';
+      document.getElementById('resultsSection').classList.remove('show');
+      document.getElementById('smsInput').focus();
+      showNotification('🗑️ Form cleared', 'info');
+    }
 
-      // Function to load mobile SMS detector script with fallback
-      function loadMobileSMSDetector() {
-        return new Promise((resolve, reject) => {
-          // Check if script is already loaded
-          if (document.querySelector('script[src="mobile-sms-detector.js"]')) {
-            console.log('✅ Mobile SMS Detector script already loaded');
-            resolve();
-            return;
-          }
-          
-          // Try multiple paths for the script
-          const scriptPaths = [
-            'mobile-sms-detector.js',
-            '/mobile-sms-detector.js',
-            './mobile-sms-detector.js'
-          ];
-          
-          let currentPathIndex = 0;
-          
-          function tryLoadScript() {
-            if (currentPathIndex >= scriptPaths.length) {
-              console.error('❌ All script paths failed');
-              reject(new Error('Failed to load mobile SMS detector script from all paths'));
-              return;
-            }
-            
-            const script = document.createElement('script');
-            script.src = scriptPaths[currentPathIndex];
-            
-            script.onload = function() {
-              console.log('✅ Mobile SMS Detector script loaded successfully from:', scriptPaths[currentPathIndex]);
-              resolve();
-            };
-            
-            script.onerror = function() {
-              console.error('❌ Failed to load script from:', scriptPaths[currentPathIndex]);
-              currentPathIndex++;
-              tryLoadScript();
-            };
-            
-            document.head.appendChild(script);
-          }
-          
-          tryLoadScript();
-        });
-      }
-
-      // Initialize mobile SMS detector when page loads
-      document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          console.log('🔄 Initializing mobile SMS detector...');
-          
-          // Wait a bit for all scripts to load
-          setTimeout(async () => {
-            if (typeof MobileSMSDetector !== 'undefined') {
-              window.mobileSMSDetector = new MobileSMSDetector();
-              console.log('✅ Mobile SMS Detector initialized on page load');
-            } else {
-              console.log('⚠️ MobileSMSDetector not available on page load');
-            }
-          }, 2000);
-          
-        } catch (error) {
-          console.error('❌ Error initializing mobile SMS detector on page load:', error);
-        }
-      });
-
-      // Enhanced test notification function
-      async function testNotification() {
-        try {
-          console.log('🔔 Testing notifications...');
-          
-          // Check if notifications are supported
-          if (!('Notification' in window)) {
-            showTestNotification('❌ Notifications not supported', 'This browser does not support notifications');
-            return;
-          }
-          
-          // Request permission if needed
-          if (Notification.permission === 'default') {
-            const permission = await Notification.requestPermission();
-            if (permission !== 'granted') {
-              showTestNotification('❌ Permission denied', 'Please allow notifications to test this feature');
-              return;
-            }
-          }
-          
-          if (Notification.permission === 'granted') {
-            // Test system notification
-            const notification = new Notification('🔔 SMS Shield Test', {
-              body: 'This is a test notification from SMS Shield',
-              icon: 'logo.png',
-              badge: 'logo.png',
-              tag: 'sms-shield-test',
-              requireInteraction: false,
-              silent: false
-            });
-            
-            // Auto-close after 5 seconds
-            setTimeout(() => {
-              notification.close();
-            }, 5000);
-            
-            showTestNotification('✅ Test notification sent', 'Check your system notifications');
-          } else {
-            showTestNotification('❌ Permission denied', 'Please allow notifications in your browser settings');
-          }
-          
-        } catch (error) {
-          console.error('Test notification failed:', error);
-          showTestNotification('❌ Test failed', 'Error: ' + error.message);
-        }
-      }
-
-      // Enhanced test notification display
-      function showTestNotification(title, message) {
-        const notificationDiv = document.createElement('div');
-        notificationDiv.style.cssText = `
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
-          backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 15px;
-          padding: 1.5rem;
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-          z-index: 10001;
-          text-align: center;
-          max-width: 300px;
-          animation: fadeInUp 0.3s ease;
-        `;
-        
-        notificationDiv.innerHTML = `
-          <h3 style="margin: 0 0 1rem 0; color: #333; font-size: 1.2rem;">${title}</h3>
-          <p style="margin: 0; color: #666; line-height: 1.5;">${message}</p>
-          <button onclick="this.parentElement.remove()" style="
-            margin-top: 1rem;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-          ">OK</button>
-        `;
-        
-        document.body.appendChild(notificationDiv);
-        
-        // Auto-remove after 5 seconds
-        setTimeout(() => {
-          if (notificationDiv.parentNode) {
-            notificationDiv.remove();
-          }
-        }, 5000);
-      }
-
-      // Test SMS analysis function
-      async function testSMSAnalysis() {
-        try {
-          console.log('🧪 Testing SMS analysis...');
-          
-          const testSMS = {
-            sender: 'Test Sender',
-            body: 'Your account has been suspended. Click here to verify: http://fake-bank.com',
-            timestamp: new Date().toISOString()
-          };
-          
-          if (window.mobileSMSDetector) {
-            await window.mobileSMSDetector.analyzeIncomingSMS(testSMS);
-            showTestNotification('✅ SMS Analysis Test', 'Test SMS has been analyzed successfully');
-          } else {
-            showTestNotification('❌ Mobile Detector Not Available', 'Please connect mobile phone first');
-          }
-          
-        } catch (error) {
-          console.error('SMS analysis test failed:', error);
-          showTestNotification('❌ Test Failed', 'Error: ' + error.message);
-        }
-      }
-
-      // Test mobile permissions function
-      async function testMobilePermissions() {
-        try {
-          console.log('🔐 Testing mobile permissions...');
-          
-          if (window.mobileSMSDetector) {
-            await window.mobileSMSDetector.requestMobilePermissions();
-            showTestNotification('✅ Permissions Requested', 'Check your browser for permission prompts');
-          } else {
-            showTestNotification('❌ Mobile Detector Not Available', 'Please connect mobile phone first');
-          }
-          
-        } catch (error) {
-          console.error('Permission test failed:', error);
-          showTestNotification('❌ Test Failed', 'Error: ' + error.message);
-        }
-      }
-
-
-
-      // Request Mobile Permissions Function
-      async function requestMobilePermissions() {
-        console.log('🔐 Requesting mobile permissions...');
-        
-        try {
-          if (typeof window.mobileSMSDetector !== 'undefined' && window.mobileSMSDetector) {
-            if (window.mobileSMSDetector.requestMobilePermissions) {
-              await window.mobileSMSDetector.requestMobilePermissions();
-              showMobileConnectionStatus('✅ Permissions requested successfully!', 'success');
-            } else {
-              showMobileConnectionStatus('❌ Permission function not available', 'error');
-            }
-          } else {
-            showMobileConnectionStatus('❌ Mobile detector not available', 'error');
-          }
-        } catch (error) {
-          console.error('❌ Permission request failed:', error);
-          showMobileConnectionStatus('❌ Permission request failed: ' + error.message, 'error');
-        }
-      }
-
-      // Test Mobile Features Function
-      async function testMobileFeatures() {
-        console.log('🧪 Testing mobile features...');
-        
-        try {
-          if (typeof window.mobileSMSDetector !== 'undefined' && window.mobileSMSDetector) {
-            // Test various mobile features
-            const tests = [
-              { name: 'SMS Detection', test: () => window.mobileSMSDetector.isSMSContent },
-              { name: 'Permission Check', test: () => window.mobileSMSDetector.requestMobilePermissions },
-              { name: 'Interface Display', test: () => window.mobileSMSDetector.showMobileInterface },
-              { name: 'Real-time Mode', test: () => window.mobileSMSDetector.enableRealTimeMode }
-            ];
-            
-            let passedTests = 0;
-            tests.forEach(({ name, test }) => {
-              if (typeof test() === 'function') {
-                console.log(`✅ ${name}: Available`);
-                passedTests++;
-              } else {
-                console.log(`❌ ${name}: Not available`);
-              }
-            });
-            
-            const message = `Tests completed: ${passedTests}/${tests.length} features available`;
-            showMobileConnectionStatus(message, passedTests === tests.length ? 'success' : 'warning');
-          } else {
-            showMobileConnectionStatus('❌ Mobile detector not available for testing', 'error');
-          }
-        } catch (error) {
-          console.error('❌ Feature test failed:', error);
-          showMobileConnectionStatus('❌ Feature test failed: ' + error.message, 'error');
-        }
-      }
-
-      // Test Mobile Detector Function
-      async function testMobileDetector() {
-        console.log('🔧 Testing mobile detector...');
-        
-        try {
-          // Check if MobileSMSDetector class exists
-          if (typeof MobileSMSDetector !== 'undefined') {
-            console.log('✅ MobileSMSDetector class found');
-            showMobileConnectionStatus('✅ MobileSMSDetector class available', 'success');
-            
-            // Try to create an instance
-            const testInstance = new MobileSMSDetector();
-            console.log('✅ MobileSMSDetector instance created successfully');
-            showMobileConnectionStatus('✅ Mobile detector instance created', 'success');
-            
-            // Check if window.mobileSMSDetector exists
-            if (typeof window.mobileSMSDetector !== 'undefined' && window.mobileSMSDetector) {
-              console.log('✅ window.mobileSMSDetector is available');
-              showMobileConnectionStatus('✅ Mobile detector is ready to use', 'success');
-            } else {
-              console.log('⚠️ window.mobileSMSDetector not set');
-              showMobileConnectionStatus('⚠️ Mobile detector not initialized', 'warning');
-            }
-          } else {
-            console.log('❌ MobileSMSDetector class not found');
-            showMobileConnectionStatus('❌ MobileSMSDetector class not available', 'error');
-          }
-        } catch (error) {
-          console.error('❌ Mobile detector test failed:', error);
-          showMobileConnectionStatus('❌ Mobile detector test failed: ' + error.message, 'error');
-        }
-      }
+    // Show/hide loading state
+    function showLoading(show) {
+      const form = document.querySelector('.analysis-form');
+      let overlay = form.querySelector('.loading-overlay');
       
-      function showMobileConnectionStatus(message, type) {
-        // Create status element
-        const statusDiv = document.createElement('div');
-        statusDiv.style.cssText = `
-          position: fixed;
-          top: 20px;
-          right: 20px;
-          padding: 1rem 1.5rem;
-          border-radius: 10px;
-          color: white;
-          font-weight: 600;
-          z-index: 10000;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-          animation: slideIn 0.3s ease;
-        `;
-        
-        if (type === 'success') {
-          statusDiv.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
-        } else if (type === 'info') {
-          statusDiv.style.background = 'linear-gradient(135deg, #17a2b8, #138496)';
-        } else if (type === 'warning') {
-          statusDiv.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
-        } else {
-          statusDiv.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
+      if (show) {
+        if (!overlay) {
+          overlay = document.getElementById('loadingTemplate').cloneNode(true);
+          overlay.id = 'activeLoading';
+          overlay.style.display = 'flex';
+          overlay.style.position = 'absolute';
+          form.style.position = 'relative';
+          form.appendChild(overlay);
         }
-        
-        statusDiv.textContent = message;
-        document.body.appendChild(statusDiv);
-        
-        // Auto-remove after 3 seconds
-        setTimeout(() => {
-          statusDiv.style.animation = 'slideOut 0.3s ease';
-          setTimeout(() => {
-            if (statusDiv.parentNode) {
-              statusDiv.parentNode.removeChild(statusDiv);
-            }
-          }, 300);
-        }, 3000);
-      }
-      
-      // Add CSS animations for status messages and test notifications
-      const style = document.createElement('style');
-      style.textContent = `
-        @keyframes slideIn {
-          from { transform: translateX(100%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOut {
-          from { transform: translateX(0); opacity: 1; }
-          to { transform: translateX(100%); opacity: 0; }
-        }
-        @keyframes fadeInUp {
-          from { 
-            transform: translate(-50%, -30%); 
-            opacity: 0; 
-          }
-          to { 
-            transform: translate(-50%, -50%); 
-            opacity: 1; 
-          }
-        }
-        @keyframes fadeOut {
-          from { opacity: 1; }
-          to { opacity: 0; }
-        }
-      `;
-      document.head.appendChild(style);
-
-      // Initialize notifications when page loads
-      document.addEventListener('DOMContentLoaded', () => {
-        // Request notification permission
-        if ('Notification' in window && Notification.permission === 'default') {
-          Notification.requestPermission();
-        }
-      });
-
-    });
-
-    // Install App function
-    function installApp() {
-      console.log('📱 Install app clicked in detect.html');
-      
-      if (deferredPrompt) {
-        console.log('📱 Using deferred prompt');
-        const installBtn = document.getElementById('install-app-btn');
-        if (installBtn) {
-          installBtn.classList.add('installing');
-          installBtn.textContent = 'Installing...';
-        }
-        
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('✅ App installed successfully');
-            showNotification('📱 App installed successfully! Enhanced SMS features enabled.', 'success');
-          } else {
-            console.log('❌ App installation declined');
-            showNotification('App installation declined. You can install later from browser menu.', 'error');
-          }
-          if (installBtn) {
-            installBtn.classList.remove('installing');
-            installBtn.textContent = '📱 Install App';
-          }
-          deferredPrompt = null;
-        });
       } else {
-        console.log('📱 No deferred prompt, showing instructions');
-        showInstallInstructions();
+        if (overlay) {
+          overlay.remove();
+        }
       }
     }
 
-    // Show install instructions
-    function showInstallInstructions() {
-      const instructions = `
-        📱 To install SMS Shield App:
-        
-        Chrome/Edge:
-        1. Tap the menu (⋮) in browser
-        2. Select "Install app" or "Add to home screen"
-        
-        Safari (iOS):
-        1. Tap the share button (□↑)
-        2. Select "Add to Home Screen"
-        
-        Firefox:
-        1. Tap the menu (☰)
-        2. Select "Install App"
-      `;
-      
-      alert(instructions);
-    }
-
-    // Show notification
+    // Enhanced notification system
     function showNotification(message, type = 'info') {
       const notification = document.createElement('div');
+      const icons = { info: 'ℹ️', warning: '⚠️', error: '❌', success: '✅' };
+      const colors = { 
+        info: '#06b6d4', 
+        warning: '#f59e0b', 
+        error: '#ef4444', 
+        success: '#10b981' 
+      };
+      
       notification.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
-        padding: 1rem 1.5rem;
-        border-radius: 10px;
+        background: ${colors[type]};
         color: white;
-        font-weight: 600;
-        z-index: 10000;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        animation: slideIn 0.3s ease;
+        padding: 1rem 1.5rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        animation: slideInRight 0.3s ease-out;
+        max-width: 300px;
+        word-wrap: break-word;
       `;
       
-      if (type === 'success') {
-        notification.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
-      } else {
-        notification.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
-      }
-      
-      notification.textContent = message;
+      notification.innerHTML = `${icons[type]} ${message}`;
       document.body.appendChild(notification);
       
       setTimeout(() => {
-        notification.remove();
+        notification.style.animation = 'slideOutRight 0.3s ease-out';
+        setTimeout(() => notification.remove(), 300);
       }, 3000);
     }
+
+    // Add slide animations
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      // Focus on input for better UX
+      document.getElementById('smsInput').focus();
+      
+      // Add keyboard shortcut
+      document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          performAnalysis();
+        }
+      });
+    });
+
+    // Handle mobile viewport
+    const handleMobileViewport = () => {
+      const nav = document.querySelector('.enhanced-nav');
+      if (window.innerWidth <= 767) {
+        nav.style.display = 'none';
+      } else {
+        nav.style.display = 'flex';
+        nav.style.flexDirection = 'row';
+        nav.style.position = 'static';
+        nav.style.background = 'none';
+        nav.style.border = 'none';
+        nav.style.padding = '0';
+      }
+    };
+
+    window.addEventListener('resize', handleMobileViewport);
+    handleMobileViewport();
   </script>
-  
-  <!-- Fallback analyzeSMS function -->
-  <script>
-    // Ensure analyzeSMS is always available
-    if (typeof window.analyzeSMS !== 'function') {
-      window.analyzeSMS = async function(smsContent) {
-        console.log('Using fallback analyzeSMS function');
-        
-        // Simple fallback analysis
-        const suspiciousKeywords = [
-          'urgent', 'bank', 'password', 'click', 'verify', 'suspended', 
-          'locked', 'prize', 'won', 'claim', 'security', 'alert', 
-          'expired', 'identity', 'reward', 'limited', 'time'
-        ];
-        
-        const text = smsContent.toLowerCase();
-        const foundKeywords = suspiciousKeywords.filter(keyword => text.includes(keyword));
-        
-        const threatLevel = foundKeywords.length > 2 ? 'high' : 
-                          foundKeywords.length > 0 ? 'medium' : 'low';
-        
-        return {
-          isPhishing: threatLevel === 'high',
-          confidence: threatLevel === 'high' ? 0.9 : threatLevel === 'medium' ? 0.6 : 0.3,
-          threatLevel: threatLevel,
-          suspiciousKeywords: foundKeywords,
-          recommendations: threatLevel === 'high' ? 
-            ['This message appears to be phishing. Do not click any links.', 'Delete this message immediately.'] :
-            threatLevel === 'medium' ? 
-            ['Be cautious with this message.', 'Verify the sender before responding.'] :
-            ['This message appears safe.', 'No immediate action required.']
-        };
-      };
-      console.log('✅ Fallback analyzeSMS function loaded');
-    }
-  </script>
-  
-  <div class="go-to-msg">
-    <a href="sms.html" class="navigate-link">Go to SMS Alerts</a>
-  </div>
 </body>
 </html>

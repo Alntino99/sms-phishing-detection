@@ -1,15 +1,22 @@
 {
+  "name": "sms-phishing-detection",
+  "version": "1.0.0",
+  "description": "AI-powered SMS phishing detection web application",
+  "main": "index.html",
   "type": "module",
+  "scripts": {
+    "dev": "npx http-server . -p 3000 -c-1 --cors",
+    "start": "npx http-server . -p 8000",
+    "build": "echo 'No build step required for static site'",
+    "test": "echo 'No tests configured'"
+  },
   "dependencies": {
-    "bcrypt": "^6.0.0",
-    "body-parser": "^2.2.0",
-    "connect-mongo": "^5.1.0",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.0",
-    "express": "^5.1.0",
-    "express-session": "^1.18.2",
-    "firebase": "^12.0.0",
-    "mongodb": "^6.17.0",
-    "mongoose": "^8.16.4"
-  }
+    "firebase": "^12.0.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "keywords": ["sms", "phishing", "detection", "ai", "security"],
+  "author": "SMS Phishing Detection Team",
+  "license": "MIT"
 }
