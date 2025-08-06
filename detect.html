@@ -765,28 +765,42 @@ Example messages:
 
     // Mobile menu toggle
     function toggleMobileMenu() {
-      const nav = document.querySelector('.enhanced-nav');
-      const toggle = document.querySelector('.mobile-menu-toggle');
-      
-      if (nav.style.display === 'flex') {
-        nav.style.display = 'none';
-        toggle.textContent = '☰';
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+
+      if (mobileMenu.classList.contains('show')) {
+        mobileMenu.classList.remove('show');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
       } else {
-        nav.style.display = 'flex';
-        nav.style.flexDirection = 'column';
-        nav.style.position = 'absolute';
-        nav.style.top = '100%';
-        nav.style.left = '0';
-        nav.style.right = '0';
-        nav.style.background = 'var(--glass-bg)';
-        nav.style.backdropFilter = 'blur(20px)';
-        nav.style.border = '1px solid var(--glass-border)';
-        nav.style.borderRadius = '0 0 1rem 1rem';
-        nav.style.padding = '1rem';
-        nav.style.gap = '0.5rem';
-        toggle.textContent = '✕';
+        mobileMenu.classList.add('show');
+        menuBtn.textContent = '✕';
+        document.body.style.overflow = 'hidden';
       }
     }
+
+    // Close mobile menu when clicking outside or on links
+    document.addEventListener('click', (e) => {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+
+      if (!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+        mobileMenu.classList.remove('show');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Close menu when clicking on menu links
+    document.querySelectorAll('.mobile-menu-links .nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        mobileMenu.classList.remove('show');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
+      });
+    });
 
     // Load saved theme
     window.addEventListener('DOMContentLoaded', () => {
