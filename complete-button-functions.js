@@ -331,7 +331,7 @@ function goBack() {
     if (window.history.length > 1) {
         window.history.back();
     } else {
-        window.location.href = '/index.html';
+        window.location.href = 'index.html';
     }
     return Promise.resolve();
 }
@@ -349,7 +349,7 @@ function logoutUser() {
     sessionStorage.clear();
     showNotification('Logged out successfully', 'success');
     setTimeout(() => {
-        window.location.href = '/login.html';
+        window.location.href = 'detect.html';
     }, 1000);
     return Promise.resolve();
 }

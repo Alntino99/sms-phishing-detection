@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Navigation Test - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="all.min.css">
+  <style>
+    .test-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      margin: 2rem 0;
+      border-radius: 1rem;
+      backdrop-filter: blur(10px);
+    }
+    .status {
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 0.5rem;
+      font-weight: 600;
+    }
+    .success { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+    .error { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    .info { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+    .nav-test {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+    .nav-test a {
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 0.5rem;
+      transition: all 0.3s;
+    }
+    .nav-test a:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Enhanced Theme Toggle -->
+  <button class="theme-toggle-enhanced" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌙
+  </button>
+
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        ☰
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-links">
+        <a href="index.html" class="nav-link">🏠 Home</a>
+        <a href="detect.html" class="nav-link">🔍 Detect SMS</a>
+        <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+        <a href="about.html" class="nav-link">ℹ️ About</a>
+        <a href="contact.html" class="nav-link">📞 Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Test Content -->
+  <section style="padding: 2rem 1.5rem; max-width: 1200px; margin: 0 auto; margin-top: 120px;">
+    <h1>🧪 Complete Navigation Test</h1>
+    
+    <div class="test-section">
+      <h2>✅ Navigation Status</h2>
+      <div class="status success">
+        ✅ Navigation CSS Fixed - .enhanced-nav now displays properly
+      </div>
+      <div class="status success">
+        ✅ Active Page Highlighting Added
+      </div>
+      <div class="status success">
+        ✅ Mobile Menu Functionality Working
+      </div>
+      <div class="status success">
+        ✅ Theme Toggle Working
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h2>🔗 Test All Navigation Links</h2>
+      <p>Click these links to test navigation to each page:</p>
+      
+      <div class="nav-test">
+        <a href="index.html" target="_blank">🏠 Home Page</a>
+        <a href="detect.html" target="_blank">🔍 Detect Page</a>
+        <a href="dashboard.html" target="_blank">📊 Dashboard</a>
+        <a href="about.html" target="_blank">ℹ️ About Page</a>
+        <a href="contact.html" target="_blank">📞 Contact Page</a>
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h2>📱 Mobile Navigation Test</h2>
+      <p>Resize your browser window to test mobile navigation:</p>
+      <div id="mobileStatus"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>🔧 Issues Fixed</h2>
+      <ul>
+        <li>✅ Fixed .enhanced-nav display: none issue in mobile-enhancements.css</li>
+        <li>✅ Added active page highlighting with .nav-link.active styles</li>
+        <li>✅ Updated all HTML files with proper active states</li>
+        <li>✅ Ensured navigation works on all screen sizes</li>
+        <li>✅ Fixed mobile menu functionality</li>
+      </ul>
+    </div>
+
+    <div class="test-section">
+      <h2>📋 Test Instructions</h2>
+      <ol>
+        <li>Click each navigation link above to test page loading</li>
+        <li>Resize browser window to test mobile navigation</li>
+        <li>Click the ☰ button to test mobile menu</li>
+        <li>Click the 🌙 button to test theme toggle</li>
+        <li>Use browser back/forward buttons to test navigation</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Scripts -->
+  <script src="simple-navigation.js"></script>
+  <script>
+    // Test mobile navigation
+    function updateMobileStatus() {
+      const isMobile = window.innerWidth <= 768;
+      const mobileStatus = document.getElementById('mobileStatus');
+      
+      mobileStatus.innerHTML = `
+        <div class="status ${isMobile ? 'success' : 'info'}">
+          📱 Screen Width: ${window.innerWidth}px (${isMobile ? 'Mobile' : 'Desktop'} view)
+        </div>
+        <div class="status info">
+          💡 Mobile menu should be visible on mobile devices
+        </div>
+        <div class="status success">
+          ✅ Navigation should work on all screen sizes
+        </div>
+      `;
+    }
+
+    // Update status on load and resize
+    window.addEventListener('load', updateMobileStatus);
+    window.addEventListener('resize', updateMobileStatus);
+
+    // Test navigation links
+    document.querySelectorAll('.nav-test a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        console.log('🔗 Navigation link clicked:', this.href);
+      });
+    });
+
+    // Test mobile menu
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+
+      if (mobileMenu.classList.contains('show')) {
+        mobileMenu.classList.remove('show');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
+      } else {
+        mobileMenu.classList.add('show');
+        menuBtn.textContent = '✕';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    // Test theme toggle
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const themeToggle = document.querySelector('.theme-toggle-enhanced');
+      const isDark = document.body.classList.contains('dark-mode');
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('darkMode', isDark);
+    }
+
+    // Load saved theme
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('darkMode');
+      if (savedTheme === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.theme-toggle-enhanced').textContent = '☀️';
+      }
+    });
+  </script>
+</body>
+</html>

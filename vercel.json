@@ -87,38 +87,14 @@
       "source": "/create",
       "destination": "/create.html"
     },
-    {
-      "source": "/sms",
-      "destination": "/sms.html"
-    },
-    {
-      "source": "/admin",
-      "destination": "/admin.html"
-    },
-    {
-      "source": "/reset",
-      "destination": "/reset.html"
-    },
-    {
-      "source": "/interactive",
-      "destination": "/interactive_main.html"
-    },
-    {
-      "source": "/post",
-      "destination": "/post.html"
-    },
-    {
-      "source": "/mobile-test",
-      "destination": "/mobile-test.html"
-    },
-    {
-      "source": "/test-fixes",
-      "destination": "/test-fixes.html"
-    },
-    {
-      "source": "/sms-detector-test",
-      "destination": "/sms-detector-test.html"
-    },
+
+
+
+
+
+
+
+
     {
       "source": "/manifest.json",
       "destination": "/manifest.json"

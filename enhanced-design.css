@@ -104,36 +104,37 @@ h6 { font-size: 1.125rem; }
 
 /* Enhanced Header */
 .enhanced-header {
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--glass-border);
-  box-shadow: var(--shadow-lg);
-  padding: var(--space-md) var(--space-xl);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   z-index: 1000;
+  padding: var(--space-md) var(--space-xl);
   transition: all var(--transition-normal);
 }
 
 .enhanced-header:hover {
   background: rgba(255, 255, 255, 0.15);
-  box-shadow: var(--shadow-xl);
+  border-bottom-color: rgba(255, 255, 255, 0.3);
 }
 
 .header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
 }
 
 .logo-section {
   display: flex;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 
 .logo-icon {
@@ -145,7 +146,7 @@ h6 { font-size: 1.125rem; }
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  animation: pulse 2s infinite;
+  animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
@@ -164,7 +165,7 @@ h6 { font-size: 1.125rem; }
 
 .logo-text:hover {
   color: var(--accent-color);
-  transform: translateY(-2px);
+  transform: scale(1.05);
 }
 
 /* Enhanced Navigation */
@@ -210,6 +211,37 @@ h6 { font-size: 1.125rem; }
   color: white;
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+}
+
+.nav-link.active {
+  background: var(--gradient-primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+  z-index: 1001;
+}
+
+.mobile-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.mobile-menu-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
 }
 
 /* Enhanced Hero Section */
@@ -504,6 +536,67 @@ h6 { font-size: 1.125rem; }
     display: none;
   }
   
+  .mobile-menu-btn {
+    display: block;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+  }
+  
+  .mobile-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+  }
+  
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    z-index: 1000;
+    padding: var(--space-lg);
+  }
+  
+  .mobile-menu.show {
+    display: block;
+    animation: slideInDown 0.3s ease-out;
+  }
+  
+  .mobile-menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+  
+  .mobile-menu-links .nav-link {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.1);
+    transition: all var(--transition-normal);
+    text-align: center;
+    font-weight: 500;
+  }
+  
+  .mobile-menu-links .nav-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(10px);
+  }
+  
+  .mobile-menu-links .nav-link.active {
+    background: var(--gradient-primary);
+    color: white;
+  }
+  
   .hero-title {
     font-size: 2.5rem;
   }
@@ -526,6 +619,32 @@ h6 { font-size: 1.125rem; }
     width: 50px;
     height: 50px;
     font-size: 1.2rem;
+  }
+}
+
+/* Desktop Navigation */
+@media (min-width: 769px) {
+  .mobile-menu-btn {
+    display: none;
+  }
+  
+  .mobile-menu {
+    display: none !important;
+  }
+  
+  .enhanced-nav {
+    display: flex !important;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

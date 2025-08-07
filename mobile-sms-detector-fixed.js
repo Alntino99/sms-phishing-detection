@@ -739,7 +739,7 @@ class MobileSMSDetector {
             // Handle notification click
             notification.onclick = function() {
                 window.focus();
-                window.location.href = '/detect.html';
+                window.location.href = 'detect.html';
                 notification.close();
             };
             

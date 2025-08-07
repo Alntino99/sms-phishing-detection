@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navigation Test - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Enhanced Theme Toggle -->
+  <button class="theme-toggle-enhanced" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌙
+  </button>
+  
+  <!-- Cache Clear Button -->
+  <button class="cache-clear-btn" onclick="clearCacheAndReload()" aria-label="Clear cache" style="position: fixed; top: 20px; right: 80px; z-index: 1000; background: rgba(239, 68, 68, 0.9); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px);">
+    🔄
+  </button>
+
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        ☰
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-links">
+        <a href="index.html" class="nav-link">🏠 Home</a>
+        <a href="detect.html" class="nav-link">🔍 Detect SMS</a>
+        <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+        <a href="about.html" class="nav-link">ℹ️ About</a>
+        <a href="contact.html" class="nav-link">📞 Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Test Content -->
+  <section class="enhanced-hero animate-slide-up" style="padding-top: 120px;">
+    <h1 class="hero-title">🔗 Navigation Test</h1>
+    <p class="hero-subtitle">
+      Testing all navigation links to ensure they work properly.
+    </p>
+  </section>
+
+  <section style="padding: 3rem 1.5rem; max-width: 800px; margin: 0 auto;">
+    <div class="card-enhanced animate-slide-up" style="padding: 2.5rem;">
+      <h2 style="text-align: center; margin-bottom: 2rem;">🧪 Test Navigation</h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+        <a href="index.html" class="btn-enhanced btn-primary" style="text-align: center; padding: 1.5rem;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏠</div>
+          <div><strong>Home</strong></div>
+          <div style="font-size: 0.9rem; opacity: 0.8;">Main page</div>
+        </a>
+        
+        <a href="detect.html" class="btn-enhanced btn-primary" style="text-align: center; padding: 1.5rem;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔍</div>
+          <div><strong>Detect</strong></div>
+          <div style="font-size: 0.9rem; opacity: 0.8;">SMS Analysis</div>
+        </a>
+        
+        <a href="dashboard.html" class="btn-enhanced btn-primary" style="text-align: center; padding: 1.5rem;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">📊</div>
+          <div><strong>Dashboard</strong></div>
+          <div style="font-size: 0.9rem; opacity: 0.8;">Analytics</div>
+        </a>
+        
+        <a href="about.html" class="btn-enhanced btn-primary" style="text-align: center; padding: 1.5rem;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">ℹ️</div>
+          <div><strong>About</strong></div>
+          <div style="font-size: 0.9rem; opacity: 0.8;">Information</div>
+        </a>
+        
+        <a href="contact.html" class="btn-enhanced btn-primary" style="text-align: center; padding: 1.5rem;">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">📞</div>
+          <div><strong>Contact</strong></div>
+          <div style="font-size: 0.9rem; opacity: 0.8;">Get in touch</div>
+        </a>
+      </div>
+      
+      <div style="text-align: center; padding: 2rem; background: rgba(255, 255, 255, 0.05); border-radius: 1rem;">
+        <h3 style="margin-bottom: 1rem;">📋 Test Instructions</h3>
+        <ol style="text-align: left; max-width: 500px; margin: 0 auto;">
+          <li>Click each button above</li>
+          <li>Verify the page loads correctly</li>
+          <li>Use browser back button to return</li>
+          <li>Test mobile menu (☰ button)</li>
+          <li>Test theme toggle (🌙 button)</li>
+          <li>Test cache clear (🔄 button)</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enhanced Footer -->
+  <footer class="enhanced-footer">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); opacity: 0.8;">
+        <p>&copy; 2024 SMS Shield. Navigation test page - all links should work! 🎉</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="simple-navigation.js"></script>
+</body>
+</html>
+

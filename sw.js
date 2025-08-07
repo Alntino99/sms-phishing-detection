@@ -1,8 +1,8 @@
 // ===== SERVICE WORKER FOR SMS PHISHING DETECTION =====
 
-const CACHE_NAME = 'sms-phishing-detection-v1';
-const STATIC_CACHE = 'static-v1';
-const DYNAMIC_CACHE = 'dynamic-v1';
+const CACHE_NAME = 'sms-phishing-detection-v2';
+const STATIC_CACHE = 'static-v2';
+const DYNAMIC_CACHE = 'dynamic-v2';
 
 // Files to cache
 const STATIC_FILES = [
@@ -10,8 +10,10 @@ const STATIC_FILES = [
   '/index.html',
   '/detect.html',
   '/dashboard.html',
-  '/login.html',
-  '/signup.html',
+  '/about.html',
+  '/contact.html',
+  '/enhanced-design.css',
+  '/mobile-enhancements.css',
   '/style.css',
   '/script.js',
   '/firebase.js',

@@ -1103,8 +1103,8 @@ function handleSMSAnalysis() {
             ` : ''}
           </div>
         `;
-      
-      resultElement.innerHTML = resultHTML;
+        
+        resultElement.innerHTML = resultHTML;
       
       // Save to database if user is logged in
       const user = auth.currentUser;
@@ -1128,75 +1128,7 @@ function handleSMSAnalysis() {
   }, 1500);
 }
 
-// Handle form submission for sms.html page
-const smsForm = document.getElementById('smsForm');
-if (smsForm) {
-  smsForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const smsContent = e.target.smsContent.value;
-    const resultDiv = document.getElementById('results');
-    
-    if (!smsContent.trim()) {
-      resultDiv.innerHTML = '<div class="error">Please enter a message to analyze.</div>';
-      return;
-    }
-    
-    // Show loading animation
-    resultDiv.innerHTML = `
-      <div class="loading-container">
-        <div class="loading-spinner"></div>
-        <p>Analyzing message with advanced detection algorithms...</p>
-      </div>
-    `;
-    
-    // Simulate analysis time for better UX
-    setTimeout(async () => {
-      try {
-        const analysis = await analyzeSMS(smsContent);
-        
-        // Create comprehensive result display
-        const resultHTML = `
-          <div class="analysis-result ${analysis.isPhishing ? 'phishing' : 'safe'}">
-            <div class="result-header">
-              <h3>${analysis.isPhishing ? '🚨 PHISHING DETECTED' : '✅ SAFE MESSAGE'}</h3>
-              <div class="confidence-meter">
-                <div class="confidence-bar" style="width: ${analysis.confidence}%"></div>
-                <span>Confidence: ${Math.round(analysis.confidence)}%</span>
-              </div>
-            </div>
-            
-            <div class="risk-assessment">
-              <div class="risk-score">
-                <span class="score-label">Threat Score:</span>
-                <span class="score-value ${analysis.riskLevel.toLowerCase()}">${analysis.score}/100</span>
-                <span class="risk-level ${analysis.riskLevel.toLowerCase()}">${analysis.riskLevel} Risk</span>
-              </div>
-              
-              ${analysis.threatType !== 'Unknown' ? `
-                <div class="threat-type">
-                  <span class="threat-label">Threat Type:</span>
-                  <span class="threat-value">${analysis.threatType}</span>
-                </div>
-              ` : ''}
-            </div>
-            
-            ${analysis.indicators.length > 0 ? `
-              <div class="indicators">
-                <h4>🔍 Detection Indicators:</h4>
-                <ul>
-                  ${analysis.indicators.map(indicator => `<li>${indicator}</li>`).join('')}
-                </ul>
-              </div>
-            ` : '<p>✅ No suspicious indicators detected.</p>'}
-            
-            <div class="recommendations">
-              <h4>💡 Recommendations:</h4>
-              <ul>
-                ${analysis.recommendations.map(rec => `<li>${rec}</li>`).join('')}
-              </ul>
-            </div>
-            
-            ${analysis.details.urls ? `
+
               <div class="url-analysis">
                 <h4>🔗 URL Analysis:</h4>
                 <ul>
@@ -1688,7 +1620,7 @@ function sendPhishingNotification(title, message, riskLevel = 'medium') {
   // Handle notification click
   notification.onclick = function() {
     window.focus();
-    window.location.href = '/detect.html';
+    window.location.href = 'detect.html';
     notification.close();
   };
   

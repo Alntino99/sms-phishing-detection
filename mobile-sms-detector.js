@@ -627,7 +627,7 @@ class MobileSMSDetector {
         // Handle notification click
         notification.onclick = function() {
           window.focus();
-          window.location.href = '/detect.html';
+          window.location.href = 'detect.html';
           notification.close();
         };
         
@@ -1137,7 +1137,7 @@ class MobileSMSDetector {
             
             if ('serviceWorker' in navigator) {
                 try {
-                    const registration = await navigator.serviceWorker.register('/sw.js');
+                    const registration = await navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' });
                     console.log('✅ Service Worker registered');
                     
                     // Show install prompt if available
@@ -1357,7 +1357,7 @@ class MobileSMSDetector {
             
             notification.onclick = function() {
                 window.focus();
-                window.location.href = '/detect.html';
+                window.location.href = 'detect.html';
                 notification.close();
             };
         }

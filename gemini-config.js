@@ -8,7 +8,7 @@
 //    - Copy the generated API key
 
 // 2. Replace the placeholder below with your actual API key:
-const GEMINI_API_KEY = 'AIzaSyAErWxch1H1WvkiakBFO9_sUu1wrq8e1NE';
+const GEMINI_API_KEY = 'AIzaSyBioNiN-EnZCv1dYqSV83QDxV8RVK21Omg';
 
 // 3. Initialize Gemini AI when the page loads (only if no user API key is set)
 document.addEventListener('DOMContentLoaded', function() {

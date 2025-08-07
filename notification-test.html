@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notification Test - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Enhanced Theme Toggle -->
+  <button class="theme-toggle-enhanced" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌙
+  </button>
+
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        ☰
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-links">
+        <a href="index.html" class="nav-link">🏠 Home</a>
+        <a href="detect.html" class="nav-link">🔍 Detect SMS</a>
+        <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+        <a href="about.html" class="nav-link">ℹ️ About</a>
+        <a href="contact.html" class="nav-link">📞 Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Enhanced Hero Section -->
+  <section class="enhanced-hero animate-slide-up" style="padding-top: 120px;">
+    <h1 class="hero-title">🔔 Notification System Test</h1>
+    <p class="hero-subtitle">
+      Test all notification types and features of the SMS Shield application.
+    </p>
+  </section>
+
+  <!-- Notification Test Section -->
+  <section style="padding: 2rem 1.5rem; max-width: 900px; margin: 0 auto;">
+    <div class="card-enhanced animate-slide-up" style="padding: 2.5rem;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <div class="card-icon" style="margin: 0 auto 1rem;">🔔</div>
+        <h2 style="font-size: 2rem; margin-bottom: 1rem;">Test Notifications</h2>
+        <p style="opacity: 0.9; font-size: 1.1rem;">
+          Click the buttons below to test different types of notifications.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem;">
+        <button onclick="testSuccessNotification()" class="btn-enhanced btn-primary">
+          <i class="fas fa-check"></i>
+          Success Notification
+        </button>
+        
+        <button onclick="testErrorNotification()" class="btn-enhanced btn-danger">
+          <i class="fas fa-times"></i>
+          Error Notification
+        </button>
+        
+        <button onclick="testWarningNotification()" class="btn-enhanced btn-secondary">
+          <i class="fas fa-exclamation-triangle"></i>
+          Warning Notification
+        </button>
+        
+        <button onclick="testInfoNotification()" class="btn-enhanced btn-secondary">
+          <i class="fas fa-info-circle"></i>
+          Info Notification
+        </button>
+      </div>
+
+      <div style="margin-top: 2rem; text-align: center;">
+        <h3 style="margin-bottom: 1rem;">Specialized Notifications</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+          <button onclick="testSMSAnalysisNotification()" class="btn-enhanced btn-primary">
+            <i class="fas fa-shield-alt"></i>
+            SMS Analysis Result
+          </button>
+          
+          <button onclick="testFirebaseNotification()" class="btn-enhanced btn-secondary">
+            <i class="fas fa-fire"></i>
+            Firebase Status
+          </button>
+          
+          <button onclick="testAIAnalysisNotification()" class="btn-enhanced btn-secondary">
+            <i class="fas fa-robot"></i>
+            AI Analysis Status
+          </button>
+          
+          <button onclick="testCacheNotification()" class="btn-enhanced btn-secondary">
+            <i class="fas fa-sync"></i>
+            Cache Status
+          </button>
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem; text-align: center;">
+        <h3 style="margin-bottom: 1rem;">Notification Features</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+          <button onclick="testLongNotification()" class="btn-enhanced btn-secondary">
+            <i class="fas fa-clock"></i>
+            Long Duration
+          </button>
+          
+          <button onclick="testMultipleNotifications()" class="btn-enhanced btn-secondary">
+            <i class="fas fa-layer-group"></i>
+            Multiple Notifications
+          </button>
+          
+          <button onclick="testCustomNotification()" class="btn-enhanced btn-secondary">
+            <i class="fas fa-cog"></i>
+            Custom Notification
+          </button>
+          
+          <button onclick="clearAllNotifications()" class="btn-enhanced btn-danger">
+            <i class="fas fa-trash"></i>
+            Clear All
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enhanced Footer -->
+  <footer class="enhanced-footer">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+        <div>
+          <h4 style="margin-bottom: 1rem; color: white;">SMS Shield</h4>
+          <p style="opacity: 0.8; line-height: 1.6;">
+            Advanced AI-powered SMS phishing detection to keep you safe from scams and malicious messages.
+          </p>
+        </div>
+        <div>
+          <h4 style="margin-bottom: 1rem; color: white;">Quick Links</h4>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <a href="detect.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s;">SMS Detection</a>
+            <a href="dashboard.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s;">Dashboard</a>
+            <a href="about.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s;">About Us</a>
+            <a href="contact.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s;">Contact</a>
+          </div>
+        </div>
+        <div>
+          <h4 style="margin-bottom: 1rem; color: white;">Connect</h4>
+          <div style="display: flex; gap: 1rem;">
+            <a href="#" style="color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; transition: color 0.3s;">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" style="color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; transition: color 0.3s;">
+              <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="#" style="color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; transition: color 0.3s;">
+              <i class="fab fa-github"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); opacity: 0.8;">
+        <p>&copy; 2024 SMS Shield. Built with ❤️ for digital security.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="notification-system.js"></script>
+  <script src="navigation-fix.js"></script>
+  <script>
+    // Test notification functions
+    function testSuccessNotification() {
+      showSuccess('This is a success notification! Everything is working perfectly.', '✅ Success');
+    }
+
+    function testErrorNotification() {
+      showError('This is an error notification! Something went wrong.', '❌ Error');
+    }
+
+    function testWarningNotification() {
+      showWarning('This is a warning notification! Please be careful.', '⚠️ Warning');
+    }
+
+    function testInfoNotification() {
+      showInfo('This is an info notification! Here is some information.', 'ℹ️ Information');
+    }
+
+    function testSMSAnalysisNotification() {
+      const result = {
+        isPhishing: Math.random() > 0.5,
+        score: Math.floor(Math.random() * 100),
+        recommendations: ['Do not click any links', 'Delete this message']
+      };
+      
+      if (result.isPhishing) {
+        showWarning(
+          `Phishing detected! Score: ${result.score}/100. ${result.recommendations.join(' ')}`,
+          '🚨 Phishing Alert'
+        );
+      } else {
+        showSuccess(
+          `Message appears safe. Score: ${result.score}/100`,
+          '✅ Safe Message'
+        );
+      }
+    }
+
+    function testFirebaseNotification() {
+      const statuses = ['success', 'error', 'info'];
+      const status = statuses[Math.floor(Math.random() * statuses.length)];
+      const messages = {
+        success: 'Firebase connection established successfully!',
+        error: 'Failed to connect to Firebase. Please check your configuration.',
+        info: 'Connecting to Firebase...'
+      };
+      
+      if (status === 'success') {
+        showSuccess(messages[status], '🔥 Firebase Connected');
+      } else if (status === 'error') {
+        showError(messages[status], '🔥 Firebase Error');
+      } else {
+        showInfo(messages[status], '🔥 Firebase Status');
+      }
+    }
+
+    function testAIAnalysisNotification() {
+      const statuses = ['success', 'error', 'info'];
+      const status = statuses[Math.floor(Math.random() * statuses.length)];
+      const messages = {
+        success: 'AI analysis completed successfully!',
+        error: 'AI analysis failed. Please try again.',
+        info: 'Running AI analysis...'
+      };
+      
+      if (status === 'success') {
+        showSuccess(messages[status], '🤖 AI Analysis Complete');
+      } else if (status === 'error') {
+        showError(messages[status], '🤖 AI Analysis Error');
+      } else {
+        showInfo(messages[status], '🤖 AI Analysis');
+      }
+    }
+
+    function testCacheNotification() {
+      const statuses = ['success', 'error', 'info'];
+      const status = statuses[Math.floor(Math.random() * statuses.length)];
+      const messages = {
+        success: 'Cache cleared successfully!',
+        error: 'Failed to clear cache. Please try again.',
+        info: 'Clearing cache...'
+      };
+      
+      if (status === 'success') {
+        showSuccess(messages[status], '🔄 Cache Cleared');
+      } else if (status === 'error') {
+        showError(messages[status], '🔄 Cache Error');
+      } else {
+        showInfo(messages[status], '🔄 Cache Status');
+      }
+    }
+
+    function testLongNotification() {
+      showInfo('This notification will stay visible for 10 seconds.', '⏰ Long Duration', 10000);
+    }
+
+    function testMultipleNotifications() {
+      showSuccess('First notification', '1️⃣ First');
+      setTimeout(() => showWarning('Second notification', '2️⃣ Second'), 500);
+      setTimeout(() => showError('Third notification', '3️⃣ Third'), 1000);
+      setTimeout(() => showInfo('Fourth notification', '4️⃣ Fourth'), 1500);
+    }
+
+    function testCustomNotification() {
+      showNotification(
+        'This is a custom notification with a custom title and longer duration.',
+        'info',
+        '🎨 Custom Notification',
+        8000
+      );
+    }
+
+    function clearAllNotifications() {
+      const container = document.getElementById('notification-container');
+      if (container) {
+        container.innerHTML = '';
+        showSuccess('All notifications cleared!', '🗑️ Cleared');
+      }
+    }
+
+    // Show welcome notification
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        showInfo('Welcome to the notification test page! Click the buttons to test different notification types.', '🔔 Notification Test');
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

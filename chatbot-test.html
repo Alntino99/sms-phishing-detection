@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot Test - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Enhanced Theme Toggle -->
+  <button class="theme-toggle-enhanced" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌙
+  </button>
+
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        ☰
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-links">
+        <a href="index.html" class="nav-link">🏠 Home</a>
+        <a href="detect.html" class="nav-link">🔍 Detect SMS</a>
+        <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+        <a href="about.html" class="nav-link">ℹ️ About</a>
+        <a href="contact.html" class="nav-link">📞 Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Enhanced Hero Section -->
+  <section class="enhanced-hero animate-slide-up" style="padding-top: 120px;">
+    <h1 class="hero-title">🤖 Chatbot Test Center</h1>
+    <p class="hero-subtitle">
+      Test the advanced AI chatbot with ML integration and beautiful animations.
+    </p>
+  </section>
+
+  <!-- Chatbot Test Section -->
+  <section style="padding: 2rem 1.5rem; max-width: 900px; margin: 0 auto;">
+    <div class="card-enhanced animate-slide-up" style="padding: 2.5rem;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <div class="card-icon" style="margin: 0 auto 1rem;">🤖</div>
+        <h2 style="font-size: 2rem; margin-bottom: 1rem;">Test the AI Chatbot</h2>
+        <p style="opacity: 0.9; font-size: 1.1rem;">
+          The chatbot will appear in the bottom-right corner. Click the AI Assistant button to start chatting!
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+        <div class="card-enhanced" style="padding: 1.5rem;">
+          <h3 style="margin-bottom: 1rem;">🎯 Test Questions</h3>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 0.5rem;">• "How does SMS phishing detection work?"</li>
+            <li style="margin-bottom: 0.5rem;">• "What are common phishing signs?"</li>
+            <li style="margin-bottom: 0.5rem;">• "How can I stay safe from SMS scams?"</li>
+            <li style="margin-bottom: 0.5rem;">• "Tell me about your AI technology"</li>
+            <li style="margin-bottom: 0.5rem;">• "What should I do about urgent messages?"</li>
+          </ul>
+        </div>
+
+        <div class="card-enhanced" style="padding: 1.5rem;">
+          <h3 style="margin-bottom: 1rem;">🔍 ML Features</h3>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 0.5rem;">• Intent Recognition</li>
+            <li style="margin-bottom: 0.5rem;">• Contextual Responses</li>
+            <li style="margin-bottom: 0.5rem;">• Sentiment Analysis</li>
+            <li style="margin-bottom: 0.5rem;">• Urgency Detection</li>
+            <li style="margin-bottom: 0.5rem;">• Conversation History</li>
+          </ul>
+        </div>
+
+        <div class="card-enhanced" style="padding: 1.5rem;">
+          <h3 style="margin-bottom: 1rem;">🎨 UI Features</h3>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 0.5rem;">• Animated Chatbot Face</li>
+            <li style="margin-bottom: 0.5rem;">• Smooth Transitions</li>
+            <li style="margin-bottom: 0.5rem;">• Typing Indicators</li>
+            <li style="margin-bottom: 0.5rem;">• Quick Suggestions</li>
+            <li style="margin-bottom: 0.5rem;">• Mobile Responsive</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem; text-align: center;">
+        <h3 style="margin-bottom: 1rem;">🚀 Quick Actions</h3>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <button onclick="openChatbot()" class="btn-enhanced btn-primary">
+            <i class="fas fa-comments"></i>
+            Open Chatbot
+          </button>
+          <button onclick="testChatbotResponse()" class="btn-enhanced btn-secondary">
+            <i class="fas fa-robot"></i>
+            Test Response
+          </button>
+          <button onclick="showChatbotInfo()" class="btn-enhanced btn-secondary">
+            <i class="fas fa-info-circle"></i>
+            Chatbot Info
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enhanced Footer -->
+  <footer class="enhanced-footer">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+        <div>
+          <h4 style="margin-bottom: 1rem; color: white;">SMS Shield</h4>
+          <p style="opacity: 0.8; line-height: 1.6;">
+            Advanced AI-powered SMS phishing detection to keep you safe from scams and malicious messages.
+          </p>
+        </div>
+        <div>
+          <h4 style="margin-bottom: 1rem; color: white;">Quick Links</h4>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <a href="detect.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s;">SMS Detection</a>
+            <a href="dashboard.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s;">Dashboard</a>
+            <a href="about.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s;">About Us</a>
+            <a href="contact.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s;">Contact</a>
+          </div>
+        </div>
+        <div>
+          <h4 style="margin-bottom: 1rem; color: white;">Connect</h4>
+          <div style="display: flex; gap: 1rem;">
+            <a href="#" style="color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; transition: color 0.3s;">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" style="color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; transition: color 0.3s;">
+              <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="#" style="color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; transition: color 0.3s;">
+              <i class="fab fa-github"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); opacity: 0.8;">
+        <p>&copy; 2024 SMS Shield. Built with ❤️ for digital security.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="notification-system.js"></script>
+  <script src="chatbot-ml-model.js"></script>
+  <script src="chatbot-system.js"></script>
+  <script src="navigation-fix.js"></script>
+  <script>
+    // Test functions
+    function openChatbot() {
+      if (window.chatbotSystem) {
+        window.chatbotSystem.openChatbot();
+        showSuccess('Chatbot opened! You can now start chatting.', '🤖 Chatbot');
+      } else {
+        showError('Chatbot system not loaded. Please refresh the page.', '❌ Error');
+      }
+    }
+
+    function testChatbotResponse() {
+      if (window.chatbotSystem) {
+        window.chatbotSystem.addMessage('Test message from user', 'user');
+        showInfo('Test message sent to chatbot. Check the chatbot for response.', '🧪 Test');
+      } else {
+        showError('Chatbot system not loaded. Please refresh the page.', '❌ Error');
+      }
+    }
+
+    function showChatbotInfo() {
+      const info = `
+🤖 Chatbot Features:
+• AI-powered responses
+• ML integration
+• Beautiful animations
+• Mobile responsive
+• Contextual learning
+• Security-focused
+• Real-time typing indicators
+• Quick suggestion buttons
+
+The chatbot uses advanced machine learning to provide intelligent, contextual responses about SMS security.
+      `;
+      showInfo(info, '🤖 Chatbot Info');
+    }
+
+    // Show welcome notification
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        showInfo('Welcome to the chatbot test page! The AI assistant will appear in the bottom-right corner.', '🤖 Chatbot Test');
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

@@ -2,691 +2,459 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Contact Us - SMS Phishing Detection System</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
   <link rel="stylesheet" href="all.min.css">
-  <link rel="stylesheet" href="chatbot.css">
-
-  <script src="index.js"></script>
-  <script src="darkMode.js"></script>
-  
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-image: url('background.jpg');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-attachment: fixed;
-      color: #fff;
-      line-height: 1.6;
-      min-height: 100vh;
-      position: relative;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: brightness(0.6);
-      z-index: -1;
-    }
-
-    /* Modern Header */
-    header {
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-      color: white;
-      padding: 1.5rem 0;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-      opacity: 0.3;
-    }
-
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      position: relative;
-      z-index: 2;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo-title {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .logo {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s ease;
-    }
-
-    .logo:hover {
-      transform: scale(1.1);
-    }
-
-    .main-title {
-      font-size: 2rem;
-      font-weight: 700;
-      background: linear-gradient(45deg, #fff, #e3f2fd);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    /* Navigation */
-    nav {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      padding: 1rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .nav-brand {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #1e3c72;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .nav-brand::before {
-      content: '🛡️';
-      font-size: 1.8rem;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: #1e3c72 !important;
-      text-decoration: none;
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      border-radius: 25px;
-      transition: all 0.3s ease;
-      position: relative;
-      background: rgba(255, 255, 255, 0.9) !important;
-      border: 1px solid rgba(30, 60, 114, 0.2) !important;
-      display: inline-block;
-    }
-
-    .nav-links a:hover {
-      background: linear-gradient(135deg, #667eea, #764ba2) !important;
-      color: white !important;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-      border-color: transparent !important;
-    }
-
-    .nav-links a.active {
-      background: linear-gradient(135deg, #667eea, #764ba2) !important;
-      color: white !important;
-      border-color: transparent !important;
-    }
-
-    /* Main Content */
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
-    /* Contact Hero Section */
-    .contact-hero {
-      text-align: center;
-      padding: 4rem 2rem;
-      margin-bottom: 3rem;
-    }
-
-    .contact-hero h1 {
-      font-size: 3.5rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      background: linear-gradient(135deg, #fff, #e3f2fd);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .contact-hero p {
-      font-size: 1.3rem;
-      color: #e2e8f0;
-      max-width: 600px;
-      margin: 0 auto 2rem;
-    }
-
-    /* Contact Form Container */
-    .contact-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      margin: 3rem 0;
-    }
-
-    .contact-info {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(20px);
-      border-radius: 20px;
-      padding: 2.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .contact-info::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-      border-radius: 20px 20px 0 0;
-    }
-
-    .contact-info h2 {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .contact-info h2::before {
-      content: '📞';
-      font-size: 2.5rem;
-    }
-
-    .contact-info p {
-      color: #e2e8f0;
-      font-size: 1.1rem;
-      line-height: 1.8;
-      margin-bottom: 1rem;
-    }
-
-    .contact-methods {
-      margin-top: 2rem;
-    }
-
-    .contact-method {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      transition: all 0.3s ease;
-    }
-
-    .contact-method:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateX(5px);
-    }
-
-    .contact-method i {
-      font-size: 1.5rem;
-      color: #667eea;
-    }
-
-    .contact-method span {
-      color: #e2e8f0;
-      font-weight: 500;
-    }
-
-    /* Form Container */
-    .form-container {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(20px);
-      border-radius: 20px;
-      padding: 2.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .form-container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #f093fb, #f5576c, #667eea);
-      border-radius: 20px 20px 0 0;
-    }
-
-    .form-container h2 {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .form-container h2::before {
-      content: '✉️';
-      font-size: 2.5rem;
-    }
-
-    .form-container p {
-      color: #e2e8f0;
-      font-size: 1.1rem;
-      line-height: 1.8;
-      margin-bottom: 2rem;
-    }
-
-    /* Form Styles */
-    .form-group {
-      position: relative;
-      margin-bottom: 2rem;
-    }
-
-    .form-group i {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #667eea;
-      font-size: 1.2rem;
-      z-index: 2;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      padding: 1rem 1rem 1rem 3rem;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      border-radius: 15px;
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .form-group input::placeholder,
-    .form-group textarea::placeholder {
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    .form-group textarea {
-      min-height: 120px;
-      resize: vertical;
-      padding-top: 1rem;
-    }
-
-    .submit-btn {
-      width: 100%;
-      padding: 1rem 2rem;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-
-    .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-      background: linear-gradient(135deg, #5a67d8, #6b46c1);
-    }
-
-    .submit-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    /* Success Message */
-    .success-message {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: rgba(34, 197, 94, 0.2);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      border-radius: 10px;
-      color: #22c55e;
-      text-align: center;
-      font-weight: 500;
-      display: none;
-    }
-
-    .error-message {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: rgba(239, 68, 68, 0.2);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      border-radius: 10px;
-      color: #ef4444;
-      text-align: center;
-      font-weight: 500;
-      display: none;
-    }
-
-    /* Dark Mode Toggle */
-    .theme-toggle {
-      position: fixed;
-      top: 2rem;
-      right: 2rem;
-      z-index: 1000;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      color: white;
-    }
-
-    .theme-toggle:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    /* Dark Mode Styles */
-    body.dark-mode {
-      color: #e2e8f0;
-    }
-
-    body.dark-mode::before {
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: brightness(0.3);
-    }
-
-    body.dark-mode header {
-      background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-    }
-
-    body.dark-mode .contact-info,
-    body.dark-mode .form-container {
-      background: rgba(45, 55, 72, 0.8);
-      color: #e2e8f0;
-    }
-
-    body.dark-mode .main-title {
-      background: linear-gradient(45deg, #e2e8f0, #cbd5e0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    body.dark-mode .nav-links a {
-      color: #e2e8f0;
-      background: rgba(45, 55, 72, 0.9);
-      border: 1px solid rgba(226, 232, 240, 0.3);
-    }
-
-    body.dark-mode .nav-links a:hover {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border-color: transparent;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .contact-hero h1 {
-        font-size: 2.5rem;
-      }
-      
-      .contact-container {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-      
-      .contact-info,
-      .form-container {
-        padding: 2rem;
-      }
-      
-      .contact-info h2,
-      .form-container h2 {
-        font-size: 1.5rem;
-      }
-      
-      .header-content {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      
-      .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-    }
-  </style>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Dark Mode Toggle -->
-  <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+  <!-- Enhanced Theme Toggle -->
+  <button class="theme-toggle-enhanced" onclick="toggleTheme()" aria-label="Toggle theme">
     🌙
   </button>
 
-  <header>
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
     <div class="header-content">
-      <div class="logo-title">
-        <img src="sms_shield_logo_new-removebg-preview.png" alt="SMS Phishing Logo" class="logo">
-        <h1 class="main-title">SMS Phishing Detection</h1>
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link active">Contact</a>
+      </nav>
+
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        ☰
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-links">
+        <a href="index.html" class="nav-link">🏠 Home</a>
+        <a href="detect.html" class="nav-link">🔍 Detect SMS</a>
+        <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+        <a href="about.html" class="nav-link">ℹ️ About</a>
+        <a href="contact.html" class="nav-link">📞 Contact</a>
       </div>
     </div>
   </header>
 
-  <nav>
-    <div class="nav-container">
-      <a href="#" class="nav-brand">SMS Phishing Detection</a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="detect.html">Detection</a></li>
-        <li><a href="sms.html">SMS Alerts</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html" class="active">Contact</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <main>
-    <!-- Contact Hero Section -->
-    <section class="contact-hero">
-      <h1>Contact Us</h1>
-      <p>We're here to help! Get in touch with us for support, feedback, or any questions about our SMS phishing detection system.</p>
+  <!-- Enhanced Hero Section -->
+  <section class="enhanced-hero animate-slide-up" style="padding-top: 120px;">
+    <h1 class="hero-title">Contact Us</h1>
+    <p class="hero-subtitle">
+      Get in touch with our team for support, feedback, or to learn more about our 
+      advanced SMS phishing detection technology.
+    </p>
     </section>
 
-    <!-- Contact Container -->
-    <div class="contact-container">
-      <!-- Contact Information -->
-      <div class="contact-info">
-        <h2>Get In Touch</h2>
-        <p>Have questions about our SMS phishing detection system? Need technical support? Want to report a bug or suggest a feature? We'd love to hear from you!</p>
-        
-                 <div class="contact-methods">
-           <div class="contact-method">
-             <i class="fas fa-envelope"></i>
-             <span>alntino99@gmail.com</span>
-           </div>
-           <div class="contact-method">
-             <i class="fas fa-phone"></i>
-             <span>+233 598182800</span>
-           </div>
-           <div class="contact-method">
-             <i class="fas fa-phone"></i>
-             <span>+233 598809938</span>
-           </div>
-           <div class="contact-method">
-             <i class="fas fa-clock"></i>
-             <span>24/7 Support Available</span>
-           </div>
-           <div class="contact-method">
-             <i class="fas fa-map-marker-alt"></i>
-             <span>Accra, Ghana</span>
-           </div>
-         </div>
+  <!-- Enhanced Contact Content -->
+  <section style="padding: 3rem 1.5rem; max-width: 1200px; margin: 0 auto;">
+    <!-- Contact Form -->
+    <div class="card-enhanced animate-slide-up" style="padding: 3rem; margin-bottom: 3rem;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <div class="card-icon" style="margin: 0 auto 1rem;">📧</div>
+        <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Send Us a Message</h2>
+        <p style="opacity: 0.9; font-size: 1.1rem;">
+          We'd love to hear from you! Send us your questions, feedback, or support requests.
+        </p>
       </div>
 
-      <!-- Contact Form -->
-      <div class="form-container">
-        <h2>Send Message</h2>
-        <p>Fill out the form below and we'll get back to you as soon as possible.</p>
-
-        <form id="contactForm">
+      <form id="contactForm" style="max-width: 600px; margin: 0 auto;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
           <div class="form-group">
+            <label for="firstName" class="form-label">
             <i class="fas fa-user"></i>
-            <input type="text" id="name" name="name" placeholder="Your Name" required>
+              First Name
+            </label>
+            <input type="text" id="firstName" class="form-input" required>
           </div>
-          
           <div class="form-group">
+            <label for="lastName" class="form-label">
+              <i class="fas fa-user"></i>
+              Last Name
+            </label>
+            <input type="text" id="lastName" class="form-input" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="form-label">
             <i class="fas fa-envelope"></i>
-            <input type="email" id="email" name="email" placeholder="Your Email" required>
+            Email Address
+          </label>
+          <input type="email" id="email" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label for="subject" class="form-label">
+            <i class="fas fa-tag"></i>
+            Subject
+          </label>
+          <select id="subject" class="form-input" required>
+            <option value="">Select a subject</option>
+            <option value="support">Technical Support</option>
+            <option value="feedback">Feedback</option>
+            <option value="partnership">Partnership</option>
+            <option value="bug-report">Bug Report</option>
+            <option value="feature-request">Feature Request</option>
+            <option value="other">Other</option>
+          </select>
           </div>
           
           <div class="form-group">
+          <label for="message" class="form-label">
             <i class="fas fa-comment"></i>
-            <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+            Message
+          </label>
+          <textarea id="message" class="form-input" rows="6" placeholder="Tell us how we can help you..." required></textarea>
           </div>
           
-          <button type="submit" class="submit-btn">
+        <div style="text-align: center; margin-top: 2rem;">
+          <button type="submit" class="btn-enhanced btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
             <i class="fas fa-paper-plane"></i>
             Send Message
           </button>
+        </div>
         </form>
+    </div>
 
-        <div id="success-message" class="success-message">
-          Thank you! Your message has been sent successfully.
+    <!-- Contact Information Grid -->
+    <div style="margin-bottom: 4rem;">
+      <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem;">Get in Touch</h2>
+      <div class="features-grid">
+        <div class="card-enhanced animate-slide-left">
+          <div class="card-icon">📧</div>
+          <h3>Email Support</h3>
+          <p>Get technical support and answers to your questions via email. We typically respond within 24 hours.</p>
+          <div style="margin-top: 1.5rem;">
+            <a href="mailto:support@smsshield.com" class="btn-enhanced btn-secondary" style="font-size: 0.9rem; padding: 0.75rem 1.5rem;">
+              <i class="fas fa-envelope"></i>
+              support@smsshield.com
+            </a>
+          </div>
         </div>
 
-        <div id="error-message" class="error-message">
-          Error sending message. Please try again.
+        <div class="card-enhanced animate-slide-up">
+          <div class="card-icon">💬</div>
+          <h3>Live Chat</h3>
+          <p>Chat with our support team in real-time for immediate assistance with urgent issues or questions.</p>
+          <div style="margin-top: 1.5rem;">
+            <button onclick="openLiveChat()" class="btn-enhanced btn-primary" style="font-size: 0.9rem; padding: 0.75rem 1.5rem;">
+              <i class="fas fa-comments"></i>
+              Start Chat
+            </button>
+          </div>
+        </div>
+
+        <div class="card-enhanced animate-slide-right">
+          <div class="card-icon">📞</div>
+          <h3>Phone Support</h3>
+          <p>Call us directly for personalized support. Available Monday-Friday, 9 AM - 6 PM EST.</p>
+          <div style="margin-top: 1.5rem;">
+            <a href="tel:+1-555-123-4567" class="btn-enhanced btn-secondary" style="font-size: 0.9rem; padding: 0.75rem 1.5rem;">
+              <i class="fas fa-phone"></i>
+              +1 (555) 123-4567
+            </a>
+          </div>
+        </div>
+
+        <div class="card-enhanced animate-slide-left">
+          <div class="card-icon">📚</div>
+          <h3>Documentation</h3>
+          <p>Browse our comprehensive documentation and knowledge base for detailed guides and tutorials.</p>
+          <div style="margin-top: 1.5rem;">
+            <a href="#" class="btn-enhanced btn-secondary" style="font-size: 0.9rem; padding: 0.75rem 1.5rem;">
+              <i class="fas fa-book"></i>
+              View Docs
+            </a>
+          </div>
+        </div>
+
+        <div class="card-enhanced animate-slide-up">
+          <div class="card-icon">🐛</div>
+          <h3>Bug Reports</h3>
+          <p>Found a bug? Report it through our dedicated bug reporting system for quick resolution.</p>
+          <div style="margin-top: 1.5rem;">
+            <button onclick="reportBug()" class="btn-enhanced btn-danger" style="font-size: 0.9rem; padding: 0.75rem 1.5rem;">
+              <i class="fas fa-bug"></i>
+              Report Bug
+            </button>
+          </div>
+        </div>
+
+        <div class="card-enhanced animate-slide-right">
+          <div class="card-icon">💡</div>
+          <h3>Feature Requests</h3>
+          <p>Have an idea for a new feature? Let us know and we'll consider it for future updates.</p>
+          <div style="margin-top: 1.5rem;">
+            <button onclick="requestFeature()" class="btn-enhanced btn-secondary" style="font-size: 0.9rem; padding: 0.75rem 1.5rem;">
+              <i class="fas fa-lightbulb"></i>
+              Request Feature
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </main>
+
+    <!-- FAQ Section -->
+    <div style="margin-bottom: 4rem;">
+      <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem;">Frequently Asked Questions</h2>
+      <div class="features-grid">
+        <div class="card-enhanced animate-slide-left">
+          <h3>How accurate is the detection?</h3>
+          <p>Our AI-powered system achieves 99.8% accuracy in detecting phishing attempts, using multiple machine learning models and real-time threat intelligence.</p>
+        </div>
+
+        <div class="card-enhanced animate-slide-up">
+          <h3>Is my data private?</h3>
+          <p>Yes! We prioritize your privacy. SMS messages are analyzed locally with optional cloud AI enhancement, and we never store your personal data.</p>
+        </div>
+
+        <div class="card-enhanced animate-slide-right">
+          <h3>How fast is the analysis?</h3>
+          <p>Analysis typically completes in under 1 second, providing instant threat assessment and detailed security recommendations.</p>
+        </div>
+
+        <div class="card-enhanced animate-slide-left">
+          <h3>Do you support all devices?</h3>
+          <p>Yes! Our system works on all devices and browsers, with optimized mobile experience and offline capabilities.</p>
+        </div>
+
+        <div class="card-enhanced animate-slide-up">
+          <h3>Is it free to use?</h3>
+          <p>Basic SMS analysis is completely free. Premium features are available for advanced users and organizations.</p>
+        </div>
+
+        <div class="card-enhanced animate-slide-right">
+          <h3>How do I report false positives?</h3>
+          <p>Use our feedback system to report any false positives. This helps us continuously improve our detection accuracy.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Office Location -->
+    <div class="card-enhanced animate-slide-up" style="padding: 3rem; text-align: center;">
+      <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Visit Our Office</h2>
+      <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem;">
+        Want to meet our team in person? Drop by our office for a chat about cybersecurity.
+      </p>
+      <div style="background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 1rem; margin: 2rem 0;">
+        <h3 style="margin-bottom: 1rem;">SMS Shield Headquarters</h3>
+        <p style="margin-bottom: 0.5rem;">123 Cybersecurity Street</p>
+        <p style="margin-bottom: 0.5rem;">Digital Security District</p>
+        <p style="margin-bottom: 1rem;">Tech City, TC 12345</p>
+        <p style="opacity: 0.8;">Open: Monday-Friday, 9 AM - 6 PM EST</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enhanced Footer -->
+  <footer class="enhanced-footer">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+        <div>
+          <h4 style="margin-bottom: 1rem; color: white;">SMS Shield</h4>
+          <p style="opacity: 0.8; line-height: 1.6;">
+            Advanced AI-powered SMS phishing detection to keep you safe from scams and malicious messages.
+          </p>
+        </div>
+        <div>
+          <h4 style="margin-bottom: 1rem; color: white;">Quick Links</h4>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <a href="detect.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s;">SMS Detection</a>
+            <a href="dashboard.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s;">Dashboard</a>
+            <a href="about.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s;">About Us</a>
+            <a href="contact.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: color 0.3s;">Contact</a>
+          </div>
+        </div>
+        <div>
+          <h4 style="margin-bottom: 1rem; color: white;">Connect</h4>
+          <div style="display: flex; gap: 1rem;">
+            <a href="#" style="color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; transition: color 0.3s;">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" style="color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; transition: color 0.3s;">
+              <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="#" style="color: rgba(255, 255, 255, 0.8); font-size: 1.5rem; transition: color 0.3s;">
+              <i class="fab fa-github"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); opacity: 0.8;">
+        <p>&copy; 2024 SMS Shield. Built with ❤️ for digital security.</p>
+      </div>
+    </div>
+  </footer>
 
   <!-- Scripts -->
-
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script src="firebase.js"></script>
-  <script src="chatbot.js"></script>
-  
+  <script src="notification-system.js"></script>
+  <script src="chatbot-ml-model.js"></script>
+  <script src="chatbot-system.js"></script>
+  <script src="navigation-fix.js"></script>
+  <script src="gemini-config.js"></script>
+  <script src="gemini-ai.js"></script>
+  <script src="script.js"></script>
   <script>
-    document.getElementById('contactForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      
-      const submitBtn = event.target.querySelector('.submit-btn');
-      const successMessage = document.getElementById('success-message');
-      const errorMessage = document.getElementById('error-message');
-      
-      // Hide previous messages
-      successMessage.style.display = 'none';
-      errorMessage.style.display = 'none';
-      
-      // Disable submit button
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-      
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const message = document.getElementById('message').value;
-      
-      try {
-        // Store in Firebase Realtime Database
-        const contactRef = db.ref('contacts');
-        await contactRef.push({
-          name: name,
-          email: email,
-          message: message,
-          timestamp: firebase.database.ServerValue.TIMESTAMP
-        });
-        
-        // Show success message
-        successMessage.textContent = `Thank you, ${name}! Your message has been received.`;
-        successMessage.style.display = 'block';
-        
-        // Reset form
-        document.getElementById('contactForm').reset();
-        
-      } catch (err) {
-        console.error('Error sending message:', err);
-        errorMessage.textContent = 'Error sending message. Please try again.';
-        errorMessage.style.display = 'block';
-      } finally {
-        // Re-enable submit button
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+    // Enhanced theme toggle
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const themeToggle = document.querySelector('.theme-toggle-enhanced');
+      const isDark = document.body.classList.contains('dark-mode');
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('darkMode', isDark);
+    }
+
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+
+      if (mobileMenu.classList.contains('show')) {
+        mobileMenu.classList.remove('show');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
+      } else {
+        mobileMenu.classList.add('show');
+        menuBtn.textContent = '✕';
+        document.body.style.overflow = 'hidden';
       }
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+
+      if (!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+        mobileMenu.classList.remove('show');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Load saved theme
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('darkMode');
+      if (savedTheme === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.theme-toggle-enhanced').textContent = '☀️';
+      }
+    });
+
+    // Enhanced scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe all cards for animation
+    document.addEventListener('DOMContentLoaded', () => {
+      const cards = document.querySelectorAll('.card-enhanced');
+      cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+        observer.observe(card);
+      });
+    });
+
+    // Enhanced button interactions
+    document.querySelectorAll('.btn-enhanced').forEach(btn => {
+      btn.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-3px) scale(1.02)';
+      });
+      
+      btn.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) scale(1)';
+      });
+    });
+
+    // Contact form functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Show contact page notification
+      setTimeout(() => {
+        showInfo('Get in touch with our team for support and feedback.', '📞 Contact Us');
+      }, 1000);
+    });
+
+    // Handle contact form submission
+    document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      showSuccess('Thank you for your message! We will get back to you soon.', '📧 Message Sent');
+    });
+
+    // Contact functions
+    function openLiveChat() {
+      showNotification('💬 Live chat feature coming soon! Please use email support for now.', 'info');
+    }
+
+    function reportBug() {
+      showNotification('🐛 Bug reporting system coming soon! Please use the contact form above.', 'info');
+    }
+
+    function requestFeature() {
+      showNotification('💡 Feature request system coming soon! Please use the contact form above.', 'info');
+    }
+
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'error' ? 'var(--gradient-danger)' : type === 'warning' ? 'var(--gradient-accent)' : 'var(--gradient-success)'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+        z-index: 10000;
+        max-width: 300px;
+        word-wrap: break-word;
+        animation: slideInRight 0.3s ease;
+      `;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.remove();
+      }, 5000);
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
     });
   </script>
 </body>

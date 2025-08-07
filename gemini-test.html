@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini AI Test - SMS Shield</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .test-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px 5px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .status {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+    }
+    .success { background: rgba(76, 175, 80, 0.3); }
+    .error { background: rgba(244, 67, 54, 0.3); }
+    .warning { background: rgba(255, 193, 7, 0.3); }
+    textarea {
+      width: 100%;
+      height: 100px;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .result {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      border-radius: 5px;
+      margin: 10px 0;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>🤖 Gemini AI Test Page</h1>
+  
+  <div class="test-container">
+    <h2>1. Check Gemini AI Status</h2>
+    <button onclick="checkStatus()">Check Status</button>
+    <div id="statusResult"></div>
+  </div>
+
+  <div class="test-container">
+    <h2>2. Test Gemini AI Analysis</h2>
+    <textarea id="testSMS" placeholder="Enter a test SMS message here...">URGENT: Your bank account has been suspended. Click here to verify: http://fake-bank.com/verify</textarea>
+    <button onclick="testAnalysis()">Test Analysis</button>
+    <div id="analysisResult"></div>
+  </div>
+
+  <div class="test-container">
+    <h2>3. Manual API Key Test</h2>
+    <input type="text" id="apiKey" placeholder="Enter your Gemini API key" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px;">
+    <button onclick="testWithKey()">Test with API Key</button>
+    <div id="manualResult"></div>
+  </div>
+
+  <!-- Load Gemini AI scripts -->
+  <script src="gemini-config.js"></script>
+  <script src="gemini-ai.js"></script>
+
+  <script>
+    function checkStatus() {
+      const resultDiv = document.getElementById('statusResult');
+      
+      if (window.geminiAnalyzer) {
+        const status = window.geminiAnalyzer.getStatus();
+        resultDiv.innerHTML = `
+          <div class="status ${status.available ? 'success' : 'warning'}">
+            <strong>Gemini AI Status:</strong><br>
+            ✅ Initialized: ${status.initialized}<br>
+            🔑 API Key Configured: ${status.apiKeyConfigured}<br>
+            🚀 Available: ${status.available}<br>
+            ${status.available ? '✅ Gemini AI is ready to use!' : '⚠️ Gemini AI needs configuration'}
+          </div>
+        `;
+      } else {
+        resultDiv.innerHTML = `
+          <div class="status error">
+            ❌ Gemini AI analyzer not found. Check if gemini-ai.js is loaded properly.
+          </div>
+        `;
+      }
+    }
+
+    async function testAnalysis() {
+      const resultDiv = document.getElementById('analysisResult');
+      const smsContent = document.getElementById('testSMS').value;
+      
+      if (!smsContent.trim()) {
+        resultDiv.innerHTML = '<div class="status error">❌ Please enter an SMS message to test</div>';
+        return;
+      }
+
+      resultDiv.innerHTML = '<div class="status warning">⏳ Testing Gemini AI analysis...</div>';
+
+      try {
+        if (window.geminiAnalyzer && window.geminiAnalyzer.isAvailable()) {
+          const result = await window.geminiAnalyzer.analyzeSMSWithAI(smsContent);
+          
+          if (result.success) {
+            resultDiv.innerHTML = `
+              <div class="status success">
+                ✅ Gemini AI Analysis Successful!
+              </div>
+              <div class="result">
+${JSON.stringify(result.analysis, null, 2)}
+              </div>
+            `;
+          } else {
+            resultDiv.innerHTML = `
+              <div class="status error">
+                ❌ Gemini AI Analysis Failed
+              </div>
+              <div class="result">
+${JSON.stringify(result, null, 2)}
+              </div>
+            `;
+          }
+        } else {
+          resultDiv.innerHTML = `
+            <div class="status error">
+              ❌ Gemini AI is not available. Please check the status above.
+            </div>
+          `;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="status error">
+            ❌ Error during analysis: ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    async function testWithKey() {
+      const resultDiv = document.getElementById('manualResult');
+      const apiKey = document.getElementById('apiKey').value.trim();
+      
+      if (!apiKey) {
+        resultDiv.innerHTML = '<div class="status error">❌ Please enter an API key</div>';
+        return;
+      }
+
+      resultDiv.innerHTML = '<div class="status warning">⏳ Testing with provided API key...</div>';
+
+      try {
+        if (window.initializeGeminiAI) {
+          const success = await window.initializeGeminiAI(apiKey);
+          
+          if (success) {
+            resultDiv.innerHTML = `
+              <div class="status success">
+                ✅ API key is valid! Gemini AI initialized successfully.
+              </div>
+            `;
+          } else {
+            resultDiv.innerHTML = `
+              <div class="status error">
+                ❌ API key validation failed. Please check your key.
+              </div>
+            `;
+          }
+        } else {
+          resultDiv.innerHTML = `
+            <div class="status error">
+              ❌ Gemini AI initialization function not found.
+            </div>
+          `;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="status error">
+            ❌ Error testing API key: ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    // Auto-check status when page loads
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(checkStatus, 1000);
+    });
+  </script>
+</body>
+</html> 

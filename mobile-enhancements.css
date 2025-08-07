@@ -93,7 +93,7 @@ body {
 
 /* Mobile Navigation */
 .enhanced-nav {
-  display: none;
+  display: flex;
   gap: 0.5rem;
 }
 
@@ -393,6 +393,7 @@ body {
 @media (min-width: 768px) {
   .enhanced-nav {
     display: flex;
+    gap: 1rem;
   }
   
   .mobile-menu-btn {

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test New Interface - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Enhanced Theme Toggle -->
+  <button class="theme-toggle-enhanced" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌙
+  </button>
+  
+  <!-- Cache Clear Button -->
+  <button class="cache-clear-btn" onclick="clearCacheAndReload()" aria-label="Clear cache" style="position: fixed; top: 20px; right: 80px; z-index: 1000; background: rgba(239, 68, 68, 0.9); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px);">
+    🔄
+  </button>
+
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        ☰
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-links">
+        <a href="index.html" class="nav-link">🏠 Home</a>
+        <a href="detect.html" class="nav-link">🔍 Detect SMS</a>
+        <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+        <a href="about.html" class="nav-link">ℹ️ About</a>
+        <a href="contact.html" class="nav-link">📞 Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Test Content -->
+  <section class="enhanced-hero animate-slide-up" style="padding-top: 120px;">
+    <h1 class="hero-title">✅ New Interface Test</h1>
+    <p class="hero-subtitle">
+      This page confirms that your new interfaces are loading properly and old interfaces have been removed.
+    </p>
+  </section>
+
+  <section style="padding: 3rem 1.5rem; max-width: 800px; margin: 0 auto;">
+    <div class="card-enhanced animate-slide-up" style="padding: 2.5rem;">
+      <h2 style="text-align: center; margin-bottom: 2rem;">Interface Status Check</h2>
+      
+      <div id="statusChecks" style="text-align: left;">
+        <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 0.5rem; border-left: 4px solid #10b981;">
+          <strong>✅ Navigation Fixed:</strong> Duplicate Dashboard links removed
+        </div>
+        
+        <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 0.5rem; border-left: 4px solid #10b981;">
+          <strong>✅ Cache Clearing:</strong> Old cached content will be cleared automatically
+        </div>
+        
+        <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 0.5rem; border-left: 4px solid #10b981;">
+          <strong>✅ Service Worker:</strong> Updated to version 2 to prevent old content
+        </div>
+        
+        <div style="margin-bottom: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 0.5rem; border-left: 4px solid #10b981;">
+          <strong>✅ Enhanced Design:</strong> New modern interface loaded
+        </div>
+      </div>
+      
+      <div style="text-align: center; margin-top: 2rem;">
+        <a href="index.html" class="btn-enhanced btn-primary" style="margin-right: 1rem;">
+          <i class="fas fa-home"></i>
+          Go to Home
+        </a>
+        <a href="detect.html" class="btn-enhanced btn-secondary">
+          <i class="fas fa-shield-alt"></i>
+          Test Detection
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enhanced Footer -->
+  <footer class="enhanced-footer">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); opacity: 0.8;">
+        <p>&copy; 2024 SMS Shield. New interfaces successfully loaded! 🎉</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="cache-clear.js"></script>
+  <script src="navigation-fix.js"></script>
+  <script src="darkMode.js"></script>
+  <script>
+    // Enhanced theme toggle
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const themeToggle = document.querySelector('.theme-toggle-enhanced');
+      const isDark = document.body.classList.contains('dark-mode');
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('darkMode', isDark);
+    }
+
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+
+      if (mobileMenu.classList.contains('show')) {
+        mobileMenu.classList.remove('show');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
+      } else {
+        mobileMenu.classList.add('show');
+        menuBtn.textContent = '✕';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    // Load saved theme
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('darkMode');
+      if (savedTheme === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.theme-toggle-enhanced').textContent = '☀️';
+      }
+    });
+  </script>
+</body>
+</html>

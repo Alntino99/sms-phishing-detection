@@ -5,7 +5,7 @@ class GeminiAIAnalyzer {
   constructor() {
     this.isInitialized = false;
     this.apiKey = null;
-    this.baseURL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+    this.baseURL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent';
     this.maxRetries = 3;
     this.retryDelay = 1000;
   }
