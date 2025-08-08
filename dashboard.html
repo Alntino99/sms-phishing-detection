@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Analytics Dashboard - SMS Shield</title>
   <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="cross-platform-responsive.css">
   <link rel="stylesheet" href="all.min.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -687,6 +688,12 @@
 
     // Observe all stat cards for animation
     document.addEventListener('DOMContentLoaded', () => {
+      // Initialize cross-platform features
+      if (window.crossPlatformManager) {
+        console.log('✅ Cross-platform manager initialized');
+        console.log('Device info:', window.crossPlatformManager.getDeviceInfo());
+      }
+      
       // Check authentication first
       checkAuthentication();
       

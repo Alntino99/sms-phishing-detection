@@ -6,6 +6,7 @@
   <title>SMS Analysis - SMS Shield</title>
   <link rel="stylesheet" href="enhanced-design.css">
   <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="cross-platform-responsive.css">
   <link rel="stylesheet" href="all.min.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -597,14 +598,20 @@
       console.log('Body has dark-mode class:', document.body.classList.contains('dark-mode'));
       console.log('Dark mode manager:', window.darkModeManager);
       
-      // Initialize AI modules
-      console.log('Initializing AI modules...');
-      
-      // Initialize ML models
-      if (typeof initializeCrossPlatformML === 'function') {
-        initializeCrossPlatformML();
-        console.log('✅ ML models initialized');
-      }
+          // Initialize cross-platform features
+    if (window.crossPlatformManager) {
+      console.log('✅ Cross-platform manager initialized');
+      console.log('Device info:', window.crossPlatformManager.getDeviceInfo());
+    }
+    
+    // Initialize AI modules
+    console.log('Initializing AI modules...');
+    
+    // Initialize ML models
+    if (typeof initializeCrossPlatformML === 'function') {
+      initializeCrossPlatformML();
+      console.log('✅ ML models initialized');
+    }
       
       // Check Gemini AI availability
       if (window.geminiAnalyzer) {
