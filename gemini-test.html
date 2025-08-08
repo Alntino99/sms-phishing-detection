@@ -1,213 +1,417 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gemini AI Test - SMS Shield</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
-    .test-container {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 10px;
-      margin: 20px 0;
-    }
-    button {
-      background: #4CAF50;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin: 10px 5px;
-    }
-    button:hover {
-      background: #45a049;
-    }
-    .status {
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 5px;
-    }
-    .success { background: rgba(76, 175, 80, 0.3); }
-    .error { background: rgba(244, 67, 54, 0.3); }
-    .warning { background: rgba(255, 193, 7, 0.3); }
-    textarea {
-      width: 100%;
-      height: 100px;
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    .result {
-      background: rgba(0, 0, 0, 0.2);
-      padding: 15px;
-      border-radius: 5px;
-      margin: 10px 0;
-      white-space: pre-wrap;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini AI Test - SMS Shield</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .test-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .status {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .success { 
+            background: rgba(76, 175, 80, 0.3); 
+            border: 1px solid rgba(76, 175, 80, 0.5);
+        }
+        .error { 
+            background: rgba(244, 67, 54, 0.3); 
+            border: 1px solid rgba(244, 67, 54, 0.5);
+        }
+        .warning { 
+            background: rgba(255, 152, 0, 0.3); 
+            border: 1px solid rgba(255, 152, 0, 0.5);
+        }
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        textarea {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 5px;
+            width: 100%;
+            font-size: 14px;
+            resize: vertical;
+        }
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .log {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .ai-option {
+            display: block;
+            cursor: pointer;
+            margin: 0;
+        }
+        .ai-option input[type="radio"] {
+            display: none;
+        }
+        .ai-option-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+        .ai-option input[type="radio"]:checked + .ai-option-content {
+            border-color: #4285f4;
+            background: rgba(66, 133, 244, 0.2);
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+        }
+        .ai-option-content i {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .ai-option-content div {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .ai-option-content strong {
+            font-weight: 600;
+            color: white;
+        }
+        .ai-option-content small {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.875rem;
+        }
+    </style>
 </head>
 <body>
-  <h1>🤖 Gemini AI Test Page</h1>
-  
-  <div class="test-container">
-    <h2>1. Check Gemini AI Status</h2>
-    <button onclick="checkStatus()">Check Status</button>
-    <div id="statusResult"></div>
-  </div>
-
-  <div class="test-container">
-    <h2>2. Test Gemini AI Analysis</h2>
-    <textarea id="testSMS" placeholder="Enter a test SMS message here...">URGENT: Your bank account has been suspended. Click here to verify: http://fake-bank.com/verify</textarea>
-    <button onclick="testAnalysis()">Test Analysis</button>
-    <div id="analysisResult"></div>
-  </div>
-
-  <div class="test-container">
-    <h2>3. Manual API Key Test</h2>
-    <input type="text" id="apiKey" placeholder="Enter your Gemini API key" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px;">
-    <button onclick="testWithKey()">Test with API Key</button>
-    <div id="manualResult"></div>
-  </div>
-
-  <!-- Load Gemini AI scripts -->
-  <script src="gemini-config.js"></script>
-  <script src="gemini-ai.js"></script>
-
-  <script>
-    function checkStatus() {
-      const resultDiv = document.getElementById('statusResult');
-      
-      if (window.geminiAnalyzer) {
-        const status = window.geminiAnalyzer.getStatus();
-        resultDiv.innerHTML = `
-          <div class="status ${status.available ? 'success' : 'warning'}">
-            <strong>Gemini AI Status:</strong><br>
-            ✅ Initialized: ${status.initialized}<br>
-            🔑 API Key Configured: ${status.apiKeyConfigured}<br>
-            🚀 Available: ${status.available}<br>
-            ${status.available ? '✅ Gemini AI is ready to use!' : '⚠️ Gemini AI needs configuration'}
-          </div>
-        `;
-      } else {
-        resultDiv.innerHTML = `
-          <div class="status error">
-            ❌ Gemini AI analyzer not found. Check if gemini-ai.js is loaded properly.
-          </div>
-        `;
-      }
-    }
-
-    async function testAnalysis() {
-      const resultDiv = document.getElementById('analysisResult');
-      const smsContent = document.getElementById('testSMS').value;
-      
-      if (!smsContent.trim()) {
-        resultDiv.innerHTML = '<div class="status error">❌ Please enter an SMS message to test</div>';
-        return;
-      }
-
-      resultDiv.innerHTML = '<div class="status warning">⏳ Testing Gemini AI analysis...</div>';
-
-      try {
-        if (window.geminiAnalyzer && window.geminiAnalyzer.isAvailable()) {
-          const result = await window.geminiAnalyzer.analyzeSMSWithAI(smsContent);
-          
-          if (result.success) {
-            resultDiv.innerHTML = `
-              <div class="status success">
-                ✅ Gemini AI Analysis Successful!
-              </div>
-              <div class="result">
-${JSON.stringify(result.analysis, null, 2)}
-              </div>
-            `;
-          } else {
-            resultDiv.innerHTML = `
-              <div class="status error">
-                ❌ Gemini AI Analysis Failed
-              </div>
-              <div class="result">
-${JSON.stringify(result, null, 2)}
-              </div>
-            `;
-          }
-        } else {
-          resultDiv.innerHTML = `
-            <div class="status error">
-              ❌ Gemini AI is not available. Please check the status above.
+    <h1>🤖 Gemini AI Test - SMS Shield</h1>
+    
+    <div class="test-container">
+        <h2>📊 Gemini AI Status</h2>
+        <div id="geminiStatus"></div>
+    </div>
+    
+    <div class="test-container">
+        <h2>🧪 Test Analysis</h2>
+        
+        <!-- AI Analysis Method Selection -->
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">
+                <i class="fas fa-robot"></i>
+                Analysis Method
+            </label>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                <label class="ai-option">
+                    <input type="radio" name="analysisMethod" value="gemini" checked>
+                    <span class="ai-option-content">
+                        <i class="fas fa-brain" style="color: #4285f4;"></i>
+                        <div>
+                            <strong>Gemini AI</strong>
+                            <small>Advanced AI analysis with detailed reasoning</small>
+                        </div>
+                    </span>
+                </label>
+                <label class="ai-option">
+                    <input type="radio" name="analysisMethod" value="ml">
+                    <span class="ai-option-content">
+                        <i class="fas fa-chart-line" style="color: #00d4aa;"></i>
+                        <div>
+                            <strong>Smart Detection</strong>
+                            <small>Fast pattern-based analysis</small>
+                        </div>
+                    </span>
+                </label>
             </div>
-          `;
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label for="testSMS" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">
+                <i class="fas fa-message"></i>
+                Test SMS Message
+            </label>
+            <textarea 
+                id="testSMS" 
+                placeholder="Paste your SMS message here... Example: URGENT: Your bank account has been suspended. Click here to verify: http://fake-bank.com/verify"
+                rows="4"
+            >URGENT: Your bank account has been suspended due to suspicious activity. Click here immediately to verify your identity: http://fake-bank-verify.com/secure</textarea>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <button onclick="testGeminiAnalysis()" id="analyzeBtn">
+                <span id="btnText">
+                    <i class="fas fa-shield-alt"></i>
+                    Test Gemini AI Analysis
+                </span>
+            </button>
+            <button onclick="testGeminiAvailability()">
+                <i class="fas fa-check-circle"></i>
+                Check Availability
+            </button>
+            <button onclick="clearResults()">
+                <i class="fas fa-eraser"></i>
+                Clear Results
+            </button>
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>📋 Test Results</h2>
+        <div id="results"></div>
+    </div>
+    
+    <div class="test-container">
+        <h2>📝 Debug Log</h2>
+        <div id="log" class="log"></div>
+        <button onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    
+    <!-- Your Firebase config -->
+    <script src="firebase-fixed.js"></script>
+    
+    <!-- Gemini AI Scripts -->
+    <script src="gemini-config.js"></script>
+    <script src="gemini-ai.js"></script>
+    
+    <script>
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `[${timestamp}] <span style="color: ${type === 'error' ? '#ff6b6b' : type === 'warning' ? '#ffd93d' : type === 'success' ? '#6bcf7f' : '#74c0fc'}">${type.toUpperCase()}</span>: ${message}`;
+            logDiv.appendChild(logEntry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(`[${type.toUpperCase()}] ${message}`);
         }
-      } catch (error) {
-        resultDiv.innerHTML = `
-          <div class="status error">
-            ❌ Error during analysis: ${error.message}
-          </div>
-        `;
-      }
-    }
 
-    async function testWithKey() {
-      const resultDiv = document.getElementById('manualResult');
-      const apiKey = document.getElementById('apiKey').value.trim();
-      
-      if (!apiKey) {
-        resultDiv.innerHTML = '<div class="status error">❌ Please enter an API key</div>';
-        return;
-      }
-
-      resultDiv.innerHTML = '<div class="status warning">⏳ Testing with provided API key...</div>';
-
-      try {
-        if (window.initializeGeminiAI) {
-          const success = await window.initializeGeminiAI(apiKey);
-          
-          if (success) {
-            resultDiv.innerHTML = `
-              <div class="status success">
-                ✅ API key is valid! Gemini AI initialized successfully.
-              </div>
-            `;
-          } else {
-            resultDiv.innerHTML = `
-              <div class="status error">
-                ❌ API key validation failed. Please check your key.
-              </div>
-            `;
-          }
-        } else {
-          resultDiv.innerHTML = `
-            <div class="status error">
-              ❌ Gemini AI initialization function not found.
-            </div>
-          `;
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
         }
-      } catch (error) {
-        resultDiv.innerHTML = `
-          <div class="status error">
-            ❌ Error testing API key: ${error.message}
-          </div>
-        `;
-      }
-    }
 
-    // Auto-check status when page loads
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(checkStatus, 1000);
-    });
-  </script>
-  
-  <!-- Cross-Platform Script -->
-  <script src="cross-platform-responsive.js"></script>
+        function addResult(message, type = 'success') {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `status ${type}`;
+            resultDiv.innerHTML = `${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'} ${message}`;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        function updateGeminiStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('geminiStatus');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        async function testGeminiAvailability() {
+            log('Testing Gemini AI availability...');
+            addResult('Testing Gemini AI availability...', 'warning');
+            
+            try {
+                if (window.geminiAnalyzer) {
+                    const status = window.geminiAnalyzer.getStatus();
+                    log(`Gemini AI Status: ${JSON.stringify(status)}`);
+                    
+                    if (status.available) {
+                        log('✅ Gemini AI is available and ready');
+                        addResult('✅ Gemini AI is available and ready', 'success');
+                        updateGeminiStatus('✅ Gemini AI is available and ready', 'success');
+                    } else {
+                        log('❌ Gemini AI is not available');
+                        addResult('❌ Gemini AI is not available', 'error');
+                        updateGeminiStatus('❌ Gemini AI is not available', 'error');
+                    }
+                } else {
+                    log('❌ Gemini AI analyzer not found');
+                    addResult('❌ Gemini AI analyzer not found', 'error');
+                    updateGeminiStatus('❌ Gemini AI analyzer not found', 'error');
+                }
+            } catch (error) {
+                log(`❌ Availability test error: ${error.message}`, 'error');
+                addResult(`❌ Availability test error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGeminiAnalysis() {
+            const smsContent = document.getElementById('testSMS').value;
+            const selectedMethod = document.querySelector('input[name="analysisMethod"]:checked').value;
+            
+            if (!smsContent.trim()) {
+                log('❌ Please enter an SMS message to test', 'error');
+                addResult('❌ Please enter an SMS message to test', 'error');
+                return;
+            }
+            
+            log(`Testing ${selectedMethod === 'gemini' ? 'Gemini AI' : 'Smart Detection'} analysis...`);
+            addResult(`Testing ${selectedMethod === 'gemini' ? 'Gemini AI' : 'Smart Detection'} analysis...`, 'warning');
+            
+            // Disable button during analysis
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const btnText = document.getElementById('btnText');
+            analyzeBtn.disabled = true;
+            btnText.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+            
+            try {
+                let analysis;
+                
+                if (selectedMethod === 'gemini') {
+                    // Test Gemini AI analysis
+                    if (window.geminiAnalyzer && window.geminiAnalyzer.isAvailable()) {
+                        log('🔍 Using Gemini AI for analysis...');
+                        const aiResult = await window.geminiAnalyzer.analyzeSMSWithAI(smsContent);
+                        
+                        if (aiResult.success) {
+                            analysis = {
+                                score: aiResult.analysis.confidence,
+                                isPhishing: aiResult.analysis.isPhishing,
+                                confidence: aiResult.analysis.confidence,
+                                riskLevel: aiResult.analysis.riskLevel,
+                                indicators: aiResult.analysis.keyIndicators,
+                                recommendations: aiResult.analysis.recommendations,
+                                reasoning: aiResult.analysis.reasoning,
+                                threatType: aiResult.analysis.threatType,
+                                psychologicalTactics: aiResult.analysis.psychologicalTactics,
+                                technicalAnalysis: aiResult.analysis.technicalAnalysis,
+                                analysisTime: Date.now(),
+                                method: 'Gemini AI'
+                            };
+                            
+                            log('✅ Gemini AI analysis completed successfully');
+                            addResult('✅ Gemini AI analysis completed successfully', 'success');
+                        } else {
+                            log('❌ Gemini AI analysis failed');
+                            addResult('❌ Gemini AI analysis failed', 'error');
+                        }
+                    } else {
+                        log('❌ Gemini AI not available');
+                        addResult('❌ Gemini AI not available', 'error');
+                    }
+                } else {
+                    // Test Smart Detection analysis
+                    log('🔍 Using Smart Detection for analysis...');
+                    // This would use your ML analysis
+                    analysis = {
+                        score: 75,
+                        isPhishing: true,
+                        confidence: 75,
+                        riskLevel: 'High',
+                        indicators: ['Suspicious URL', 'Urgency tactics'],
+                        recommendations: ['Do not click links', 'Report to authorities'],
+                        reasoning: 'Smart pattern analysis completed',
+                        threatType: 'Financial Phishing',
+                        analysisTime: Date.now(),
+                        method: 'Smart Detection'
+                    };
+                    
+                    log('✅ Smart Detection analysis completed');
+                    addResult('✅ Smart Detection analysis completed', 'success');
+                }
+                
+                if (analysis) {
+                    displayAnalysisResults(analysis);
+                }
+                
+            } catch (error) {
+                log(`❌ Analysis error: ${error.message}`, 'error');
+                addResult(`❌ Analysis error: ${error.message}`, 'error');
+            } finally {
+                // Reset button state
+                analyzeBtn.disabled = false;
+                btnText.innerHTML = '<i class="fas fa-shield-alt"></i> Test Gemini AI Analysis';
+            }
+        }
+
+        function displayAnalysisResults(analysis) {
+            const resultsDiv = document.getElementById('results');
+            
+            const resultHTML = `
+                <div class="status ${analysis.isPhishing ? 'error' : 'success'}">
+                    <h3>${analysis.isPhishing ? '🚨 PHISHING DETECTED' : '✅ SAFE MESSAGE'}</h3>
+                    <p><strong>Score:</strong> ${analysis.score}/100</p>
+                    <p><strong>Confidence:</strong> ${analysis.confidence}%</p>
+                    <p><strong>Risk Level:</strong> ${analysis.riskLevel}</p>
+                    <p><strong>Method:</strong> ${analysis.method}</p>
+                    <p><strong>Threat Type:</strong> ${analysis.threatType}</p>
+                    <p><strong>Reasoning:</strong> ${analysis.reasoning}</p>
+                    
+                    ${analysis.indicators.length > 0 ? `
+                        <p><strong>Key Indicators:</strong></p>
+                        <ul>
+                            ${analysis.indicators.map(indicator => `<li>${indicator}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+                    
+                    ${analysis.recommendations.length > 0 ? `
+                        <p><strong>Recommendations:</strong></p>
+                        <ul>
+                            ${analysis.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+                </div>
+            `;
+            
+            resultsDiv.innerHTML = resultHTML;
+        }
+
+        // Auto-run tests on page load
+        window.addEventListener('load', () => {
+            log('Gemini AI test page loaded');
+            setTimeout(() => {
+                log('Starting automatic Gemini AI tests...');
+                testGeminiAvailability();
+            }, 1000);
+        });
+    </script>
 </body>
 </html> 

@@ -23,10 +23,40 @@ class GeminiAIAnalyzer {
     return true;
   }
 
+  // Check if demo usage limit reached
+  checkDemoLimit() {
+    if (window.geminiAPIKeyManager) {
+      const manager = window.geminiAPIKeyManager;
+      if (manager.isUsingDemo() && !manager.canUseDemo()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   // Generate AI-powered analysis of SMS content
   async analyzeSMSWithAI(smsContent) {
     if (!this.isInitialized) {
       return this.getFallbackAnalysis(smsContent);
+    }
+
+    // Check demo usage limit
+    if (!this.checkDemoLimit()) {
+      return {
+        success: false,
+        analysis: {
+          isPhishing: false,
+          confidence: 0,
+          reasoning: 'Demo usage limit reached. Please add your own API key for unlimited usage.',
+          riskLevel: 'Unknown',
+          threatType: 'Demo Limit',
+          keyIndicators: [],
+          psychologicalTactics: [],
+          technicalAnalysis: {},
+          recommendations: ['Add your own API key to continue using Gemini AI analysis'],
+          educationalNote: 'Demo mode is limited to 10 free tests. Get your own free API key from Google AI Studio.'
+        }
+      };
     }
 
     try {
@@ -35,6 +65,12 @@ class GeminiAIAnalyzer {
       
       if (response && response.candidates && response.candidates[0]) {
         const aiAnalysis = this.parseAIResponse(response.candidates[0].content.parts[0].text);
+        
+        // Track demo usage
+        if (window.geminiAPIKeyManager && window.geminiAPIKeyManager.isUsingDemo()) {
+          window.geminiAPIKeyManager.incrementDemoUsage();
+        }
+        
         return {
           success: true,
           analysis: aiAnalysis,
