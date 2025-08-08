@@ -56,31 +56,11 @@
         }
     }
     
-    // Enhanced theme toggle
+    // Enhanced theme toggle - now handled by darkMode.js
     function setupThemeToggle() {
-        const themeToggle = document.querySelector('.theme-toggle-enhanced');
-        
-        if (themeToggle) {
-            themeToggle.addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
-                const isDark = document.body.classList.contains('dark-mode');
-                themeToggle.textContent = isDark ? '☀️' : '🌙';
-                localStorage.setItem('darkMode', isDark);
-                
-                // Add smooth transition
-                themeToggle.style.transform = 'scale(1.2)';
-                setTimeout(() => {
-                    themeToggle.style.transform = 'scale(1)';
-                }, 200);
-            });
-            
-            // Load saved theme
-            const savedTheme = localStorage.getItem('darkMode');
-            if (savedTheme === 'true') {
-                document.body.classList.add('dark-mode');
-                themeToggle.textContent = '☀️';
-            }
-        }
+        // Theme toggle is now handled by the global darkMode.js
+        // This function is kept for compatibility but doesn't do anything
+        console.log('Theme toggle handled by darkMode.js');
     }
     
     // Enhanced navigation link interactions

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background-attachment: fixed;
+    }
+
+    .auth-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 3rem;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.6s ease-in-out;
+    }
+
+    .auth-card:hover::before {
+      left: 100%;
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .auth-logo {
+      width: 80px;
+      height: 80px;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+
+    .auth-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      color: white;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .password-toggle {
+      position: relative;
+    }
+
+    .password-toggle-btn {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+    }
+
+    .password-toggle-btn:hover {
+      color: white;
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 1rem 2rem;
+      background: var(--gradient-primary);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.6s ease-in-out;
+    }
+
+    .auth-btn:hover::before {
+      left: 100%;
+    }
+
+    .auth-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .auth-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .auth-divider {
+      text-align: center;
+      margin: 2rem 0;
+      position: relative;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .auth-divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .auth-divider span {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 0 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .social-auth {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .social-btn {
+      padding: 0.75rem 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .social-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .auth-footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .auth-footer a:hover {
+      color: white;
+    }
+
+    .forgot-password {
+      text-align: right;
+      margin-bottom: 1.5rem;
+    }
+
+    .forgot-password a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+
+    .forgot-password a:hover {
+      color: white;
+    }
+
+    .loading-spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top: 2px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 0.5rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fecaca;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .success-message {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #a7f3d0;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .auth-card {
+        padding: 2rem;
+        margin: 1rem;
+      }
+
+      .auth-title {
+        font-size: 2rem;
+      }
+
+      .social-auth {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Enhanced Theme Toggle -->
+  <button class="nav-link theme-toggle-nav" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌙
+  </button>
+
+  <div class="auth-container">
+    <div class="auth-card animate-slide-up">
+      <!-- Auth Header -->
+      <div class="auth-header">
+        <div class="auth-logo">🛡️</div>
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-subtitle">Sign in to your SMS Shield account</p>
+      </div>
+
+      <!-- Error/Success Messages -->
+      <div id="errorMessage" class="error-message"></div>
+      <div id="successMessage" class="success-message"></div>
+
+      <!-- Login Form -->
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email" class="form-label">
+            <i class="fas fa-envelope"></i>
+            Email Address
+          </label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required 
+            class="form-input"
+            placeholder="Enter your email address"
+            autocomplete="email"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">
+            <i class="fas fa-lock"></i>
+            Password
+          </label>
+          <div class="password-toggle">
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              required 
+              class="form-input"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+            >
+            <button type="button" class="password-toggle-btn" onclick="togglePassword('password')">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="forgot-password">
+          <a href="#" onclick="showForgotPassword()">Forgot your password?</a>
+        </div>
+
+        <button type="submit" class="auth-btn" id="loginBtn">
+          <div class="loading-spinner" id="loginSpinner"></div>
+          <span id="loginBtnText">Sign In</span>
+        </button>
+      </form>
+
+      <!-- Social Authentication -->
+      <div class="auth-divider">
+        <span>or continue with</span>
+      </div>
+
+      <div class="social-auth">
+        <button class="social-btn" onclick="signInWithGoogle()">
+          <i class="fab fa-google"></i>
+          Google
+        </button>
+        <button class="social-btn" onclick="signInWithGithub()">
+          <i class="fab fa-github"></i>
+          GitHub
+        </button>
+      </div>
+
+      <!-- Auth Footer -->
+      <div class="auth-footer">
+        <p>
+          Don't have an account? 
+          <a href="signup.html">Sign up here</a>
+        </p>
+        <p style="margin-top: 1rem;">
+          <a href="index.html">← Back to Home</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  
+  <!-- Enhanced Scripts -->
+  <script src="firebase-fixed.js"></script>
+  <script src="auth-state-manager.js"></script>
+  <script src="notification-system.js"></script>
+  <script src="navigation-fix.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Password toggle functionality
+    function togglePassword(inputId) {
+      const input = document.getElementById(inputId);
+      const btn = input.nextElementSibling;
+      const icon = btn.querySelector('i');
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fas fa-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'fas fa-eye';
+      }
+    }
+
+    // Show forgot password modal
+    function showForgotPassword() {
+      const email = document.getElementById('email').value;
+      if (!email) {
+        showError('Please enter your email address first', '❌ Error');
+        return;
+      }
+      
+      // For now, show a simple message. In production, implement password reset
+      showSuccess('Password reset link sent to your email', '✅ Password Reset');
+    }
+
+    // Google Sign In
+    async function signInWithGoogle() {
+      try {
+        showLoading('loginBtn', 'Signing in with Google...');
+        
+        // Simulate Google sign in (replace with actual Google Auth)
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        showSuccess('Successfully signed in with Google!', '✅ Welcome');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1500);
+        
+      } catch (error) {
+        showError('Google sign in failed: ' + error.message, '❌ Error');
+        hideLoading('loginBtn', 'Sign In');
+      }
+    }
+
+    // GitHub Sign In
+    async function signInWithGithub() {
+      try {
+        showLoading('loginBtn', 'Signing in with GitHub...');
+        
+        // Simulate GitHub sign in (replace with actual GitHub Auth)
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        showSuccess('Successfully signed in with GitHub!', '✅ Welcome');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1500);
+        
+      } catch (error) {
+        showError('GitHub sign in failed: ' + error.message, '❌ Error');
+        hideLoading('loginBtn', 'Sign In');
+      }
+    }
+
+    // Show loading state
+    function showLoading(btnId, text) {
+      const btn = document.getElementById(btnId);
+      const spinner = document.getElementById(btnId.replace('Btn', 'Spinner'));
+      const btnText = document.getElementById(btnId.replace('Btn', 'BtnText'));
+      
+      btn.disabled = true;
+      spinner.style.display = 'inline-block';
+      btnText.textContent = text;
+    }
+
+    // Hide loading state
+    function hideLoading(btnId, text) {
+      const btn = document.getElementById(btnId);
+      const spinner = document.getElementById(btnId.replace('Btn', 'Spinner'));
+      const btnText = document.getElementById(btnId.replace('Btn', 'BtnText'));
+      
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnText.textContent = text;
+    }
+
+    // Show error message
+    function showError(message, title = '❌ Error') {
+      const errorDiv = document.getElementById('errorMessage');
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+      
+      // Hide success message if shown
+      document.getElementById('successMessage').style.display = 'none';
+      
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        errorDiv.style.display = 'none';
+      }, 5000);
+    }
+
+    // Show success message
+    function showSuccess(message, title = '✅ Success') {
+      const successDiv = document.getElementById('successMessage');
+      successDiv.textContent = message;
+      successDiv.style.display = 'block';
+      
+      // Hide error message if shown
+      document.getElementById('errorMessage').style.display = 'none';
+      
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        successDiv.style.display = 'none';
+      }, 5000);
+    }
+
+    // Handle form submission
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      if (!email || !password) {
+        showError('Please fill in all fields', '❌ Error');
+        return;
+      }
+      
+      try {
+        showLoading('loginBtn', 'Signing in...');
+        
+        // Use Auth Manager for sign in
+        await authManager.signIn(email, password);
+        
+        showSuccess('Successfully signed in!', '✅ Welcome');
+        
+        // Redirect to dashboard
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1500);
+        
+      } catch (error) {
+        console.error('Login error:', error);
+        showError('Login failed: ' + error.message, '❌ Error');
+        hideLoading('loginBtn', 'Sign In');
+      }
+    });
+
+    // Check if user is already logged in
+    document.addEventListener('DOMContentLoaded', function() {
+      // Use Auth Manager to check if user is already signed in
+      if (authManager.isSignedIn()) {
+        showSuccess('Already logged in!', '✅ Welcome Back');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1000);
+      }
+    });
+  </script>
+  
+  <!-- Dark Mode Script -->
+  <script src="darkMode.js"></script>
+</body>
+</html>

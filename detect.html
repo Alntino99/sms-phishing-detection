@@ -25,14 +25,79 @@
       transform: translateY(-2px);
       box-shadow: var(--shadow-lg);
     }
+
+    /* AI Option Styles */
+    .ai-option {
+      display: block;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .ai-option input[type="radio"] {
+      display: none;
+    }
+
+    .ai-option-content {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      border: 2px solid #e1e5e9;
+      border-radius: 0.75rem;
+      background: white;
+      transition: all 0.3s ease;
+      min-width: 200px;
+    }
+
+    .ai-option input[type="radio"]:checked + .ai-option-content {
+      border-color: #4285f4;
+      background: linear-gradient(135deg, #f8f9ff 0%, #e8f0fe 100%);
+      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.15);
+    }
+
+    .ai-option-content i {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .ai-option-content div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .ai-option-content strong {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .ai-option-content small {
+      color: #666;
+      font-size: 0.875rem;
+    }
+
+    /* Dark mode support */
+    .dark-mode .ai-option-content {
+      background: #2d3748;
+      border-color: #4a5568;
+      color: white;
+    }
+
+    .dark-mode .ai-option-content strong {
+      color: white;
+    }
+
+    .dark-mode .ai-option-content small {
+      color: #a0aec0;
+    }
+
+    .dark-mode .ai-option input[type="radio"]:checked + .ai-option-content {
+      border-color: #4285f4;
+      background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    }
   </style>
 </head>
 <body>
-  <!-- Enhanced Theme Toggle -->
-  <button class="theme-toggle-enhanced" onclick="toggleTheme()" aria-label="Toggle theme">
-    🌙
-  </button>
-
   <!-- Enhanced Header -->
   <header class="enhanced-header">
     <div class="header-content">
@@ -48,7 +113,26 @@
         <a href="profile.html" class="nav-link">Profile</a>
         <a href="about.html" class="nav-link">About</a>
         <a href="contact.html" class="nav-link">Contact</a>
-                    <a href="#" class="nav-link auth-link">Detect</a>
+        <a href="#" class="nav-link auth-link">Detect</a>
+        
+        <!-- Notification Bell -->
+        <div class="notification-bell-container">
+          <button class="nav-link notification-bell" onclick="toggleNotificationPanel()" aria-label="View notifications">
+            🔔
+            <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
+          </button>
+          
+          <!-- Notification Panel -->
+          <div class="notification-panel" id="notification-panel">
+            <div class="notification-panel-header">
+              <h3>Notifications</h3>
+              <button class="clear-notifications-btn" onclick="clearAllNotifications()">Clear All</button>
+            </div>
+            <div class="notification-list" id="notification-list">
+              <div class="no-notifications">No notifications yet</div>
+            </div>
+          </div>
+        </div>
       </nav>
 
       <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
@@ -65,7 +149,11 @@
         <a href="profile.html" class="nav-link">👤 Profile</a>
         <a href="about.html" class="nav-link">ℹ️ About</a>
         <a href="contact.html" class="nav-link">📞 Contact</a>
-                  <a href="#" class="nav-link">🔍 Detect</a>
+        <a href="#" class="nav-link">🔍 Detect</a>
+        <button class="nav-link notification-bell" onclick="toggleNotificationPanel()" aria-label="View notifications">
+          🔔
+          <span class="notification-badge" style="display: none;">0</span>
+        </button>
       </div>
     </div>
   </header>
@@ -91,6 +179,36 @@
       </div>
 
       <form id="smsForm" style="margin-top: 2rem;">
+        <!-- AI Analysis Method Selection -->
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label class="form-label">
+            <i class="fas fa-robot"></i>
+            Analysis Method
+          </label>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem;">
+            <label class="ai-option">
+              <input type="radio" name="analysisMethod" value="gemini" checked>
+              <span class="ai-option-content">
+                <i class="fas fa-brain" style="color: #4285f4;"></i>
+                <div>
+                  <strong>Gemini AI</strong>
+                  <small>Advanced AI analysis with detailed reasoning</small>
+                </div>
+              </span>
+            </label>
+            <label class="ai-option">
+              <input type="radio" name="analysisMethod" value="ml">
+              <span class="ai-option-content">
+                <i class="fas fa-chart-line" style="color: #00d4aa;"></i>
+                <div>
+                  <strong>Smart Detection</strong>
+                  <small>Fast pattern-based analysis</small>
+                </div>
+              </span>
+            </label>
+          </div>
+        </div>
+
         <div class="form-group">
           <label for="smsInput" class="form-label">
             <i class="fas fa-message"></i>
@@ -184,46 +302,82 @@
     </div>
   </footer>
 
+  <!-- Firebase SDK Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  
   <!-- Scripts -->
+  <script src="darkMode.js"></script>
   <script src="firebase-fixed.js"></script>
+  <script src="auth-state-manager.js"></script>
   <script src="notification-system.js"></script>
   <script src="chatbot-ml-model.js"></script>
   <script src="chatbot-system.js"></script>
   <script src="navigation-fix.js"></script>
+  <script src="notification-panel.js"></script>
+  <script src="gemini-ai.js"></script>
+  <script src="cross-platform-ml.js"></script>
+  <script src="api-manager.js"></script>
   <script>
-    // Authentication state management
-    let currentUser = null;
-    
-    auth.onAuthStateChanged((user) => {
-      currentUser = user;
-      updateAuthUI();
+    // Authentication state management using Auth Manager
+    document.addEventListener('DOMContentLoaded', function() {
+      // Auth manager will automatically handle UI updates
+      // Add auth state listener for additional functionality
+      if (window.authManager) {
+        authManager.addAuthListener((user) => {
+          if (user) {
+            console.log('✅ User signed in on detect page:', user.email);
+            // Show personalized welcome message
+            if (window.showSuccess) {
+              showSuccess(`Welcome back, ${user.email}! Ready to analyze SMS messages.`, '🛡️ SMS Shield');
+            }
+          } else {
+            console.log('✅ User signed out on detect page');
+          }
+        });
+      }
     });
     
-    function updateAuthUI() {
-      const authLink = document.querySelector('.auth-link');
-      if (authLink) {
-        authLink.textContent = 'Detect';
-        authLink.href = '#';
-      }
-    }
+    // Immediate dark mode test
+    console.log('🔍 Dark Mode Test - Page Load');
+    console.log('1. toggleTheme function exists:', typeof toggleTheme === 'function');
+    console.log('2. Current theme in localStorage:', localStorage.getItem('theme'));
+    console.log('3. Body has dark-mode class:', document.body.classList.contains('dark-mode'));
+    console.log('4. Theme buttons found:', document.querySelectorAll('.theme-toggle-nav').length);
     
     // Form functions
     function clearForm() {
       document.getElementById('smsInput').value = '';
       document.getElementById('resultsSection').style.display = 'none';
-      showSuccess('Form cleared successfully', 'Form Reset');
+      
+      // Reset analysis method to Gemini AI
+      const geminiRadio = document.querySelector('input[name="analysisMethod"][value="gemini"]');
+      if (geminiRadio) {
+        geminiRadio.checked = true;
+      }
+      
+      if (window.showSuccess) {
+        showSuccess('Form cleared successfully', 'Form Reset');
+      }
     }
 
+
+
     function shareResults() {
-      showInfo('Share functionality coming soon!', 'Share Feature');
+      if (window.showInfo) {
+        showInfo('Share functionality coming soon!', 'Share Feature');
+      }
     }
 
     function saveToHistory() {
-      showInfo('Save to history functionality coming soon!', 'Save Feature');
+      if (window.showInfo) {
+        showInfo('Save to history functionality coming soon!', 'Save Feature');
+      }
     }
 
-    // Enhanced SMS analysis with notifications
-    function performAnalysis() {
+    // Enhanced SMS analysis with AI method selection
+    async function performAnalysis() {
       const smsInput = document.getElementById('smsInput');
       const smsContent = smsInput.value.trim();
       
@@ -233,30 +387,56 @@
         return;
       }
       
-      // Show analysis started notification
-      showInfo('Analyzing SMS message...', '🤖 AI Analysis');
+      // Get selected analysis method
+      const selectedMethod = document.querySelector('input[name="analysisMethod"]:checked').value;
+      const analyzeBtn = document.getElementById('analyzeBtn');
+      const btnText = document.getElementById('btnText');
       
-      // Simulate analysis delay
-      setTimeout(() => {
-        // Simple analysis for testing
-        const isPhishing = smsContent.toLowerCase().includes('urgent') || 
-                          smsContent.toLowerCase().includes('verify') ||
-                          smsContent.toLowerCase().includes('click here');
+      // Update button state
+      analyzeBtn.disabled = true;
+      btnText.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+      
+      // Show analysis started notification
+      const methodName = selectedMethod === 'gemini' ? 'Gemini AI' : 'Smart Detection';
+      showInfo(`Analyzing with ${methodName}...`, '🤖 AI Analysis');
+      
+      try {
+        let analysis;
         
-        const analysis = {
-          score: isPhishing ? 85 : 15,
-          isPhishing: isPhishing,
-          confidence: isPhishing ? 90 : 70,
-          riskLevel: isPhishing ? 'High' : 'Low',
-          indicators: isPhishing ? ['Suspicious keywords detected', 'Urgency indicators found'] : ['No threats detected'],
-          recommendations: isPhishing ? ['Do not click any links', 'Delete this message'] : ['Message appears safe'],
-          analysisTime: 1000
-        };
+        if (selectedMethod === 'gemini') {
+          // Use Gemini AI analysis
+          if (window.geminiAnalyzer && window.geminiAnalyzer.isAvailable()) {
+            const aiResult = await window.geminiAnalyzer.analyzeSMSWithAI(smsContent);
+            analysis = {
+              score: aiResult.analysis.threatAssessment.confidence,
+              isPhishing: aiResult.analysis.threatAssessment.isPhishing,
+              confidence: aiResult.analysis.threatAssessment.confidence,
+              riskLevel: aiResult.analysis.riskLevel,
+              indicators: aiResult.analysis.keyIndicators,
+              recommendations: aiResult.analysis.recommendations,
+              reasoning: aiResult.analysis.threatAssessment.reasoning,
+              threatType: aiResult.analysis.threatType,
+              psychologicalTactics: aiResult.analysis.psychologicalTactics,
+              technicalAnalysis: aiResult.analysis.technicalAnalysis,
+              analysisTime: Date.now(),
+              method: 'Gemini AI'
+            };
+          } else {
+            // Fallback to ML if Gemini not available
+            showWarning('Gemini AI not available, using Smart Detection instead', '⚠️ Fallback');
+            analysis = await performMLAnalysis(smsContent);
+            analysis.method = 'Smart Detection (Fallback)';
+          }
+        } else {
+          // Use Smart Detection analysis
+          analysis = await performMLAnalysis(smsContent);
+          analysis.method = 'Smart Detection';
+        }
         
         // Show analysis result notification
         if (analysis.isPhishing) {
           showWarning(
-            `Phishing detected! Score: ${analysis.score}/100. ${analysis.recommendations.join(' ')}`,
+            `Phishing detected! Score: ${analysis.score}/100. ${analysis.recommendations[0] || 'Be cautious with this message.'}`,
             '🚨 Phishing Alert'
           );
         } else {
@@ -267,7 +447,39 @@
         }
         
         displayResults(analysis);
-      }, 1500);
+        
+      } catch (error) {
+        console.error('Analysis error:', error);
+        showError('Analysis failed. Please try again.', '❌ Analysis Error');
+      } finally {
+        // Reset button state
+        analyzeBtn.disabled = false;
+        btnText.innerHTML = '<i class="fas fa-shield-alt"></i> Analyze SMS';
+      }
+    }
+
+    // Smart Detection analysis function
+    async function performMLAnalysis(smsContent) {
+      // Initialize ML models if not ready
+      if (!mlModelsReady) {
+        initializeCrossPlatformML();
+      }
+      
+      // Perform ML analysis
+      const mlAnalysis = await analyzeSMS(smsContent);
+      
+      return {
+        score: mlAnalysis.score,
+        isPhishing: mlAnalysis.isPhishing,
+        confidence: mlAnalysis.confidence,
+        riskLevel: mlAnalysis.riskLevel,
+        indicators: mlAnalysis.indicators,
+        recommendations: mlAnalysis.recommendations,
+        reasoning: 'Smart pattern analysis completed',
+        threatType: mlAnalysis.threatType || 'Unknown',
+        analysisTime: Date.now(),
+        method: 'Smart Detection'
+      };
     }
 
     function displayResults(analysis) {
@@ -288,11 +500,22 @@
       analysisResults.innerHTML = `
         <div style="margin-bottom: 1.5rem;">
           <h4 style="margin-bottom: 0.5rem;">📊 Analysis Summary</h4>
+          <p><strong>Analysis Method:</strong> ${analysis.method}</p>
           <p><strong>Threat Score:</strong> ${analysis.score}/100</p>
           <p><strong>Confidence:</strong> ${analysis.confidence}%</p>
           <p><strong>Risk Level:</strong> ${analysis.riskLevel}</p>
-          <p><strong>Analysis Time:</strong> ${analysis.analysisTime}ms</p>
+          <p><strong>Threat Type:</strong> ${analysis.threatType || 'Unknown'}</p>
+          <p><strong>Analysis Time:</strong> ${Date.now() - analysis.analysisTime}ms</p>
         </div>
+        
+        ${analysis.reasoning ? `
+        <div style="margin-bottom: 1.5rem;">
+          <h4 style="margin-bottom: 0.5rem;">🧠 AI Reasoning</h4>
+          <p style="background: rgba(66, 133, 244, 0.1); padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #4285f4;">
+            ${analysis.reasoning}
+          </p>
+        </div>
+        ` : ''}
         
         <div style="margin-bottom: 1.5rem;">
           <h4 style="margin-bottom: 0.5rem;">🔍 Key Indicators</h4>
@@ -300,6 +523,51 @@
             ${analysis.indicators.map(indicator => `<li style="margin-bottom: 0.5rem;">• ${indicator}</li>`).join('')}
           </ul>
         </div>
+        
+        ${analysis.psychologicalTactics ? `
+        <div style="margin-bottom: 1.5rem;">
+          <h4 style="margin-bottom: 0.5rem;">🎭 Psychological Tactics</h4>
+          <ul style="list-style: none; padding: 0;">
+            ${analysis.psychologicalTactics.map(tactic => `<li style="margin-bottom: 0.5rem;">• ${tactic}</li>`).join('')}
+          </ul>
+        </div>
+        ` : ''}
+        
+        ${analysis.technicalAnalysis ? `
+        <div style="margin-bottom: 1.5rem;">
+          <h4 style="margin-bottom: 0.5rem;">🔧 Technical Analysis</h4>
+          ${analysis.technicalAnalysis.suspiciousUrls && analysis.technicalAnalysis.suspiciousUrls.length > 0 ? `
+            <p><strong>Suspicious URLs:</strong></p>
+            <ul style="list-style: none; padding: 0;">
+              ${analysis.technicalAnalysis.suspiciousUrls.map(url => `<li style="margin-bottom: 0.5rem;">• ${url}</li>`).join('')}
+            </ul>
+          ` : ''}
+          ${analysis.technicalAnalysis.suspiciousPhoneNumbers && analysis.technicalAnalysis.suspiciousPhoneNumbers.length > 0 ? `
+            <p><strong>Suspicious Phone Numbers:</strong></p>
+            <ul style="list-style: none; padding: 0;">
+              ${analysis.technicalAnalysis.suspiciousPhoneNumbers.map(phone => `<li style="margin-bottom: 0.5rem;">• ${phone}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+        ` : ''}
+        
+        ${analysis.modelInsights ? `
+        <div style="margin-bottom: 1.5rem;">
+          <h4 style="margin-bottom: 0.5rem;">🤖 ML Model Insights</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+            <div style="background: rgba(66, 133, 244, 0.1); padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #4285f4;">
+              <h5 style="margin: 0 0 0.5rem 0; color: #4285f4;">K-Nearest Neighbors</h5>
+              <p style="margin: 0; font-size: 0.9rem;"><strong>Model:</strong> ${analysis.modelInsights.knn}</p>
+              <p style="margin: 0; font-size: 0.9rem;"><strong>Distance:</strong> ${analysis.modelInsights.knnDistance}</p>
+            </div>
+            <div style="background: rgba(0, 212, 170, 0.1); padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #00d4aa;">
+              <h5 style="margin: 0 0 0.5rem 0; color: #00d4aa;">Random Forest</h5>
+              <p style="margin: 0; font-size: 0.9rem;"><strong>Model:</strong> ${analysis.modelInsights.randomForest}</p>
+              <p style="margin: 0; font-size: 0.9rem;"><strong>Votes:</strong> ${analysis.modelInsights.rfVotes}</p>
+            </div>
+          </div>
+        </div>
+        ` : ''}
         
         <div style="margin-bottom: 1.5rem;">
           <h4 style="margin-bottom: 0.5rem;">💡 Recommendations</h4>
@@ -321,9 +589,33 @@
 
     // Test notifications on page load
     document.addEventListener('DOMContentLoaded', function() {
+      // Theme is now handled by darkMode.js
+      
+      // Test dark mode functionality
+      console.log('Testing dark mode functionality...');
+      console.log('Current theme:', localStorage.getItem('theme'));
+      console.log('Body has dark-mode class:', document.body.classList.contains('dark-mode'));
+      console.log('Dark mode manager:', window.darkModeManager);
+      
+      // Initialize AI modules
+      console.log('Initializing AI modules...');
+      
+      // Initialize ML models
+      if (typeof initializeCrossPlatformML === 'function') {
+        initializeCrossPlatformML();
+        console.log('✅ ML models initialized');
+      }
+      
+      // Check Gemini AI availability
+      if (window.geminiAnalyzer) {
+        console.log('✅ Gemini AI analyzer available');
+      } else {
+        console.log('⚠️ Gemini AI analyzer not available');
+      }
+      
       // Show welcome notification
       setTimeout(() => {
-        showInfo('Welcome to SMS Shield! Ready to analyze your messages.', '🛡️ SMS Shield');
+        showInfo('Welcome to SMS Shield! Choose your analysis method and analyze your messages.', '🛡️ SMS Shield');
       }, 1000);
     });
   </script>

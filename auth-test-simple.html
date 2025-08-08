@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication Test - SMS Shield</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .test-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 16px;
+    }
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+    }
+    button:hover {
+      transform: translateY(-2px);
+    }
+    .status {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+    .success {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .error {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .info {
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>🔐 Authentication Test</h1>
+    <p>This page tests the authentication system to ensure sign-in is working properly.</p>
+    
+    <div id="status" class="status info">
+      Testing authentication system...
+    </div>
+    
+    <form id="testForm">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="test@example.com" value="test@example.com">
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="password123" value="password123">
+      </div>
+      
+      <button type="button" onclick="testSignIn()">Test Sign In</button>
+      <button type="button" onclick="testSignUp()">Test Sign Up</button>
+      <button type="button" onclick="testSignOut()">Test Sign Out</button>
+      <button type="button" onclick="checkAuthState()">Check Auth State</button>
+    </form>
+    
+    <div id="results"></div>
+  </div>
+
+  <!-- Firebase SDK Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  
+  <!-- Scripts -->
+  <script src="firebase-fixed.js"></script>
+  <script src="auth-state-manager.js"></script>
+  <script src="script.js"></script>
+  
+  <script>
+    function updateStatus(message, type = 'info') {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      status.className = `status ${type}`;
+    }
+    
+    function addResult(message, type = 'info') {
+      const results = document.getElementById('results');
+      const div = document.createElement('div');
+      div.className = `status ${type}`;
+      div.textContent = message;
+      results.appendChild(div);
+    }
+    
+    async function testSignIn() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      if (!email || !password) {
+        updateStatus('Please enter email and password', 'error');
+        return;
+      }
+      
+      try {
+        updateStatus('Attempting to sign in...', 'info');
+        
+        // Test with Auth Manager
+        const result = await authManager.signIn(email, password);
+        
+        updateStatus(`✅ Sign in successful! User: ${result.user.email}`, 'success');
+        addResult(`Auth Manager sign in: SUCCESS - ${result.user.email}`, 'success');
+        
+        // Test with direct Firebase
+        if (window.auth) {
+          try {
+            const firebaseResult = await auth.signInWithEmailAndPassword(email, password);
+            addResult(`Firebase direct sign in: SUCCESS - ${firebaseResult.user.email}`, 'success');
+          } catch (error) {
+            addResult(`Firebase direct sign in: FAILED - ${error.message}`, 'error');
+          }
+        }
+        
+      } catch (error) {
+        updateStatus(`❌ Sign in failed: ${error.message}`, 'error');
+        addResult(`Auth Manager sign in: FAILED - ${error.message}`, 'error');
+      }
+    }
+    
+    async function testSignUp() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      if (!email || !password) {
+        updateStatus('Please enter email and password', 'error');
+        return;
+      }
+      
+      try {
+        updateStatus('Attempting to sign up...', 'info');
+        
+        // Test with Auth Manager
+        const result = await authManager.signUp(email, password);
+        
+        updateStatus(`✅ Sign up successful! User: ${result.user.email}`, 'success');
+        addResult(`Auth Manager sign up: SUCCESS - ${result.user.email}`, 'success');
+        
+        // Test with direct Firebase
+        if (window.auth) {
+          try {
+            const firebaseResult = await auth.createUserWithEmailAndPassword(email, password);
+            addResult(`Firebase direct sign up: SUCCESS - ${firebaseResult.user.email}`, 'success');
+          } catch (error) {
+            addResult(`Firebase direct sign up: FAILED - ${error.message}`, 'error');
+          }
+        }
+        
+      } catch (error) {
+        updateStatus(`❌ Sign up failed: ${error.message}`, 'error');
+        addResult(`Auth Manager sign up: FAILED - ${error.message}`, 'error');
+      }
+    }
+    
+    async function testSignOut() {
+      try {
+        updateStatus('Attempting to sign out...', 'info');
+        
+        await authManager.signOut();
+        
+        updateStatus('✅ Sign out successful!', 'success');
+        addResult('Auth Manager sign out: SUCCESS', 'success');
+        
+        // Test with direct Firebase
+        if (window.auth) {
+          try {
+            await auth.signOut();
+            addResult('Firebase direct sign out: SUCCESS', 'success');
+          } catch (error) {
+            addResult(`Firebase direct sign out: FAILED - ${error.message}`, 'error');
+          }
+        }
+        
+      } catch (error) {
+        updateStatus(`❌ Sign out failed: ${error.message}`, 'error');
+        addResult(`Auth Manager sign out: FAILED - ${error.message}`, 'error');
+      }
+    }
+    
+    function checkAuthState() {
+      const isSignedIn = authManager.isSignedIn();
+      const currentUser = authManager.getCurrentUser();
+      
+      updateStatus(`Auth State: ${isSignedIn ? 'SIGNED IN' : 'SIGNED OUT'}`, isSignedIn ? 'success' : 'info');
+      
+      if (currentUser) {
+        addResult(`Current User: ${currentUser.email}`, 'success');
+        addResult(`User UID: ${currentUser.uid}`, 'info');
+        addResult(`Login Time: ${new Date(currentUser.loginTime).toLocaleString()}`, 'info');
+      } else {
+        addResult('No current user', 'info');
+      }
+      
+      // Check Firebase auth state
+      if (window.auth && window.auth.currentUser) {
+        addResult(`Firebase User: ${window.auth.currentUser.email}`, 'success');
+      } else {
+        addResult('No Firebase user', 'info');
+      }
+    }
+    
+    // Initialize test
+    document.addEventListener('DOMContentLoaded', function() {
+      updateStatus('Authentication test ready. Click buttons to test functionality.', 'info');
+      
+      // Check initial state
+      setTimeout(() => {
+        checkAuthState();
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

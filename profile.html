@@ -339,11 +339,6 @@
   </style>
 </head>
 <body>
-  <!-- Enhanced Theme Toggle -->
-  <button class="theme-toggle-enhanced" onclick="toggleTheme()" aria-label="Toggle theme">
-    🌙
-  </button>
-
   <!-- Enhanced Header -->
   <header class="enhanced-header">
     <div class="header-content">
@@ -359,6 +354,25 @@
         <a href="profile.html" class="nav-link active">Profile</a>
         <a href="about.html" class="nav-link">About</a>
         <a href="contact.html" class="nav-link">Contact</a>
+        
+        <!-- Notification Bell -->
+        <div class="notification-bell-container">
+          <button class="nav-link notification-bell" onclick="toggleNotificationPanel()" aria-label="View notifications">
+            🔔
+            <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
+          </button>
+          
+          <!-- Notification Panel -->
+          <div class="notification-panel" id="notification-panel">
+            <div class="notification-panel-header">
+              <h3>Notifications</h3>
+              <button class="clear-notifications-btn" onclick="clearAllNotifications()">Clear All</button>
+            </div>
+            <div class="notification-list" id="notification-list">
+              <div class="no-notifications">No notifications yet</div>
+            </div>
+          </div>
+        </div>
       </nav>
 
       <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
@@ -375,6 +389,10 @@
         <a href="profile.html" class="nav-link">👤 Profile</a>
         <a href="about.html" class="nav-link">ℹ️ About</a>
         <a href="contact.html" class="nav-link">📞 Contact</a>
+        <button class="nav-link notification-bell" onclick="toggleNotificationPanel()" aria-label="View notifications">
+          🔔
+          <span class="notification-badge" style="display: none;">0</span>
+        </button>
       </div>
     </div>
   </header>
@@ -533,8 +551,12 @@
           </div>
 
           <div class="security-section">
-            <h3 style="color: white; margin-bottom: 1rem;">Danger Zone</h3>
+            <h3 style="color: white; margin-bottom: 1rem;">Account Actions</h3>
             <div class="button-group">
+              <button type="button" class="btn-secondary" onclick="signOut()" style="margin-right: 1rem;">
+                <i class="fas fa-sign-out-alt"></i>
+                Sign Out
+              </button>
               <button type="button" class="btn-danger" onclick="deleteAccount()">Delete Account</button>
             </div>
           </div>
@@ -604,27 +626,113 @@
     </div>
   </div>
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  
+  <!-- Your Firebase config -->
   <script src="firebase-fixed.js"></script>
+  <script src="auth-state-manager.js"></script>
+  <script src="notification-panel.js"></script>
+  <script src="darkMode.js"></script>
   <script>
     let currentUser = null;
     let userData = {};
 
-    // Authentication removed - direct access
-    // Initialize profile data
+    // Check authentication status and load user data
     document.addEventListener('DOMContentLoaded', async () => {
-      currentUser = { email: 'user@example.com', uid: 'demo-user' };
-      await loadUserData();
-      await loadUserStats();
-      await loadActivity();
+      try {
+        // Check if user is signed in using Auth Manager
+        if (!authManager.isSignedIn()) {
+          console.log('❌ No user authenticated, redirecting to login');
+          window.location.href = 'login.html';
+          return;
+        }
+        
+        // Get current user from Auth Manager
+        currentUser = authManager.getCurrentUser();
+        console.log('✅ User authenticated:', currentUser.email);
+        
+        // Wait for Firebase to be ready
+        await waitForFirebase();
+        
+        // Load user data
+        await loadUserData();
+        await loadUserStats();
+        await loadActivity();
+        
+        // Add auth state listener
+        authManager.addAuthListener((user) => {
+          if (!user) {
+            // User signed out, redirect to login
+            window.location.href = 'login.html';
+          }
+        });
+        
+      } catch (error) {
+        console.error('❌ Authentication error:', error);
+        // Show error message instead of fallback
+        document.body.innerHTML = `
+          <div style="text-align: center; padding: 4rem; color: white;">
+            <h2>⚠️ Authentication Required</h2>
+            <p>Please log in to view your profile.</p>
+            <div style="margin-top: 2rem;">
+              <a href="login.html" style="background: var(--gradient-primary); color: white; padding: 1rem 2rem; text-decoration: none; border-radius: 8px; margin: 0 1rem;">Go to Login</a>
+              <a href="index.html" style="background: rgba(255, 255, 255, 0.1); color: white; padding: 1rem 2rem; text-decoration: none; border-radius: 8px; margin: 0 1rem;">Back to Home</a>
+            </div>
+          </div>
+        `;
+      }
     });
+
+    // Wait for Firebase to be ready
+    async function waitForFirebase() {
+      return new Promise((resolve) => {
+        const checkFirebase = () => {
+          if (typeof window.auth !== 'undefined' && typeof window.saveToFirebase === 'function') {
+            console.log('✅ Firebase ready');
+            resolve();
+          } else {
+            console.log('⏳ Waiting for Firebase...');
+            setTimeout(checkFirebase, 100);
+          }
+        };
+        checkFirebase();
+      });
+    }
 
     async function loadUserData() {
       try {
+        console.log('📋 Loading user data for:', currentUser.uid);
+        
+        // Check if Firebase functions are available
+        if (typeof getFromFirebase !== 'function' || typeof saveToFirebase !== 'function') {
+          throw new Error('Firebase functions not available');
+        }
+        
+        // Try to get user data from Firebase
         const userDataSnapshot = await getFromFirebase(`users/${currentUser.uid}`);
         userData = userDataSnapshot || {};
         
+        // If no user data exists, create default profile
+        if (!userData.firstName && !userData.lastName) {
+          userData = {
+            firstName: currentUser.displayName ? currentUser.displayName.split(' ')[0] : 'User',
+            lastName: currentUser.displayName ? currentUser.displayName.split(' ').slice(1).join(' ') : '',
+            email: currentUser.email,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          };
+          
+          // Save default profile to Firebase
+          await saveToFirebase(`users/${currentUser.uid}`, userData);
+          console.log('✅ Created default profile for user');
+        }
+        
         // Update profile display
-        document.getElementById('profileName').textContent = `${userData.firstName || 'User'} ${userData.lastName || ''}`;
+        const fullName = `${userData.firstName || 'User'} ${userData.lastName || ''}`.trim();
+        document.getElementById('profileName').textContent = fullName || 'User';
         document.getElementById('profileEmail').textContent = currentUser.email;
         document.getElementById('firstName').value = userData.firstName || '';
         document.getElementById('lastName').value = userData.lastName || '';
@@ -632,22 +740,43 @@
         document.getElementById('phone').value = userData.phone || '';
         document.getElementById('bio').value = userData.bio || '';
         
-        // Update avatar
+        // Update avatar with user's first initial
         const avatarText = document.getElementById('avatarText');
         if (userData.firstName) {
           avatarText.textContent = userData.firstName.charAt(0).toUpperCase();
+        } else {
+          avatarText.textContent = currentUser.email.charAt(0).toUpperCase();
         }
         
+        console.log('✅ User data loaded successfully');
+        
       } catch (error) {
-        console.error('Error loading user data:', error);
+        console.error('❌ Error loading user data:', error);
+        // Show fallback data
+        document.getElementById('profileName').textContent = 'User';
+        document.getElementById('profileEmail').textContent = currentUser.email;
+        document.getElementById('email').value = currentUser.email;
       }
     }
 
     async function loadUserStats() {
       try {
+        console.log('📊 Loading user statistics...');
+        
         // Load user statistics from Firebase
         const statsSnapshot = await getFromFirebase(`users/${currentUser.uid}/stats`);
         const stats = statsSnapshot || {};
+        
+        // If no stats exist, create default stats
+        if (!stats.smsAnalyzed && !stats.threatsBlocked) {
+          const defaultStats = {
+            smsAnalyzed: 0,
+            threatsBlocked: 0,
+            lastUpdated: new Date().toISOString()
+          };
+          await saveToFirebase(`users/${currentUser.uid}/stats`, defaultStats);
+          console.log('✅ Created default stats for user');
+        }
         
         document.getElementById('smsAnalyzed').textContent = stats.smsAnalyzed || 0;
         document.getElementById('threatsBlocked').textContent = stats.threatsBlocked || 0;
@@ -655,38 +784,69 @@
         // Calculate days active
         const createdAt = userData.createdAt ? new Date(userData.createdAt) : new Date();
         const daysActive = Math.floor((new Date() - createdAt) / (1000 * 60 * 60 * 24));
-        document.getElementById('daysActive').textContent = daysActive;
+        document.getElementById('daysActive').textContent = Math.max(1, daysActive);
+        
+        console.log('✅ User stats loaded successfully');
         
       } catch (error) {
-        console.error('Error loading user stats:', error);
+        console.error('❌ Error loading user stats:', error);
+        // Show default stats
+        document.getElementById('smsAnalyzed').textContent = '0';
+        document.getElementById('threatsBlocked').textContent = '0';
+        document.getElementById('daysActive').textContent = '1';
       }
     }
 
     async function loadActivity() {
       try {
+        console.log('📋 Loading user activity...');
+        
         const activitySnapshot = await getFromFirebase(`users/${currentUser.uid}/activity`);
-        const activities = activitySnapshot || [];
+        // Ensure activities is always an array
+        const activities = Array.isArray(activitySnapshot) ? activitySnapshot : [];
         
         const activityList = document.getElementById('activityList');
         if (activities.length === 0) {
-          activityList.innerHTML = '<div style="text-align: center; color: rgba(255, 255, 255, 0.7); padding: 2rem;"><p>No recent activity</p></div>';
-          return;
+          // Create default activity entry
+          const defaultActivity = {
+            action: 'Account Created',
+            description: 'Welcome to SMS Shield! Your account has been successfully created.',
+            timestamp: new Date().toISOString()
+          };
+          
+          await saveToFirebase(`users/${currentUser.uid}/activity`, [defaultActivity]);
+          
+          activityList.innerHTML = `
+            <div style="padding: 1rem; background: rgba(255, 255, 255, 0.05); border-radius: var(--radius-lg); margin-bottom: 1rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <h4 style="color: white; margin-bottom: 0.25rem;">Account Created</h4>
+                  <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">Welcome to SMS Shield! Your account has been successfully created.</p>
+                </div>
+                <span style="color: rgba(255, 255, 255, 0.5); font-size: 0.8rem;">${new Date().toLocaleDateString()}</span>
+              </div>
+            </div>
+          `;
+        } else {
+          activityList.innerHTML = activities.map(activity => `
+            <div style="padding: 1rem; background: rgba(255, 255, 255, 0.05); border-radius: var(--radius-lg); margin-bottom: 1rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <h4 style="color: white; margin-bottom: 0.25rem;">${activity.action}</h4>
+                  <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">${activity.description}</p>
+                </div>
+                <span style="color: rgba(255, 255, 255, 0.5); font-size: 0.8rem;">${new Date(activity.timestamp).toLocaleDateString()}</span>
+              </div>
+            </div>
+          `).join('');
         }
         
-        activityList.innerHTML = activities.map(activity => `
-          <div style="padding: 1rem; background: rgba(255, 255, 255, 0.05); border-radius: var(--radius-lg); margin-bottom: 1rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <h4 style="color: white; margin-bottom: 0.25rem;">${activity.action}</h4>
-                <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">${activity.description}</p>
-              </div>
-              <span style="color: rgba(255, 255, 255, 0.5); font-size: 0.8rem;">${new Date(activity.timestamp).toLocaleDateString()}</span>
-            </div>
-          </div>
-        `).join('');
+        console.log('✅ User activity loaded successfully');
         
       } catch (error) {
-        console.error('Error loading activity:', error);
+        console.error('❌ Error loading activity:', error);
+        const activityList = document.getElementById('activityList');
+        activityList.innerHTML = '<div style="text-align: center; color: rgba(255, 255, 255, 0.7); padding: 2rem;"><p>Unable to load activity</p></div>';
       }
     }
 
@@ -718,16 +878,35 @@
       };
       
       try {
+        console.log('💾 Updating profile for user:', currentUser.uid);
         await saveToFirebase(`users/${currentUser.uid}`, formData);
+        
+        // Update local userData
+        userData = { ...userData, ...formData };
+        
         showMessage('Profile updated successfully!', 'success', 'profileMessage');
         
         // Update display
-        document.getElementById('profileName').textContent = `${formData.firstName} ${formData.lastName}`;
+        const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+        document.getElementById('profileName').textContent = fullName || 'User';
         const avatarText = document.getElementById('avatarText');
         avatarText.textContent = formData.firstName.charAt(0).toUpperCase();
         
+        // Add activity entry
+        const activityEntry = {
+          action: 'Profile Updated',
+          description: 'Your profile information has been updated successfully.',
+          timestamp: new Date().toISOString()
+        };
+        
+        const currentActivity = await getFromFirebase(`users/${currentUser.uid}/activity`) || [];
+        currentActivity.unshift(activityEntry);
+        await saveToFirebase(`users/${currentUser.uid}/activity`, currentActivity);
+        
+        console.log('✅ Profile updated successfully');
+        
       } catch (error) {
-        console.error('Error updating profile:', error);
+        console.error('❌ Error updating profile:', error);
         showMessage('Failed to update profile. Please try again.', 'error', 'profileMessage');
       }
     }
@@ -750,6 +929,8 @@
       }
       
       try {
+        console.log('🔐 Changing password for user:', currentUser.email);
+        
         // Re-authenticate user before changing password
         const credential = firebase.auth.EmailAuthProvider.credential(currentUser.email, currentPassword);
         await currentUser.reauthenticateWithCredential(credential);
@@ -760,8 +941,21 @@
         showMessage('Password changed successfully!', 'success', 'securityMessage');
         document.getElementById('passwordForm').reset();
         
+        // Add activity entry
+        const activityEntry = {
+          action: 'Password Changed',
+          description: 'Your password has been updated successfully.',
+          timestamp: new Date().toISOString()
+        };
+        
+        const currentActivity = await getFromFirebase(`users/${currentUser.uid}/activity`) || [];
+        currentActivity.unshift(activityEntry);
+        await saveToFirebase(`users/${currentUser.uid}/activity`, currentActivity);
+        
+        console.log('✅ Password changed successfully');
+        
       } catch (error) {
-        console.error('Error changing password:', error);
+        console.error('❌ Error changing password:', error);
         let errorMessage = 'Failed to change password. Please try again.';
         
         if (error.code === 'auth/wrong-password') {
@@ -824,13 +1018,30 @@
       showMessage('Data export feature coming soon!', 'success', 'profileMessage');
     }
 
+    async function signOut() {
+      if (confirm('Are you sure you want to sign out?')) {
+        try {
+          console.log('👋 Signing out user:', currentUser.email);
+          await authManager.signOut();
+          showMessage('Signing out...', 'success', 'securityMessage');
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1500);
+        } catch (error) {
+          console.error('❌ Error signing out:', error);
+          showMessage('Failed to sign out. Please try again.', 'error', 'securityMessage');
+        }
+      }
+    }
+
     async function deleteAccount() {
       if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
         try {
+          console.log('🗑️ Deleting account for user:', currentUser.email);
           await currentUser.delete();
           window.location.href = 'index.html';
         } catch (error) {
-          console.error('Error deleting account:', error);
+          console.error('❌ Error deleting account:', error);
           showMessage('Failed to delete account. Please try again.', 'error', 'securityMessage');
         }
       }
@@ -851,6 +1062,15 @@
     function toggleMobileMenu() {
       const mobileMenu = document.getElementById('mobileMenu');
       mobileMenu.classList.toggle('active');
+    }
+
+    // Enhanced theme toggle - now handled by darkMode.js
+    function toggleTheme() {
+      // This function is now handled by the global darkMode.js
+      // Call the global function
+      if (typeof window.toggleTheme === 'function') {
+        window.toggleTheme();
+      }
     }
   </script>
 </body>

@@ -4,7 +4,6 @@
 class APIManager {
   constructor() {
     this.geminiAPIKey = null;
-    this.deepseekAPIKey = null;
     this.isInitialized = false;
   }
 
@@ -20,16 +19,10 @@ class APIManager {
   loadSavedAPIKeys() {
     try {
       this.geminiAPIKey = localStorage.getItem('user_gemini_api_key');
-      this.deepseekAPIKey = localStorage.getItem('user_deepseek_api_key');
       
       if (this.geminiAPIKey) {
         console.log('Loaded saved Gemini API key');
         this.initializeGeminiAI(this.geminiAPIKey);
-      }
-      
-      if (this.deepseekAPIKey) {
-        console.log('Loaded saved DeepSeek API key');
-        this.initializeDeepSeekAI(this.deepseekAPIKey);
       }
     } catch (error) {
       console.warn('Error loading saved API keys:', error);
@@ -64,21 +57,7 @@ class APIManager {
     return false;
   }
 
-  // Initialize DeepSeek AI with user's API key
-  async initializeDeepSeekAI(apiKey) {
-    if (window.initializeDeepSeekAI) {
-      const success = await window.initializeDeepSeekAI(apiKey);
-      if (success) {
-        this.deepseekAPIKey = apiKey;
-        this.saveAPIKey('deepseek', apiKey);
-        this.showStatus('deepseek', 'success', 'DeepSeek AI initialized successfully!');
-      } else {
-        this.showStatus('deepseek', 'error', 'Failed to initialize DeepSeek AI. Please check your API key.');
-      }
-      return success;
-    }
-    return false;
-  }
+
 
   // Create the API input UI
   createAPIInputUI() {
@@ -315,22 +294,7 @@ class APIManager {
           </div>
         </div>
         
-        <div class="api-service">
-          <h3><i class="fas fa-brain" style="color: #00d4aa;"></i> DeepSeek AI</h3>
-          <div class="api-input-group">
-            <label for="deepseek-api-key">API Key:</label>
-            <input type="password" id="deepseek-api-key" placeholder="Enter your DeepSeek API key" value="${this.deepseekAPIKey || ''}">
-          </div>
-          <div class="api-status" id="deepseek-status" style="display: none;"></div>
-          <div class="api-links">
-            <strong>Get Free API Key:</strong><br>
-            <a href="https://platform.deepseek.com/" target="_blank">DeepSeek Platform</a> → Sign in → API Keys → Create API Key
-          </div>
-          <div class="api-actions">
-            <button class="api-btn primary" onclick="window.apiManager.testDeepSeekAPI()">Test & Save</button>
-            <button class="api-btn danger" onclick="window.apiManager.clearDeepSeekAPI()">Clear</button>
-          </div>
-        </div>
+
         
         <div style="text-align: center; margin-top: 20px;">
           <button class="api-btn secondary" onclick="document.getElementById('api-modal').remove()">Close</button>
@@ -366,29 +330,7 @@ class APIManager {
     }
   }
 
-  // Test and save DeepSeek API key
-  async testDeepSeekAPI() {
-    const apiKey = document.getElementById('deepseek-api-key').value.trim();
-    const statusElement = document.getElementById('deepseek-status');
-    
-    if (!apiKey) {
-      this.showStatus('deepseek', 'warning', 'Please enter an API key');
-      return;
-    }
-    
-    this.showStatus('deepseek', 'warning', 'Testing API key...');
-    
-    try {
-      const success = await this.initializeDeepSeekAI(apiKey);
-      if (success) {
-        this.showStatus('deepseek', 'success', '✅ DeepSeek AI is ready for analysis!');
-      } else {
-        this.showStatus('deepseek', 'error', '❌ Invalid API key or service unavailable');
-      }
-    } catch (error) {
-      this.showStatus('deepseek', 'error', `❌ Error: ${error.message}`);
-    }
-  }
+
 
   // Clear Gemini API key
   clearGeminiAPI() {
@@ -398,13 +340,7 @@ class APIManager {
     this.showStatus('gemini', 'warning', 'Gemini API key cleared');
   }
 
-  // Clear DeepSeek API key
-  clearDeepSeekAPI() {
-    this.deepseekAPIKey = null;
-    localStorage.removeItem('user_deepseek_api_key');
-    document.getElementById('deepseek-api-key').value = '';
-    this.showStatus('deepseek', 'warning', 'DeepSeek API key cleared');
-  }
+
 
   // Show status message
   showStatus(service, type, message) {
@@ -429,10 +365,6 @@ class APIManager {
       gemini: {
         configured: !!this.geminiAPIKey,
         available: window.geminiAnalyzer ? window.geminiAnalyzer.isAvailable() : false
-      },
-      deepseek: {
-        configured: !!this.deepseekAPIKey,
-        available: window.deepseekAnalyzer ? window.deepseekAnalyzer.isAvailable() : false
       }
     };
   }

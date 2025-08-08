@@ -47,7 +47,7 @@ npx vercel --prod
 
 ### ✅ AI Integration
 - Gemini AI Analysis
-- DeepSeek AI Analysis
+- Gemini AI Analysis
 - Multiple ML Models
 - Real-time Threat Detection
 

@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    .profile-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 3rem;
+      position: relative;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+
+    .profile-avatar:hover {
+      transform: scale(1.05);
+    }
+
+    .avatar-edit {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 35px;
+      height: 35px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      border: 3px solid var(--glass-bg);
+    }
+
+    .profile-name {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-email {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .profile-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-item {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: white;
+      display: block;
+    }
+
+    .profile-content {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+    }
+
+    .profile-sidebar {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      height: fit-content;
+    }
+
+    .sidebar-section {
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      border-radius: var(--radius-lg);
+      transition: all var(--transition-normal);
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .profile-main {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      display: block;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-lg);
+      color: white;
+      font-size: 1rem;
+      transition: all var(--transition-normal);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .btn-primary {
+      background: var(--gradient-primary);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 1rem 2rem;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 1rem 2rem;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.3);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .message {
+      padding: 1rem;
+      border-radius: var(--radius-lg);
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .message.success {
+      background: rgba(34, 197, 94, 0.2);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #86efac;
+    }
+
+    .message.error {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+
+    .security-section {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .security-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-lg);
+      margin-bottom: 1rem;
+    }
+
+    .security-info h4 {
+      color: white;
+      margin-bottom: 0.25rem;
+    }
+
+    .security-info p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+
+    .toggle-switch.active {
+      background: var(--primary-color);
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: all var(--transition-normal);
+    }
+
+    .toggle-switch.active::after {
+      left: 28px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .error-container {
+      text-align: center;
+      padding: 2rem;
+      color: #fca5a5;
+    }
+
+    @media (max-width: 768px) {
+      .profile-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .profile-stats {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Enhanced Theme Toggle -->
+  <button class="nav-link theme-toggle-nav" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌙
+  </button>
+
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="profile.html" class="nav-link active">Profile</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        ☰
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-links">
+        <a href="index.html" class="nav-link">🏠 Home</a>
+        <a href="detect.html" class="nav-link">🔍 Detect SMS</a>
+        <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+        <a href="profile.html" class="nav-link">👤 Profile</a>
+        <a href="about.html" class="nav-link">ℹ️ About</a>
+        <a href="contact.html" class="nav-link">📞 Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="profile-container">
+    <div id="loadingState" class="loading">
+      <h2>Loading Profile...</h2>
+      <p>Please wait while we load your profile information.</p>
+    </div>
+
+    <div id="errorState" class="error-container" style="display: none;">
+      <h2>⚠️ Authentication Required</h2>
+      <p>Please log in to view your profile.</p>
+      <div class="button-group" style="justify-content: center; margin-top: 2rem;">
+        <a href="login.html" class="btn-primary">Go to Login</a>
+        <a href="index.html" class="btn-secondary">Back to Home</a>
+      </div>
+    </div>
+
+    <div id="profileContent" style="display: none;">
+      <div class="profile-header">
+        <div class="profile-avatar" onclick="changeAvatar()">
+          <span id="avatarText">👤</span>
+          <div class="avatar-edit">✏️</div>
+        </div>
+        <h1 class="profile-name" id="profileName">Loading...</h1>
+        <p class="profile-email" id="profileEmail">loading@example.com</p>
+        
+        <div class="profile-stats">
+          <div class="stat-item">
+            <span class="stat-value" id="smsAnalyzed">0</span>
+            <span>SMS Analyzed</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" id="threatsBlocked">0</span>
+            <span>Threats Blocked</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" id="daysActive">0</span>
+            <span>Days Active</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-content">
+        <div class="profile-sidebar">
+          <div class="sidebar-section">
+            <h3 class="sidebar-title">Navigation</h3>
+            <a href="#profile" class="nav-item active" onclick="showSection('profile')">
+              👤 Profile Info
+            </a>
+            <a href="#security" class="nav-item" onclick="showSection('security')">
+              🔒 Security
+            </a>
+            <a href="#preferences" class="nav-item" onclick="showSection('preferences')">
+              ⚙️ Preferences
+            </a>
+            <a href="#activity" class="nav-item" onclick="showSection('activity')">
+              📊 Activity
+            </a>
+          </div>
+
+          <div class="sidebar-section">
+            <h3 class="sidebar-title">Quick Actions</h3>
+            <a href="detect.html" class="nav-item">
+              🔍 Analyze SMS
+            </a>
+            <a href="dashboard.html" class="nav-item">
+              📊 View Dashboard
+            </a>
+            <a href="#" class="nav-item" onclick="exportData()">
+              📤 Export Data
+            </a>
+          </div>
+        </div>
+
+        <div class="profile-main">
+          <!-- Profile Info Section -->
+          <div id="profileSection" class="section-content">
+            <h2 class="section-title">Profile Information</h2>
+            
+            <div id="profileMessage" class="message"></div>
+            
+            <form id="profileForm" onsubmit="updateProfile(event)">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="firstName" class="form-label">First Name</label>
+                  <input type="text" id="firstName" name="firstName" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label for="lastName" class="form-label">Last Name</label>
+                  <input type="text" id="lastName" name="lastName" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label for="email" class="form-label">Email Address</label>
+                  <input type="email" id="email" name="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label for="phone" class="form-label">Phone Number</label>
+                  <input type="tel" id="phone" name="phone" class="form-input">
+                </div>
+                <div class="form-group full-width">
+                  <label for="bio" class="form-label">Bio</label>
+                  <textarea id="bio" name="bio" class="form-input" rows="4" placeholder="Tell us about yourself..."></textarea>
+                </div>
+              </div>
+              
+              <div class="button-group">
+                <button type="submit" class="btn-primary">Save Changes</button>
+                <button type="button" class="btn-secondary" onclick="resetForm()">Reset</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Security Section -->
+          <div id="securitySection" class="section-content" style="display: none;">
+            <h2 class="section-title">Security Settings</h2>
+            
+            <div id="securityMessage" class="message"></div>
+            
+            <div class="security-section">
+              <h3 style="color: white; margin-bottom: 1rem;">Change Password</h3>
+              <form id="passwordForm" onsubmit="changePassword(event)">
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="currentPassword" class="form-label">Current Password</label>
+                    <input type="password" id="currentPassword" name="currentPassword" class="form-input" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="newPassword" class="form-label">New Password</label>
+                    <input type="password" id="newPassword" name="newPassword" class="form-input" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="confirmNewPassword" class="form-label">Confirm New Password</label>
+                    <input type="password" id="confirmNewPassword" name="confirmNewPassword" class="form-input" required>
+                  </div>
+                </div>
+                
+                <div class="button-group">
+                  <button type="submit" class="btn-primary">Change Password</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="security-section">
+              <h3 style="color: white; margin-bottom: 1rem;">Security Features</h3>
+              
+              <div class="security-item">
+                <div class="security-info">
+                  <h4>Two-Factor Authentication</h4>
+                  <p>Add an extra layer of security to your account</p>
+                </div>
+                <div class="toggle-switch" onclick="toggle2FA()" id="twoFactorToggle"></div>
+              </div>
+              
+              <div class="security-item">
+                <div class="security-info">
+                  <h4>Email Notifications</h4>
+                  <p>Receive alerts about suspicious SMS activity</p>
+                </div>
+                <div class="toggle-switch active" onclick="toggleEmailNotifications()" id="emailToggle"></div>
+              </div>
+              
+              <div class="security-item">
+                <div class="security-info">
+                  <h4>Auto-Block Threats</h4>
+                  <p>Automatically block detected phishing attempts</p>
+                </div>
+                <div class="toggle-switch active" onclick="toggleAutoBlock()" id="autoBlockToggle"></div>
+              </div>
+            </div>
+
+            <div class="security-section">
+              <h3 style="color: white; margin-bottom: 1rem;">Danger Zone</h3>
+              <div class="button-group">
+                <button type="button" class="btn-danger" onclick="deleteAccount()">Delete Account</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preferences Section -->
+          <div id="preferencesSection" class="section-content" style="display: none;">
+            <h2 class="section-title">Preferences</h2>
+            
+            <div id="preferencesMessage" class="message"></div>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="language" class="form-label">Language</label>
+                <select id="language" class="form-input">
+                  <option value="en">English</option>
+                  <option value="es">Spanish</option>
+                  <option value="fr">French</option>
+                  <option value="de">German</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="timezone" class="form-label">Timezone</label>
+                <select id="timezone" class="form-input">
+                  <option value="UTC">UTC</option>
+                  <option value="EST">Eastern Time</option>
+                  <option value="PST">Pacific Time</option>
+                  <option value="GMT">GMT</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="theme" class="form-label">Theme</label>
+                <select id="theme" class="form-input">
+                  <option value="auto">Auto</option>
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="notifications" class="form-label">Notification Frequency</label>
+                <select id="notifications" class="form-input">
+                  <option value="immediate">Immediate</option>
+                  <option value="hourly">Hourly</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="button-group">
+              <button type="button" class="btn-primary" onclick="savePreferences()">Save Preferences</button>
+              <button type="button" class="btn-secondary" onclick="resetPreferences()">Reset to Default</button>
+            </div>
+          </div>
+
+          <!-- Activity Section -->
+          <div id="activitySection" class="section-content" style="display: none;">
+            <h2 class="section-title">Recent Activity</h2>
+            
+            <div id="activityList">
+              <div style="text-align: center; color: rgba(255, 255, 255, 0.7); padding: 2rem;">
+                <p>Loading activity...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  
+  <!-- Your Firebase config -->
+  <script src="darkMode.js"></script>
+  <script src="firebase-fixed.js"></script>
+  
+  <script>
+    let currentUser = null;
+    let userData = {};
+
+    // Initialize profile page with proper error handling
+    document.addEventListener('DOMContentLoaded', async () => {
+      console.log('🚀 Profile page initializing...');
+      
+      try {
+        // Wait for Firebase to be ready
+        await waitForFirebase();
+        
+        // Check authentication status
+        await checkAuthentication();
+        
+      } catch (error) {
+        console.error('❌ Profile initialization error:', error);
+        showErrorState();
+      }
+    });
+
+    // Wait for Firebase to be ready
+    async function waitForFirebase() {
+      return new Promise((resolve) => {
+        const checkFirebase = () => {
+          if (typeof window.auth !== 'undefined' && typeof window.saveToFirebase === 'function') {
+            console.log('✅ Firebase ready');
+            resolve();
+          } else {
+            console.log('⏳ Waiting for Firebase...');
+            setTimeout(checkFirebase, 100);
+          }
+        };
+        checkFirebase();
+      });
+    }
+
+    // Check authentication status
+    async function checkAuthentication() {
+      try {
+        console.log('🔐 Checking authentication...');
+        
+        if (auth.currentUser) {
+          currentUser = auth.currentUser;
+          console.log('✅ User authenticated:', currentUser.email);
+          await loadUserData();
+          await loadUserStats();
+          await loadActivity();
+          showProfileContent();
+        } else {
+          // Listen for auth state changes
+          auth.onAuthStateChanged(async (user) => {
+            if (user) {
+              currentUser = user;
+              console.log('✅ User authenticated via listener:', user.email);
+              await loadUserData();
+              await loadUserStats();
+              await loadActivity();
+              showProfileContent();
+            } else {
+              console.log('❌ No user authenticated');
+              showErrorState();
+            }
+          });
+        }
+      } catch (error) {
+        console.error('❌ Authentication check error:', error);
+        showErrorState();
+      }
+    }
+
+    function showProfileContent() {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('errorState').style.display = 'none';
+      document.getElementById('profileContent').style.display = 'block';
+    }
+
+    function showErrorState() {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('errorState').style.display = 'block';
+      document.getElementById('profileContent').style.display = 'none';
+    }
+
+    async function loadUserData() {
+      try {
+        console.log('📋 Loading user data for:', currentUser.uid);
+        
+        // Try to get user data from Firebase
+        const userDataSnapshot = await getFromFirebase(`users/${currentUser.uid}`);
+        userData = userDataSnapshot || {};
+        
+        // If no user data exists, create default profile
+        if (!userData.firstName && !userData.lastName) {
+          userData = {
+            firstName: currentUser.displayName ? currentUser.displayName.split(' ')[0] : 'User',
+            lastName: currentUser.displayName ? currentUser.displayName.split(' ').slice(1).join(' ') : '',
+            email: currentUser.email,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          };
+          
+          // Save default profile to Firebase
+          await saveToFirebase(`users/${currentUser.uid}`, userData);
+          console.log('✅ Created default profile for user');
+        }
+        
+        // Update profile display
+        const fullName = `${userData.firstName || 'User'} ${userData.lastName || ''}`.trim();
+        document.getElementById('profileName').textContent = fullName || 'User';
+        document.getElementById('profileEmail').textContent = currentUser.email;
+        document.getElementById('firstName').value = userData.firstName || '';
+        document.getElementById('lastName').value = userData.lastName || '';
+        document.getElementById('email').value = currentUser.email;
+        document.getElementById('phone').value = userData.phone || '';
+        document.getElementById('bio').value = userData.bio || '';
+        
+        // Update avatar with user's first initial
+        const avatarText = document.getElementById('avatarText');
+        if (userData.firstName) {
+          avatarText.textContent = userData.firstName.charAt(0).toUpperCase();
+        } else {
+          avatarText.textContent = currentUser.email.charAt(0).toUpperCase();
+        }
+        
+        console.log('✅ User data loaded successfully');
+        
+      } catch (error) {
+        console.error('❌ Error loading user data:', error);
+        // Show fallback data
+        document.getElementById('profileName').textContent = 'User';
+        document.getElementById('profileEmail').textContent = currentUser.email;
+        document.getElementById('email').value = currentUser.email;
+      }
+    }
+
+    async function loadUserStats() {
+      try {
+        console.log('📊 Loading user statistics...');
+        
+        // Load user statistics from Firebase
+        const statsSnapshot = await getFromFirebase(`users/${currentUser.uid}/stats`);
+        const stats = statsSnapshot || {};
+        
+        // If no stats exist, create default stats
+        if (!stats.smsAnalyzed && !stats.threatsBlocked) {
+          const defaultStats = {
+            smsAnalyzed: 0,
+            threatsBlocked: 0,
+            lastUpdated: new Date().toISOString()
+          };
+          await saveToFirebase(`users/${currentUser.uid}/stats`, defaultStats);
+          console.log('✅ Created default stats for user');
+        }
+        
+        document.getElementById('smsAnalyzed').textContent = stats.smsAnalyzed || 0;
+        document.getElementById('threatsBlocked').textContent = stats.threatsBlocked || 0;
+        
+        // Calculate days active
+        const createdAt = userData.createdAt ? new Date(userData.createdAt) : new Date();
+        const daysActive = Math.floor((new Date() - createdAt) / (1000 * 60 * 60 * 24));
+        document.getElementById('daysActive').textContent = Math.max(1, daysActive);
+        
+        console.log('✅ User stats loaded successfully');
+        
+      } catch (error) {
+        console.error('❌ Error loading user stats:', error);
+        // Show default stats
+        document.getElementById('smsAnalyzed').textContent = '0';
+        document.getElementById('threatsBlocked').textContent = '0';
+        document.getElementById('daysActive').textContent = '1';
+      }
+    }
+
+    async function loadActivity() {
+      try {
+        console.log('📋 Loading user activity...');
+        
+        const activitySnapshot = await getFromFirebase(`users/${currentUser.uid}/activity`);
+        const activities = activitySnapshot || [];
+        
+        const activityList = document.getElementById('activityList');
+        if (activities.length === 0) {
+          // Create default activity entry
+          const defaultActivity = {
+            action: 'Account Created',
+            description: 'Welcome to SMS Shield! Your account has been successfully created.',
+            timestamp: new Date().toISOString()
+          };
+          
+          await saveToFirebase(`users/${currentUser.uid}/activity`, [defaultActivity]);
+          
+          activityList.innerHTML = `
+            <div style="padding: 1rem; background: rgba(255, 255, 255, 0.05); border-radius: var(--radius-lg); margin-bottom: 1rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <h4 style="color: white; margin-bottom: 0.25rem;">Account Created</h4>
+                  <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">Welcome to SMS Shield! Your account has been successfully created.</p>
+                </div>
+                <span style="color: rgba(255, 255, 255, 0.5); font-size: 0.8rem;">${new Date().toLocaleDateString()}</span>
+              </div>
+            </div>
+          `;
+        } else {
+          activityList.innerHTML = activities.map(activity => `
+            <div style="padding: 1rem; background: rgba(255, 255, 255, 0.05); border-radius: var(--radius-lg); margin-bottom: 1rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <h4 style="color: white; margin-bottom: 0.25rem;">${activity.action}</h4>
+                  <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">${activity.description}</p>
+                </div>
+                <span style="color: rgba(255, 255, 255, 0.5); font-size: 0.8rem;">${new Date(activity.timestamp).toLocaleDateString()}</span>
+              </div>
+            </div>
+          `).join('');
+        }
+        
+        console.log('✅ User activity loaded successfully');
+        
+      } catch (error) {
+        console.error('❌ Error loading activity:', error);
+        const activityList = document.getElementById('activityList');
+        activityList.innerHTML = '<div style="text-align: center; color: rgba(255, 255, 255, 0.7); padding: 2rem;"><p>Unable to load activity</p></div>';
+      }
+    }
+
+    function showSection(sectionName) {
+      // Hide all sections
+      document.querySelectorAll('.section-content').forEach(section => {
+        section.style.display = 'none';
+      });
+      
+      // Show selected section
+      document.getElementById(sectionName + 'Section').style.display = 'block';
+      
+      // Update navigation
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    async function updateProfile(event) {
+      event.preventDefault();
+      
+      const formData = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        phone: document.getElementById('phone').value,
+        bio: document.getElementById('bio').value,
+        updatedAt: new Date().toISOString()
+      };
+      
+      try {
+        console.log('💾 Updating profile for user:', currentUser.uid);
+        await saveToFirebase(`users/${currentUser.uid}`, formData);
+        
+        // Update local userData
+        userData = { ...userData, ...formData };
+        
+        showMessage('Profile updated successfully!', 'success', 'profileMessage');
+        
+        // Update display
+        const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+        document.getElementById('profileName').textContent = fullName || 'User';
+        const avatarText = document.getElementById('avatarText');
+        avatarText.textContent = formData.firstName.charAt(0).toUpperCase();
+        
+        // Add activity entry
+        const activityEntry = {
+          action: 'Profile Updated',
+          description: 'Your profile information has been updated successfully.',
+          timestamp: new Date().toISOString()
+        };
+        
+        const currentActivity = await getFromFirebase(`users/${currentUser.uid}/activity`) || [];
+        currentActivity.unshift(activityEntry);
+        await saveToFirebase(`users/${currentUser.uid}/activity`, currentActivity);
+        
+        console.log('✅ Profile updated successfully');
+        
+      } catch (error) {
+        console.error('❌ Error updating profile:', error);
+        showMessage('Failed to update profile. Please try again.', 'error', 'profileMessage');
+      }
+    }
+
+    async function changePassword(event) {
+      event.preventDefault();
+      
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+      
+      if (newPassword !== confirmNewPassword) {
+        showMessage('New passwords do not match.', 'error', 'securityMessage');
+        return;
+      }
+      
+      if (newPassword.length < 8) {
+        showMessage('Password must be at least 8 characters long.', 'error', 'securityMessage');
+        return;
+      }
+      
+      try {
+        console.log('🔐 Changing password for user:', currentUser.email);
+        
+        // Re-authenticate user before changing password
+        const credential = firebase.auth.EmailAuthProvider.credential(currentUser.email, currentPassword);
+        await currentUser.reauthenticateWithCredential(credential);
+        
+        // Change password
+        await currentUser.updatePassword(newPassword);
+        
+        showMessage('Password changed successfully!', 'success', 'securityMessage');
+        document.getElementById('passwordForm').reset();
+        
+        // Add activity entry
+        const activityEntry = {
+          action: 'Password Changed',
+          description: 'Your password has been updated successfully.',
+          timestamp: new Date().toISOString()
+        };
+        
+        const currentActivity = await getFromFirebase(`users/${currentUser.uid}/activity`) || [];
+        currentActivity.unshift(activityEntry);
+        await saveToFirebase(`users/${currentUser.uid}/activity`, currentActivity);
+        
+        console.log('✅ Password changed successfully');
+        
+      } catch (error) {
+        console.error('❌ Error changing password:', error);
+        let errorMessage = 'Failed to change password. Please try again.';
+        
+        if (error.code === 'auth/wrong-password') {
+          errorMessage = 'Current password is incorrect.';
+        }
+        
+        showMessage(errorMessage, 'error', 'securityMessage');
+      }
+    }
+
+    function toggle2FA() {
+      const toggle = document.getElementById('twoFactorToggle');
+      toggle.classList.toggle('active');
+      showMessage('Two-factor authentication feature coming soon!', 'success', 'securityMessage');
+    }
+
+    function toggleEmailNotifications() {
+      const toggle = document.getElementById('emailToggle');
+      toggle.classList.toggle('active');
+      showMessage('Email notification settings updated!', 'success', 'securityMessage');
+    }
+
+    function toggleAutoBlock() {
+      const toggle = document.getElementById('autoBlockToggle');
+      toggle.classList.toggle('active');
+      showMessage('Auto-block settings updated!', 'success', 'securityMessage');
+    }
+
+    function savePreferences() {
+      const preferences = {
+        language: document.getElementById('language').value,
+        timezone: document.getElementById('timezone').value,
+        theme: document.getElementById('theme').value,
+        notifications: document.getElementById('notifications').value
+      };
+      
+      // Save to localStorage for now
+      localStorage.setItem('userPreferences', JSON.stringify(preferences));
+      showMessage('Preferences saved successfully!', 'success', 'preferencesMessage');
+    }
+
+    function resetPreferences() {
+      document.getElementById('language').value = 'en';
+      document.getElementById('timezone').value = 'UTC';
+      document.getElementById('theme').value = 'auto';
+      document.getElementById('notifications').value = 'immediate';
+      showMessage('Preferences reset to default!', 'success', 'preferencesMessage');
+    }
+
+    function resetForm() {
+      document.getElementById('profileForm').reset();
+      loadUserData();
+    }
+
+    function changeAvatar() {
+      showMessage('Avatar change feature coming soon!', 'success', 'profileMessage');
+    }
+
+    function exportData() {
+      showMessage('Data export feature coming soon!', 'success', 'profileMessage');
+    }
+
+    async function deleteAccount() {
+      if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+        try {
+          console.log('🗑️ Deleting account for user:', currentUser.email);
+          await currentUser.delete();
+          window.location.href = 'index.html';
+        } catch (error) {
+          console.error('❌ Error deleting account:', error);
+          showMessage('Failed to delete account. Please try again.', 'error', 'securityMessage');
+        }
+      }
+    }
+
+    function showMessage(message, type, elementId) {
+      const messageElement = document.getElementById(elementId);
+      messageElement.textContent = message;
+      messageElement.className = `message ${type}`;
+      messageElement.style.display = 'block';
+      
+      setTimeout(() => {
+        messageElement.style.display = 'none';
+      }, 5000);
+    }
+
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      mobileMenu.classList.toggle('active');
+    }
+
+    // Enhanced theme toggle - now handled by darkMode.js
+    function toggleTheme() {
+      // This function is now handled by the global darkMode.js
+      // Call the global function
+      if (typeof window.toggleTheme === 'function') {
+        window.toggleTheme();
+      }
+    }
+
+    // Theme is now handled by darkMode.js
+  </script>
+</body>
+</html>

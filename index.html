@@ -28,10 +28,7 @@
   </style>
 </head>
 <body>
-  <!-- Enhanced Theme Toggle -->
-  <button class="theme-toggle-enhanced" onclick="toggleTheme()" aria-label="Toggle theme">
-    🌙
-  </button>
+
   
   <!-- Cache Clear Button -->
   <button class="cache-clear-btn" onclick="clearCacheAndReload()" aria-label="Clear cache" style="position: fixed; top: 20px; right: 80px; z-index: 1000; background: rgba(239, 68, 68, 0.9); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px);">
@@ -53,7 +50,30 @@
         <a href="profile.html" class="nav-link">Profile</a>
         <a href="about.html" class="nav-link">About</a>
         <a href="contact.html" class="nav-link">Contact</a>
-                    <a href="#" class="nav-link auth-link">Home</a>
+        <a href="login.html" class="nav-link auth-link">Sign In</a>
+        
+        <!-- Notification Bell -->
+        <div class="notification-bell-container">
+          <button class="nav-link notification-bell" onclick="toggleNotificationPanel()" aria-label="View notifications">
+            🔔
+            <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
+          </button>
+          
+          <!-- Notification Panel -->
+          <div class="notification-panel" id="notification-panel">
+            <div class="notification-panel-header">
+              <h3>Notifications</h3>
+              <button class="clear-notifications-btn" onclick="clearAllNotifications()">Clear All</button>
+            </div>
+            <div class="notification-list" id="notification-list">
+              <div class="no-notifications">No notifications yet</div>
+            </div>
+          </div>
+        </div>
+        
+        <button class="theme-toggle-enhanced" aria-label="Toggle theme" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: rgba(59, 130, 246, 0.9); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s ease;">
+          🌙
+        </button>
       </nav>
 
       <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
@@ -70,7 +90,14 @@
         <a href="profile.html" class="nav-link">👤 Profile</a>
         <a href="about.html" class="nav-link">ℹ️ About</a>
         <a href="contact.html" class="nav-link">📞 Contact</a>
-                  <a href="#" class="nav-link">🏠 Home</a>
+        <a href="login.html" class="nav-link">🔐 Sign In</a>
+        <button class="nav-link notification-bell" onclick="toggleNotificationPanel()" aria-label="View notifications">
+          🔔
+          <span class="notification-badge" style="display: none;">0</span>
+        </button>
+        <button class="theme-toggle-enhanced" aria-label="Toggle theme">
+          🌙
+        </button>
       </div>
     </div>
   </header>
@@ -101,8 +128,8 @@
       <h3>AI-Powered Analysis</h3>
       <p>Our advanced machine learning models including Naive Bayes, LSTM neural networks, and Gemini AI provide multi-layered protection against sophisticated phishing attempts.</p>
       <div style="margin-top: 1.5rem;">
-        <a href="detect.html" class="btn-enhanced btn-primary" style="font-size: 0.9rem; padding: 0.75rem 1.5rem;">
-          Try Detection
+        <a href="ai-analysis.html" class="btn-enhanced btn-primary" style="font-size: 0.9rem; padding: 0.75rem 1.5rem;">
+          Learn More
         </a>
       </div>
     </div>
@@ -145,8 +172,8 @@
       <h3>Mobile Optimized</h3>
       <p>Seamlessly works across all devices with responsive design, offline capabilities, and integration with your device's SMS app.</p>
       <div style="margin-top: 1.5rem;">
-        <a href="detect.html" class="btn-enhanced btn-secondary" style="font-size: 0.9rem; padding: 0.75rem 1.5rem;">
-          SMS Detection
+        <a href="mobile-features.html" class="btn-enhanced btn-secondary" style="font-size: 0.9rem; padding: 0.75rem 1.5rem;">
+          Learn More
         </a>
       </div>
     </div>
@@ -246,24 +273,48 @@
     </div>
   </footer>
 
-  <!-- Enhanced Scripts -->
+  <!-- Firebase SDK Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  
+  <!-- Core Scripts (load first) -->
+  <script src="error-handler.js"></script>
+  <script src="code-audit.js"></script>
+  <script src="darkMode-fixed.js"></script>
   <script src="firebase-fixed.js"></script>
+  <script src="auth-state-manager.js"></script>
   <script src="notification-system.js"></script>
+  <script src="notification-panel.js"></script>
+  <script src="cache-clear.js"></script>
+  
+  <!-- Feature Scripts (load after core) -->
   <script src="chatbot-ml-model.js"></script>
   <script src="chatbot-system.js"></script>
   <script src="navigation-fix.js"></script>
   <script src="gemini-config.js"></script>
   <script src="gemini-ai.js"></script>
+  <script src="mobile-sms-integration.js"></script>
   <script src="script.js"></script>
   <script>
-    // Authentication removed - direct access
-    function updateAuthUI() {
-      const authLink = document.querySelector('.auth-link');
-      if (authLink) {
-        authLink.textContent = 'Home';
-        authLink.href = '#';
+    // Authentication UI management using Auth Manager
+    document.addEventListener('DOMContentLoaded', function() {
+      // Auth manager will automatically handle UI updates
+      // Add auth state listener for additional functionality
+      if (window.authManager) {
+        authManager.addAuthListener((user) => {
+          if (user) {
+            console.log('✅ User signed in on home page:', user.email);
+            // Show personalized welcome message
+            if (window.showSuccess) {
+              showSuccess(`Welcome back, ${user.email}! Your SMS Shield is ready.`, '🛡️ SMS Shield');
+            }
+          } else {
+            console.log('✅ User signed out on home page');
+          }
+        });
       }
-    }
+    });
     
     // Enhanced scroll animations
     const observerOptions = {
@@ -290,9 +341,18 @@
         observer.observe(card);
       });
 
+      // Theme is now handled by darkMode.js
+
+      // Update authentication UI safely
+      if (window.authManager && typeof authManager.updateAuthUI === 'function') {
+        authManager.updateAuthUI();
+      }
+
       // Show welcome notification
       setTimeout(() => {
-        showSuccess('Welcome to SMS Shield! Your AI-powered protection is ready.', '🛡️ SMS Shield');
+        if (window.showSuccess) {
+          showSuccess('Welcome to SMS Shield! Your AI-powered protection is ready.', '🛡️ SMS Shield');
+        }
       }, 2000);
     });
 
@@ -318,7 +378,9 @@
     document.querySelectorAll('.card-enhanced').forEach(card => {
       card.addEventListener('click', function() {
         const title = this.querySelector('h3')?.textContent || 'Feature';
-        showInfo(`Learn more about ${title}`, 'ℹ️ Feature Info');
+        if (window.showInfo) {
+          showInfo(`Learn more about ${title}`, 'ℹ️ Feature Info');
+        }
       });
     });
   </script>

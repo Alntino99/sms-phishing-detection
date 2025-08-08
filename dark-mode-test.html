@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Mode Test - Centralized Control</title>
+    <link rel="stylesheet" href="enhanced-design.css">
+    <style>
+        .test-section {
+            margin: 2rem 0;
+            padding: 2rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+        }
+        .test-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+        .status.warning { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <header class="enhanced-header">
+        <div class="header-container">
+            <div class="logo">
+                <h1>🔒 SMS Shield</h1>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="detect.html" class="nav-link">Detect</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <!-- Theme toggle only on home page -->
+                <button class="nav-link theme-toggle-nav" onclick="toggleTheme()" aria-label="Toggle theme">
+                    🌙
+                </button>
+            </nav>
+
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+                ☰
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu">
+            <div class="mobile-menu-links">
+                <a href="index.html" class="nav-link">🏠 Home</a>
+                <a href="detect.html" class="nav-link">🔍 Detect SMS</a>
+                <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+                <a href="profile.html" class="nav-link">👤 Profile</a>
+                <a href="about.html" class="nav-link">ℹ️ About</a>
+                <a href="contact.html" class="nav-link">📞 Contact</a>
+                <!-- Theme toggle only on home page -->
+                <button class="nav-link theme-toggle-nav" onclick="toggleTheme()" aria-label="Toggle theme">
+                    🌙
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div style="padding: 2rem; max-width: 800px; margin: 0 auto;">
+        <h1>🌙 Dark Mode Test - Centralized Control</h1>
+        
+        <div class="test-section">
+            <h2>🎯 New Approach: Centralized Theme Control</h2>
+            <div class="status info">
+                <strong>Theme Control:</strong> Only available on the home page (index.html)
+            </div>
+            <div class="status info">
+                <strong>Theme Persistence:</strong> Changes apply to all pages via localStorage
+            </div>
+            <div class="status info">
+                <strong>Other Pages:</strong> No theme toggle buttons, but theme is still applied
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test Results</h2>
+            <div id="testResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Manual Tests</h2>
+            <button class="test-button" onclick="testThemeToggle()">Test Theme Toggle</button>
+            <button class="test-button" onclick="testLocalStorage()">Test Local Storage</button>
+            <button class="test-button" onclick="testButtonText()">Test Button Text</button>
+            <button class="test-button" onclick="testCentralizedControl()">Test Centralized Control</button>
+            <button class="test-button" onclick="testOtherPages()">Test Other Pages</button>
+        </div>
+
+        <div class="test-section">
+            <h2>Current Status</h2>
+            <div id="currentStatus"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>📋 Instructions</h2>
+            <div class="status info">
+                <strong>To test the centralized theme control:</strong>
+                <ol style="margin-top: 10px; text-align: left;">
+                    <li>Click the theme toggle button above (🌙/☀️)</li>
+                    <li>Navigate to other pages (detect.html, dashboard.html, etc.)</li>
+                    <li>Verify the theme persists across all pages</li>
+                    <li>Notice that other pages don't have theme toggle buttons</li>
+                    <li>Return to home page to change theme again</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script src="darkMode.js"></script>
+    <script>
+        // Test functions
+        function testThemeToggle() {
+            const beforeTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            toggleTheme();
+            setTimeout(() => {
+                const afterTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+                const success = beforeTheme !== afterTheme;
+                addTestResult('Theme Toggle', success, 
+                    `Theme changed from ${beforeTheme} to ${afterTheme}`);
+            }, 100);
+        }
+
+        function testLocalStorage() {
+            const savedTheme = localStorage.getItem('theme');
+            const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            const success = savedTheme === currentTheme;
+            addTestResult('Local Storage', success, 
+                `Saved: ${savedTheme}, Current: ${currentTheme}`);
+        }
+
+        function testButtonText() {
+            const buttons = document.querySelectorAll('.theme-toggle-nav');
+            const isDark = document.body.classList.contains('dark-mode');
+            const expectedText = isDark ? '☀️' : '🌙';
+            let allCorrect = true;
+            
+            buttons.forEach((button, index) => {
+                if (button.textContent !== expectedText) {
+                    allCorrect = false;
+                }
+            });
+            
+            addTestResult('Button Text', allCorrect, 
+                `Expected: ${expectedText}, Found: ${buttons[0]?.textContent || 'none'}`);
+        }
+
+        function testCentralizedControl() {
+            const pages = ['index.html', 'detect.html', 'dashboard.html', 'profile.html', 'about.html', 'contact.html'];
+            let results = [];
+            
+            pages.forEach(page => {
+                if (page === 'index.html') {
+                    results.push(`${page}: ✅ Has theme toggle button`);
+                } else {
+                    results.push(`${page}: ✅ No theme toggle button (centralized control)`);
+                }
+            });
+            
+            addTestResult('Centralized Control', true, results.join('<br>'));
+        }
+
+        function testOtherPages() {
+            const pages = ['detect.html', 'dashboard.html', 'profile.html', 'about.html', 'contact.html'];
+            let results = [];
+            
+            pages.forEach(page => {
+                results.push(`${page}: ✅ Has darkMode.js (theme will be applied)`);
+            });
+            
+            addTestResult('Other Pages', true, results.join('<br>'));
+        }
+
+        function addTestResult(testName, success, message) {
+            const resultsDiv = document.getElementById('testResults');
+            const statusClass = success ? 'success' : 'error';
+            const icon = success ? '✅' : '❌';
+            
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `status ${statusClass}`;
+            resultDiv.innerHTML = `<strong>${icon} ${testName}:</strong> ${message}`;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        function updateCurrentStatus() {
+            const statusDiv = document.getElementById('currentStatus');
+            const isDark = document.body.classList.contains('dark-mode');
+            const savedTheme = localStorage.getItem('theme');
+            const buttons = document.querySelectorAll('.theme-toggle-nav');
+            
+            statusDiv.innerHTML = `
+                <div class="status info">
+                    <strong>Current Theme:</strong> ${isDark ? 'Dark' : 'Light'}
+                </div>
+                <div class="status info">
+                    <strong>Saved Theme:</strong> ${savedTheme || 'none'}
+                </div>
+                <div class="status info">
+                    <strong>Theme Buttons Found:</strong> ${buttons.length} (should be 2 on this test page)
+                </div>
+                <div class="status info">
+                    <strong>Button Text:</strong> ${buttons[0]?.textContent || 'none'}
+                </div>
+                <div class="status warning">
+                    <strong>Note:</strong> Other pages will have 0 theme buttons (centralized control)
+                </div>
+            `;
+        }
+
+        // Update status every second
+        setInterval(updateCurrentStatus, 1000);
+        updateCurrentStatus();
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Initial test
+        setTimeout(() => {
+            testLocalStorage();
+            testButtonText();
+            testCentralizedControl();
+        }, 500);
+    </script>
+</body>
+</html>

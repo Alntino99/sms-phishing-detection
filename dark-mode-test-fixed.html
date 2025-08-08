@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dark Mode Test - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    .test-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .test-section {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 1rem;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .status-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    
+    .status-indicator.working {
+      background: #10b981;
+    }
+    
+    .status-indicator.error {
+      background: #ef4444;
+    }
+    
+    .test-button {
+      background: var(--gradient-primary);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      margin: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .test-button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .console-log {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      font-family: monospace;
+      font-size: 0.875rem;
+      max-height: 200px;
+      overflow-y: auto;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Enhanced Theme Toggle -->
+  <button class="theme-toggle-enhanced" onclick="toggleTheme()" aria-label="Toggle theme" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: rgba(59, 130, 246, 0.9); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s ease;">
+    🌙
+  </button>
+
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <section class="enhanced-hero animate-slide-up" style="padding-top: 120px;">
+    <h1 class="hero-title">🌙 Dark Mode Test</h1>
+    <p class="hero-subtitle">
+      Testing the dark mode functionality to ensure it's working properly
+    </p>
+  </section>
+
+  <div class="test-container">
+    
+    <!-- Status Section -->
+    <div class="test-section">
+      <h2>🔍 Dark Mode Status</h2>
+      <div id="statusDisplay">
+        <p><span class="status-indicator" id="statusIndicator"></span> <span id="statusText">Checking...</span></p>
+        <p><strong>Current Theme:</strong> <span id="currentTheme">Loading...</span></p>
+        <p><strong>Button Text:</strong> <span id="buttonText">Loading...</span></p>
+        <p><strong>LocalStorage:</strong> <span id="localStorageValue">Loading...</span></p>
+      </div>
+    </div>
+
+    <!-- Test Controls -->
+    <div class="test-section">
+      <h2>🎮 Test Controls</h2>
+      <button class="test-button" onclick="testToggleTheme()">Test Toggle Theme</button>
+      <button class="test-button" onclick="testSetDarkMode(true)">Force Dark Mode</button>
+      <button class="test-button" onclick="testSetDarkMode(false)">Force Light Mode</button>
+      <button class="test-button" onclick="testClearStorage()">Clear Storage</button>
+      <button class="test-button" onclick="testReloadPage()">Reload Page</button>
+    </div>
+
+    <!-- Console Log -->
+    <div class="test-section">
+      <h2>📝 Console Log</h2>
+      <div class="console-log" id="consoleLog">
+        <p>Console log will appear here...</p>
+      </div>
+    </div>
+
+    <!-- Visual Test -->
+    <div class="test-section">
+      <h2>👁️ Visual Test</h2>
+      <p>This section should change appearance when you toggle dark mode:</p>
+      <div style="padding: 1rem; background: rgba(255, 255, 255, 0.1); border-radius: 0.5rem; margin: 1rem 0;">
+        <p>This is a test card that should adapt to the current theme.</p>
+        <p>If dark mode is working, this background should change color.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="darkMode.js"></script>
+  <script>
+    let consoleLog = [];
+    
+    function log(message) {
+      const timestamp = new Date().toLocaleTimeString();
+      const logEntry = `[${timestamp}] ${message}`;
+      consoleLog.push(logEntry);
+      
+      // Update console display
+      const consoleElement = document.getElementById('consoleLog');
+      consoleElement.innerHTML = consoleLog.map(log => `<div>${log}</div>`).join('');
+      consoleElement.scrollTop = consoleElement.scrollHeight;
+      
+      // Also log to browser console
+      console.log(message);
+    }
+
+    function updateStatus() {
+      const body = document.body;
+      const isDark = body.classList.contains('dark-mode');
+      const statusIndicator = document.getElementById('statusIndicator');
+      const statusText = document.getElementById('statusText');
+      const currentTheme = document.getElementById('currentTheme');
+      const buttonText = document.getElementById('buttonText');
+      const localStorageValue = document.getElementById('localStorageValue');
+      
+      // Update status indicator
+      statusIndicator.className = isDark ? 'status-indicator working' : 'status-indicator working';
+      
+      // Update text
+      statusText.textContent = isDark ? 'Dark Mode Active' : 'Light Mode Active';
+      currentTheme.textContent = isDark ? 'Dark' : 'Light';
+      
+      // Get button text
+      const themeButton = document.querySelector('.theme-toggle-enhanced');
+      buttonText.textContent = themeButton ? themeButton.textContent : 'Button not found';
+      
+      // Get localStorage value
+      const savedTheme = localStorage.getItem('theme');
+      const savedDarkMode = localStorage.getItem('darkMode');
+      localStorageValue.textContent = `theme: "${savedTheme}", darkMode: "${savedDarkMode}"`;
+      
+      log(`Status updated - Dark mode: ${isDark}, Theme: ${savedTheme}, DarkMode: ${savedDarkMode}`);
+    }
+
+    function testToggleTheme() {
+      log('Testing toggleTheme() function...');
+      if (window.darkModeManager && window.darkModeManager.isInitialized) {
+        log('Using DarkModeManager.toggleTheme()');
+        window.darkModeManager.toggleTheme();
+      } else {
+        log('Using fallback toggleTheme()');
+        toggleTheme();
+      }
+      setTimeout(updateStatus, 100);
+    }
+
+    function testSetDarkMode(isDark) {
+      log(`Testing setDarkMode(${isDark})...`);
+      if (window.darkModeManager && window.darkModeManager.isInitialized) {
+        log('Using DarkModeManager.setDarkMode()');
+        window.darkModeManager.setDarkMode(isDark);
+      } else {
+        log('Using fallback setDarkMode()');
+        setDarkMode(isDark);
+      }
+      setTimeout(updateStatus, 100);
+    }
+
+    function testClearStorage() {
+      log('Clearing localStorage...');
+      localStorage.removeItem('theme');
+      localStorage.removeItem('darkMode');
+      log('localStorage cleared');
+      updateStatus();
+    }
+
+    function testReloadPage() {
+      log('Reloading page...');
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      log('DOM loaded, initializing test...');
+      
+      // Wait for dark mode manager to initialize
+      setTimeout(() => {
+        log('Dark mode manager status: ' + (window.darkModeManager ? 'Loaded' : 'Not loaded'));
+        if (window.darkModeManager) {
+          log('Dark mode manager initialized: ' + window.darkModeManager.isInitialized);
+        }
+        updateStatus();
+      }, 500);
+    });
+
+    // Update status every 2 seconds
+    setInterval(updateStatus, 2000);
+  </script>
+</body>
+</html>

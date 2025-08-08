@@ -198,8 +198,411 @@ class LSTMClassifier {
     }
 }
 
+// ===== K-NEAREST NEIGHBORS (KNN) IMPLEMENTATION =====
+// As specified in the project document with Manhattan distance and k=6
+
+class KNNClassifier {
+    constructor(k = 6) {
+        this.k = k; // Fixed k-value of 6 as specified
+        this.trainingData = [];
+        this.isTrained = false;
+    }
+
+    // Manhattan distance calculation as specified in the document
+    manhattanDistance(text1, text2) {
+        const words1 = this.extractWords(text1);
+        const words2 = this.extractWords(text2);
+        
+        // Create word frequency vectors
+        const vector1 = this.createWordVector(words1);
+        const vector2 = this.createWordVector(words2);
+        
+        // Calculate Manhattan distance
+        let distance = 0;
+        const allWords = new Set([...Object.keys(vector1), ...Object.keys(vector2)]);
+        
+        allWords.forEach(word => {
+            const freq1 = vector1[word] || 0;
+            const freq2 = vector2[word] || 0;
+            distance += Math.abs(freq1 - freq2);
+        });
+        
+        return distance;
+    }
+
+    // Extract words from text
+    extractWords(text) {
+        return text.toLowerCase()
+            .replace(/[^\w\s]/g, '')
+            .split(/\s+/)
+            .filter(word => word.length > 2);
+    }
+
+    // Create word frequency vector
+    createWordVector(words) {
+        const vector = {};
+        words.forEach(word => {
+            vector[word] = (vector[word] || 0) + 1;
+        });
+        return vector;
+    }
+
+    // Train the classifier (lazy learning - stores all training data)
+    train(trainingData) {
+        this.trainingData = trainingData.map(item => ({
+            text: item.text,
+            label: item.isPhishing || item.label === 'phishing',
+            words: this.extractWords(item.text)
+        }));
+        
+        this.isTrained = true;
+        console.log(`✅ KNN Classifier trained with ${this.trainingData.length} samples (k=${this.k})`);
+    }
+
+    // Predict using k-nearest neighbors
+    predict(text) {
+        if (!this.isTrained) {
+            throw new Error('KNN Classifier not trained yet!');
+        }
+
+        // Calculate distances to all training samples
+        const distances = this.trainingData.map(item => ({
+            distance: this.manhattanDistance(text, item.text),
+            label: item.label
+        }));
+
+        // Sort by distance and get k nearest neighbors
+        distances.sort((a, b) => a.distance - b.distance);
+        const kNearest = distances.slice(0, this.k);
+
+        // Count labels among k nearest neighbors
+        let phishingCount = 0;
+        let safeCount = 0;
+
+        kNearest.forEach(neighbor => {
+            if (neighbor.label) {
+                phishingCount++;
+            } else {
+                safeCount++;
+            }
+        });
+
+        // Majority vote
+        const isPhishing = phishingCount > safeCount;
+        const confidence = Math.max(phishingCount, safeCount) / this.k;
+
+        return {
+            isPhishing: isPhishing,
+            confidence: Math.min(0.95, Math.max(0.05, confidence)),
+            kNearest: kNearest,
+            distance: kNearest[0]?.distance || 0,
+            modelType: 'K-Nearest Neighbors (k=6, Manhattan distance)'
+        };
+    }
+
+    // Get model insights
+    getInsights() {
+        return {
+            k: this.k,
+            trainingSamples: this.trainingData.length,
+            distanceMetric: 'Manhattan',
+            modelType: 'K-Nearest Neighbors (Lazy Learning)'
+        };
+    }
+}
+
+// ===== RANDOM FOREST (RF) IMPLEMENTATION =====
+// As specified in the project document with ensemble learning and bagging
+
+class RandomForestClassifier {
+    constructor(nTrees = 10, maxDepth = 5) {
+        this.nTrees = nTrees;
+        this.maxDepth = maxDepth;
+        this.trees = [];
+        this.isTrained = false;
+    }
+
+    // Bootstrap sampling (bagging)
+    bootstrapSample(data, sampleSize) {
+        const sample = [];
+        for (let i = 0; i < sampleSize; i++) {
+            const randomIndex = Math.floor(Math.random() * data.length);
+            sample.push(data[randomIndex]);
+        }
+        return sample;
+    }
+
+    // Feature randomness - select random subset of features
+    getRandomFeatures(featureCount, featureRatio = 0.7) {
+        const selectedCount = Math.floor(featureCount * featureRatio);
+        const features = [];
+        for (let i = 0; i < selectedCount; i++) {
+            features.push(Math.floor(Math.random() * featureCount));
+        }
+        return features;
+    }
+
+    // Simple Decision Tree for Random Forest
+    class SimpleDecisionTree {
+        constructor(maxDepth = 5) {
+            this.maxDepth = maxDepth;
+            this.root = null;
+        }
+
+        // Calculate entropy
+        calculateEntropy(labels) {
+            const counts = {};
+            labels.forEach(label => {
+                counts[label] = (counts[label] || 0) + 1;
+            });
+            
+            let entropy = 0;
+            const total = labels.length;
+            Object.values(counts).forEach(count => {
+                const p = count / total;
+                entropy -= p * Math.log2(p);
+            });
+            return entropy;
+        }
+
+        // Find best split
+        findBestSplit(features, labels, featureIndices) {
+            let bestSplit = null;
+            let bestGain = -1;
+
+            featureIndices.forEach(featureIndex => {
+                const uniqueValues = [...new Set(features.map(f => f[featureIndex]))];
+                
+                uniqueValues.forEach(value => {
+                    const leftLabels = [];
+                    const rightLabels = [];
+                    
+                    features.forEach((feature, i) => {
+                        if (feature[featureIndex] <= value) {
+                            leftLabels.push(labels[i]);
+                        } else {
+                            rightLabels.push(labels[i]);
+                        }
+                    });
+
+                    if (leftLabels.length > 0 && rightLabels.length > 0) {
+                        const parentEntropy = this.calculateEntropy(labels);
+                        const leftEntropy = this.calculateEntropy(leftLabels);
+                        const rightEntropy = this.calculateEntropy(rightLabels);
+                        
+                        const leftWeight = leftLabels.length / labels.length;
+                        const rightWeight = rightLabels.length / labels.length;
+                        
+                        const informationGain = parentEntropy - 
+                            (leftWeight * leftEntropy + rightWeight * rightEntropy);
+                        
+                        if (informationGain > bestGain) {
+                            bestGain = informationGain;
+                            bestSplit = { featureIndex, value, informationGain };
+                        }
+                    }
+                });
+            });
+
+            return bestSplit;
+        }
+
+        // Build tree recursively
+        buildTree(features, labels, depth = 0, featureIndices = null) {
+            if (depth >= this.maxDepth || labels.length <= 1) {
+                // Leaf node - return majority class
+                const counts = {};
+                labels.forEach(label => {
+                    counts[label] = (counts[label] || 0) + 1;
+                });
+                const majorityClass = Object.keys(counts).reduce((a, b) => 
+                    counts[a] > counts[b] ? a : b);
+                return { type: 'leaf', prediction: majorityClass };
+            }
+
+            if (!featureIndices) {
+                featureIndices = Array.from({ length: features[0].length }, (_, i) => i);
+            }
+
+            const split = this.findBestSplit(features, labels, featureIndices);
+            
+            if (!split) {
+                // No good split found
+                const counts = {};
+                labels.forEach(label => {
+                    counts[label] = (counts[label] || 0) + 1;
+                });
+                const majorityClass = Object.keys(counts).reduce((a, b) => 
+                    counts[a] > counts[b] ? a : b);
+                return { type: 'leaf', prediction: majorityClass };
+            }
+
+            // Split data
+            const leftFeatures = [];
+            const leftLabels = [];
+            const rightFeatures = [];
+            const rightLabels = [];
+
+            features.forEach((feature, i) => {
+                if (feature[split.featureIndex] <= split.value) {
+                    leftFeatures.push(feature);
+                    leftLabels.push(labels[i]);
+                } else {
+                    rightFeatures.push(feature);
+                    rightLabels.push(labels[i]);
+                }
+            });
+
+            // Recursively build subtrees
+            const leftChild = this.buildTree(leftFeatures, leftLabels, depth + 1, featureIndices);
+            const rightChild = this.buildTree(rightFeatures, rightLabels, depth + 1, featureIndices);
+
+            return {
+                type: 'split',
+                featureIndex: split.featureIndex,
+                value: split.value,
+                leftChild,
+                rightChild
+            };
+        }
+
+        // Train the tree
+        train(features, labels) {
+            this.root = this.buildTree(features, labels);
+        }
+
+        // Predict using the tree
+        predict(features) {
+            let node = this.root;
+            
+            while (node.type === 'split') {
+                if (features[node.featureIndex] <= node.value) {
+                    node = node.leftChild;
+                } else {
+                    node = node.rightChild;
+                }
+            }
+            
+            return node.prediction;
+        }
+    }
+
+    // Train Random Forest
+    train(trainingData) {
+        console.log(`🌲 Training Random Forest with ${this.nTrees} trees...`);
+        
+        // Convert training data to feature vectors
+        const featureVectors = this.convertToFeatureVectors(trainingData);
+        const labels = trainingData.map(item => item.isPhishing || item.label === 'phishing');
+        
+        // Train multiple trees with bootstrap sampling and feature randomness
+        for (let i = 0; i < this.nTrees; i++) {
+            // Bootstrap sample
+            const bootstrapData = this.bootstrapSample(trainingData, trainingData.length);
+            const bootstrapFeatures = this.convertToFeatureVectors(bootstrapData);
+            const bootstrapLabels = bootstrapData.map(item => item.isPhishing || item.label === 'phishing');
+            
+            // Create tree with feature randomness
+            const tree = new this.SimpleDecisionTree(this.maxDepth);
+            
+            // Train tree
+            tree.train(bootstrapFeatures, bootstrapLabels);
+            
+            this.trees.push(tree);
+        }
+        
+        this.isTrained = true;
+        console.log(`✅ Random Forest trained with ${this.nTrees} trees`);
+    }
+
+    // Convert text to feature vector
+    convertToFeatureVectors(data) {
+        const vocabulary = new Set();
+        
+        // Build vocabulary
+        data.forEach(item => {
+            const words = this.extractWords(item.text);
+            words.forEach(word => vocabulary.add(word));
+        });
+        
+        const wordList = Array.from(vocabulary);
+        
+        // Convert each text to feature vector
+        return data.map(item => {
+            const words = this.extractWords(item.text);
+            const vector = new Array(wordList.length).fill(0);
+            
+            words.forEach(word => {
+                const index = wordList.indexOf(word);
+                if (index !== -1) {
+                    vector[index]++;
+                }
+            });
+            
+            return vector;
+        });
+    }
+
+    // Extract words from text
+    extractWords(text) {
+        return text.toLowerCase()
+            .replace(/[^\w\s]/g, '')
+            .split(/\s+/)
+            .filter(word => word.length > 2);
+    }
+
+    // Predict using ensemble voting
+    predict(text) {
+        if (!this.isTrained) {
+            throw new Error('Random Forest not trained yet!');
+        }
+
+        // Convert text to feature vector
+        const featureVector = this.convertToFeatureVectors([{ text }])[0];
+        
+        // Get predictions from all trees
+        const predictions = this.trees.map(tree => tree.predict(featureVector));
+        
+        // Majority vote
+        let phishingVotes = 0;
+        let safeVotes = 0;
+        
+        predictions.forEach(prediction => {
+            if (prediction) {
+                phishingVotes++;
+            } else {
+                safeVotes++;
+            }
+        });
+        
+        const isPhishing = phishingVotes > safeVotes;
+        const confidence = Math.max(phishingVotes, safeVotes) / this.nTrees;
+        
+        return {
+            isPhishing: isPhishing,
+            confidence: Math.min(0.95, Math.max(0.05, confidence)),
+            treePredictions: predictions,
+            phishingVotes,
+            safeVotes,
+            modelType: `Random Forest (${this.nTrees} trees, max depth ${this.maxDepth})`
+        };
+    }
+
+    // Get model insights
+    getInsights() {
+        return {
+            nTrees: this.nTrees,
+            maxDepth: this.maxDepth,
+            modelType: 'Random Forest (Ensemble Learning)',
+            features: 'Bootstrap sampling + Feature randomness + Majority voting'
+        };
+    }
+}
+
 // Export classes for global access
 window.NaiveBayesClassifier = NaiveBayesClassifier;
 window.LSTMClassifier = LSTMClassifier;
+window.KNNClassifier = KNNClassifier;
+window.RandomForestClassifier = RandomForestClassifier;
 
-console.log('✅ ML Classifier classes loaded successfully'); 
+console.log('✅ ML Classifier classes loaded successfully (including KNN and Random Forest)'); 

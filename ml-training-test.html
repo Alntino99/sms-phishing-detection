@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Training Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .model-status {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .status-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: block;
+        }
+        .status-ready { background: #4CAF50; }
+        .status-training { background: #FF9800; }
+        .status-error { background: #f44336; }
+        .btn {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: transform 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .log-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .log-info { background: rgba(33, 150, 243, 0.3); }
+        .log-success { background: rgba(76, 175, 80, 0.3); }
+        .log-error { background: rgba(244, 67, 54, 0.3); }
+        .log-warning { background: rgba(255, 152, 0, 0.3); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Enhanced ML Training System</h1>
+        <p>Testing all 5 Machine Learning models for SMS Phishing Detection</p>
+        
+        <div class="status-grid">
+            <div class="model-status">
+                <div class="status-indicator status-training" id="nb-status"></div>
+                <h3>📊 Naive Bayes</h3>
+                <p id="nb-info">Initializing...</p>
+            </div>
+            <div class="model-status">
+                <div class="status-indicator status-training" id="lstm-status"></div>
+                <h3>🧠 LSTM Neural Network</h3>
+                <p id="lstm-info">Initializing...</p>
+            </div>
+            <div class="model-status">
+                <div class="status-indicator status-training" id="svm-status"></div>
+                <h3>🔧 Support Vector Machine</h3>
+                <p id="svm-info">Initializing...</p>
+            </div>
+            <div class="model-status">
+                <div class="status-indicator status-training" id="dt-status"></div>
+                <h3>🌲 Decision Tree</h3>
+                <p id="dt-info">Initializing...</p>
+            </div>
+            <div class="model-status">
+                <div class="status-indicator status-training" id="cnn-status"></div>
+                <h3>🧠 CNN-LSTM Hybrid</h3>
+                <p id="cnn-info">Initializing...</p>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <button class="btn" onclick="startTraining()">🚀 Start Enhanced Training</button>
+            <button class="btn" onclick="checkStatus()">📊 Check Status</button>
+            <button class="btn" onclick="testModels()">🧪 Test Models</button>
+            <button class="btn" onclick="clearLog()">🗑️ Clear Log</button>
+        </div>
+        
+        <div class="log-container">
+            <h3>📝 Training Log</h3>
+            <div id="log-output"></div>
+        </div>
+    </div>
+
+    <!-- Load the ML models and training system -->
+    <script src="script.js"></script>
+    <script src="enhanced-ml-training.js"></script>
+    
+    <script>
+        // Custom logging function
+        function log(message, type = 'info') {
+            const logOutput = document.getElementById('log-output');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            logOutput.appendChild(logEntry);
+            logOutput.scrollTop = logOutput.scrollHeight;
+        }
+
+        // Override console.log to also display in UI
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            log(args.join(' '), 'info');
+        };
+
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            log(args.join(' '), 'error');
+        };
+
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            log(args.join(' '), 'warning');
+        };
+
+        // Update model status
+        function updateModelStatus(modelName, status, info) {
+            const statusElement = document.getElementById(`${modelName}-status`);
+            const infoElement = document.getElementById(`${modelName}-info`);
+            
+            statusElement.className = `status-indicator status-${status}`;
+            infoElement.textContent = info;
+        }
+
+        // Start enhanced training
+        function startTraining() {
+            log('🚀 Starting Enhanced ML Training...', 'info');
+            
+            // Update all statuses to training
+            updateModelStatus('nb', 'training', 'Training...');
+            updateModelStatus('lstm', 'training', 'Training...');
+            updateModelStatus('svm', 'training', 'Training...');
+            updateModelStatus('dt', 'training', 'Training...');
+            updateModelStatus('cnn', 'training', 'Training...');
+            
+            // Start enhanced training
+            const result = enhancedTrainAllModels();
+            
+            if (result.success) {
+                log('✅ Enhanced training completed successfully!', 'success');
+                log(`⏱️ Training time: ${result.trainingTime}ms`, 'info');
+                log(`📊 Trained on ${result.sampleCount} samples`, 'info');
+                
+                // Update all statuses to ready
+                updateModelStatus('nb', 'ready', 'Trained & Ready');
+                updateModelStatus('lstm', 'ready', 'Trained & Ready');
+                updateModelStatus('svm', 'ready', 'Trained & Ready');
+                updateModelStatus('dt', 'ready', 'Trained & Ready');
+                updateModelStatus('cnn', 'ready', 'Trained & Ready');
+                
+                // Validate models after a delay
+                setTimeout(() => {
+                    validateModels();
+                }, 1000);
+                
+            } else {
+                log(`❌ Training failed: ${result.error}`, 'error');
+                updateModelStatus('nb', 'error', 'Training Failed');
+                updateModelStatus('lstm', 'error', 'Training Failed');
+                updateModelStatus('svm', 'error', 'Training Failed');
+                updateModelStatus('dt', 'error', 'Training Failed');
+                updateModelStatus('cnn', 'error', 'Training Failed');
+            }
+        }
+
+        // Check training status
+        function checkStatus() {
+            log('📊 Checking ML Model Status...', 'info');
+            const status = checkTrainingStatus();
+            
+            Object.keys(status).forEach(model => {
+                if (model !== 'allReady') {
+                    const modelName = model === 'naiveBayes' ? 'nb' : 
+                                    model === 'lstm' ? 'lstm' :
+                                    model === 'svm' ? 'svm' :
+                                    model === 'decisionTree' ? 'dt' : 'cnn';
+                    
+                    const isReady = status[model];
+                    updateModelStatus(modelName, isReady ? 'ready' : 'error', 
+                                   isReady ? 'Trained & Ready' : 'Not Trained');
+                }
+            });
+            
+            log(`Overall Status: ${status.allReady ? '✅ All Ready' : '❌ Not Ready'}`, 
+                status.allReady ? 'success' : 'error');
+        }
+
+        // Test models with sample messages
+        function testModels() {
+            log('🧪 Testing ML Models with Sample Messages...', 'info');
+            
+            const testMessages = [
+                "Your bank account has been suspended. Click here to verify immediately!",
+                "Hi Sarah, can we meet for lunch tomorrow?",
+                "CONGRATULATIONS! You've won $5000! Claim now!",
+                "Your package will be delivered tomorrow between 2-4 PM"
+            ];
+            
+            testMessages.forEach((message, index) => {
+                log(`\n📝 Test Message ${index + 1}: "${message}"`, 'info');
+                
+                try {
+                    const nbResult = naiveBayesClassifier.predict(message);
+                    const lstmResult = lstmClassifier.predict(message);
+                    const svmResult = svmClassifier.predict(message);
+                    const dtResult = decisionTreeClassifier.predict(message);
+                    const cnnResult = cnnLstmHybridClassifier.predict(message);
+                    
+                    log(`📊 Naive Bayes: ${nbResult.isPhishing ? 'PHISHING' : 'SAFE'} (${(nbResult.confidence * 100).toFixed(1)}%)`, 'info');
+                    log(`🧠 LSTM: ${lstmResult.isPhishing ? 'PHISHING' : 'SAFE'} (${(lstmResult.confidence * 100).toFixed(1)}%)`, 'info');
+                    log(`🔧 SVM: ${svmResult.isPhishing ? 'PHISHING' : 'SAFE'} (${(svmResult.confidence * 100).toFixed(1)}%)`, 'info');
+                    log(`🌲 Decision Tree: ${dtResult.isPhishing ? 'PHISHING' : 'SAFE'} (${(dtResult.confidence * 100).toFixed(1)}%)`, 'info');
+                    log(`🧠 CNN-LSTM: ${cnnResult.isPhishing ? 'PHISHING' : 'SAFE'} (${(cnnResult.confidence * 100).toFixed(1)}%)`, 'info');
+                    
+                } catch (error) {
+                    log(`❌ Error testing message ${index + 1}: ${error.message}`, 'error');
+                }
+            });
+        }
+
+        // Clear log
+        function clearLog() {
+            document.getElementById('log-output').innerHTML = '';
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', function() {
+            log('🚀 ML Training Test System Loaded', 'success');
+            log('📊 Ready to test all 5 ML models', 'info');
+            log('💡 Click "Start Enhanced Training" to begin', 'info');
+        });
+
+        // Listen for training completion events
+        window.addEventListener('mlModelsEnhancedReady', function() {
+            log('🎉 Enhanced training completed!', 'success');
+        });
+    </script>
+</body>
+</html>

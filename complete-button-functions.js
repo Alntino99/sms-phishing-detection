@@ -414,14 +414,8 @@ function togglePassword(fieldId) {
     return Promise.resolve();
 }
 
-// Theme Functions
-function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    showNotification(`Theme changed to ${isDark ? 'dark' : 'light'} mode`, 'success');
-    return Promise.resolve();
-}
+// Theme Functions - now handled by darkMode.js
+// Removed duplicate toggleTheme function - use the one in darkMode.js
 
 // Analysis Mode Functions
 function setAnalysisMode(mode) {

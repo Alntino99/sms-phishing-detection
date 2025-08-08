@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time SMS Integration Test - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    .integration-status {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .status-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border-left: 4px solid;
+      transition: all 0.3s ease;
+    }
+    
+    .status-card.active {
+      border-left-color: #10b981;
+      background: rgba(16, 185, 129, 0.1);
+    }
+    
+    .status-card.inactive {
+      border-left-color: #6b7280;
+      background: rgba(107, 114, 128, 0.1);
+    }
+    
+    .status-card.error {
+      border-left-color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+    
+    .test-sms-container {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 1rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .test-sms-input {
+      width: 100%;
+      min-height: 100px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      color: white;
+      font-family: inherit;
+      resize: vertical;
+    }
+    
+    .test-sms-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    .analysis-result {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-top: 1rem;
+      border-left: 4px solid;
+      animation: slideIn 0.3s ease;
+    }
+    
+    .analysis-result.phishing {
+      border-left-color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+    
+    .analysis-result.safe {
+      border-left-color: #10b981;
+      background: rgba(16, 185, 129, 0.1);
+    }
+    
+    .analysis-result.unknown {
+      border-left-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.1);
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .live-monitoring {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 1rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .monitoring-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+    
+    .monitoring-indicator.active {
+      background: #10b981;
+    }
+    
+    .monitoring-indicator.inactive {
+      background: #6b7280;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+    
+    .sample-sms {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .sample-sms:hover {
+      background: rgba(59, 130, 246, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .clipboard-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        ☰
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <section class="enhanced-hero animate-slide-up" style="padding-top: 120px;">
+    <h1 class="hero-title">🚀 Real-Time SMS Integration Test</h1>
+    <p class="hero-subtitle">
+      Test the live SMS monitoring and analysis capabilities of your SMS Shield web app
+    </p>
+  </section>
+
+  <section style="padding: 3rem 1.5rem; max-width: 1200px; margin: 0 auto;">
+    
+    <!-- Integration Status -->
+    <div class="card-enhanced animate-slide-up">
+      <h2 style="text-align: center; margin-bottom: 2rem;">📱 Integration Status</h2>
+      
+      <div class="integration-status" id="integrationStatus">
+        <!-- Status cards will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <!-- Live Monitoring Status -->
+    <div class="live-monitoring card-enhanced animate-slide-up">
+      <h3 style="margin-bottom: 1rem;">
+        <span class="monitoring-indicator" id="monitoringIndicator"></span>
+        Live SMS Monitoring
+      </h3>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <div>
+          <strong>Status:</strong> <span id="monitoringStatus">Initializing...</span>
+        </div>
+        <div>
+          <strong>Queue Length:</strong> <span id="queueLength">0</span>
+        </div>
+        <div>
+          <strong>Total Analyses:</strong> <span id="totalAnalyses">0</span>
+        </div>
+        <div>
+          <strong>Last Update:</strong> <span id="lastUpdate">Never</span>
+        </div>
+      </div>
+      
+      <div class="clipboard-status" id="clipboardStatus" style="display: none;">
+        <span>📋</span>
+        <span>Clipboard monitoring active - Copy SMS text to clipboard for automatic analysis</span>
+      </div>
+    </div>
+
+    <!-- Test SMS Analysis -->
+    <div class="test-sms-container card-enhanced animate-slide-up">
+      <h3 style="margin-bottom: 1rem;">🧪 Test SMS Analysis</h3>
+      
+      <div style="margin-bottom: 1rem;">
+        <label for="testSMSInput" style="display: block; margin-bottom: 0.5rem;">Enter SMS text to test:</label>
+        <textarea 
+          id="testSMSInput" 
+          class="test-sms-input" 
+          placeholder="Paste or type SMS content here to test real-time analysis..."
+        ></textarea>
+      </div>
+      
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <button class="btn-enhanced btn-primary" onclick="analyzeTestSMS()">
+          <i class="fas fa-shield-alt"></i>
+          Analyze SMS
+        </button>
+        <button class="btn-enhanced btn-secondary" onclick="clearTestResults()">
+          <i class="fas fa-trash"></i>
+          Clear Results
+        </button>
+      </div>
+      
+      <!-- Sample SMS Messages -->
+      <div style="margin-top: 2rem;">
+        <h4 style="margin-bottom: 1rem;">📝 Sample SMS Messages for Testing:</h4>
+        <div class="sample-sms" onclick="loadSampleSMS(this)">
+          <strong>Phishing SMS:</strong> "URGENT: Your bank account has been SUSPENDED! Click here to verify: http://fake-bank.com"
+        </div>
+        <div class="sample-sms" onclick="loadSampleSMS(this)">
+          <strong>Safe SMS:</strong> "Hi, this is your bank. We need to verify your account immediately."
+        </div>
+        <div class="sample-sms" onclick="loadSampleSMS(this)">
+          <strong>Lottery Scam:</strong> "CONGRATULATIONS! You've won $1000! Claim your prize now at free-gift.com"
+        </div>
+        <div class="sample-sms" onclick="loadSampleSMS(this)">
+          <strong>Normal SMS:</strong> "Hey, are you free for lunch tomorrow? Let me know!"
+        </div>
+      </div>
+      
+      <!-- Analysis Results -->
+      <div id="analysisResults"></div>
+    </div>
+
+    <!-- Integration Methods -->
+    <div class="card-enhanced animate-slide-up">
+      <h3 style="margin-bottom: 1rem;">🔧 Available Integration Methods</h3>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        <div style="padding: 1.5rem; background: rgba(16, 185, 129, 0.1); border-radius: 1rem; border-left: 4px solid #10b981;">
+          <h4 style="color: #10b981; margin-bottom: 1rem;">📋 Clipboard Monitoring</h4>
+          <p>Automatically detects SMS content copied to clipboard</p>
+          <button class="btn-enhanced btn-primary" onclick="toggleClipboardMonitoring()" style="margin-top: 1rem;">
+            Toggle Clipboard Monitoring
+          </button>
+        </div>
+        
+        <div style="padding: 1.5rem; background: rgba(59, 130, 246, 0.1); border-radius: 1rem; border-left: 4px solid #3b82f6;">
+          <h4 style="color: #3b82f6; margin-bottom: 1rem;">📤 Share API</h4>
+          <p>Receive SMS content via native share functionality</p>
+          <button class="btn-enhanced btn-secondary" onclick="testShareAPI()" style="margin-top: 1rem;">
+            Test Share API
+          </button>
+        </div>
+        
+        <div style="padding: 1.5rem; background: rgba(245, 158, 11, 0.1); border-radius: 1rem; border-left: 4px solid #f59e0b;">
+          <h4 style="color: #f59e0b; margin-bottom: 1rem;">📱 PWA Integration</h4>
+          <p>Install as Progressive Web App for background monitoring</p>
+          <button class="btn-enhanced btn-primary" onclick="installPWA()" style="margin-top: 1rem;">
+            Install PWA
+          </button>
+        </div>
+        
+        <div style="padding: 1.5rem; background: rgba(139, 92, 246, 0.1); border-radius: 1rem; border-left: 4px solid #8b5cf6;">
+          <h4 style="color: #8b5cf6; margin-bottom: 1rem;">🌐 Webhook</h4>
+          <p>Receive SMS data via webhook from native apps</p>
+          <button class="btn-enhanced btn-secondary" onclick="testWebhook()" style="margin-top: 1rem;">
+            Test Webhook
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analysis History -->
+    <div class="card-enhanced animate-slide-up">
+      <h3 style="margin-bottom: 1rem;">📊 Recent Analysis History</h3>
+      <div id="analysisHistory">
+        <!-- Analysis history will be populated by JavaScript -->
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Scripts -->
+  <script src="mobile-sms-real-time-integration.js"></script>
+  <script src="enhanced-design-system.js"></script>
+  <script>
+    let clipboardMonitoring = false;
+    let analysisHistory = [];
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', async () => {
+      console.log('🚀 Initializing Real-Time SMS Test Page...');
+      
+      // Wait for integration to load
+      await waitForIntegration();
+      
+      // Update status display
+      updateIntegrationStatus();
+      
+      // Start monitoring updates
+      startStatusUpdates();
+      
+      // Listen for SMS analysis events
+      window.addEventListener('smsAnalysisComplete', handleSMSAnalysis);
+      
+      console.log('✅ Real-Time SMS Test Page initialized');
+    });
+
+    async function waitForIntegration() {
+      let attempts = 0;
+      while (!window.realTimeSMSIntegration && attempts < 50) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        attempts++;
+      }
+      
+      if (!window.realTimeSMSIntegration) {
+        console.error('❌ SMS Integration failed to load');
+        return false;
+      }
+      
+      return true;
+    }
+
+    function updateIntegrationStatus() {
+      if (!window.realTimeSMSIntegration) return;
+      
+      const status = window.realTimeSMSIntegration.getStatus();
+      const statusContainer = document.getElementById('integrationStatus');
+      
+      statusContainer.innerHTML = '';
+      
+      // Create status cards for each integration method
+      Object.entries(status.methods).forEach(([method, isActive]) => {
+        const card = document.createElement('div');
+        card.className = `status-card ${isActive ? 'active' : 'inactive'}`;
+        
+        const methodNames = {
+          pwa: 'Progressive Web App',
+          webhook: 'Webhook Integration',
+          clipboard: 'Clipboard Monitoring',
+          shareApi: 'Share API',
+          nativeApp: 'Native App Bridge'
+        };
+        
+        card.innerHTML = `
+          <h4 style="margin-bottom: 0.5rem;">${methodNames[method] || method}</h4>
+          <p style="margin: 0; opacity: 0.8;">
+            Status: ${isActive ? '✅ Active' : '❌ Inactive'}
+          </p>
+        `;
+        
+        statusContainer.appendChild(card);
+      });
+      
+      // Update monitoring status
+      updateMonitoringStatus(status);
+    }
+
+    function updateMonitoringStatus(status) {
+      const indicator = document.getElementById('monitoringIndicator');
+      const statusText = document.getElementById('monitoringStatus');
+      const queueLength = document.getElementById('queueLength');
+      const totalAnalyses = document.getElementById('totalAnalyses');
+      
+      if (status.monitoring) {
+        indicator.className = 'monitoring-indicator active';
+        statusText.textContent = 'Active';
+      } else {
+        indicator.className = 'monitoring-indicator inactive';
+        statusText.textContent = 'Inactive';
+      }
+      
+      queueLength.textContent = status.queueLength;
+      totalAnalyses.textContent = status.totalAnalyses;
+      
+      // Show clipboard status if active
+      const clipboardStatus = document.getElementById('clipboardStatus');
+      if (status.methods.clipboard) {
+        clipboardStatus.style.display = 'flex';
+      } else {
+        clipboardStatus.style.display = 'none';
+      }
+    }
+
+    function startStatusUpdates() {
+      setInterval(() => {
+        if (window.realTimeSMSIntegration) {
+          updateIntegrationStatus();
+          document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+        }
+      }, 2000);
+    }
+
+    async function analyzeTestSMS() {
+      const input = document.getElementById('testSMSInput');
+      const smsText = input.value.trim();
+      
+      if (!smsText) {
+        alert('Please enter SMS text to analyze');
+        return;
+      }
+      
+      if (!window.realTimeSMSIntegration) {
+        alert('SMS Integration not available');
+        return;
+      }
+      
+      try {
+        // Show loading state
+        const resultsContainer = document.getElementById('analysisResults');
+        resultsContainer.innerHTML = '<div class="analysis-result unknown">Analyzing...</div>';
+        
+        // Analyze SMS
+        const analysis = await window.realTimeSMSIntegration.analyzeSMSText(smsText);
+        
+        // Display results
+        displayAnalysisResult(smsText, analysis);
+        
+        // Add to history
+        addToHistory({
+          sender: 'Test',
+          message: smsText,
+          timestamp: new Date(),
+          analysis: analysis
+        });
+        
+      } catch (error) {
+        console.error('Analysis failed:', error);
+        document.getElementById('analysisResults').innerHTML = 
+          '<div class="analysis-result error">Analysis failed: ' + error.message + '</div>';
+      }
+    }
+
+    function displayAnalysisResult(smsText, analysis) {
+      const resultsContainer = document.getElementById('analysisResults');
+      const resultClass = analysis.isPhishing ? 'phishing' : 'safe';
+      
+      resultsContainer.innerHTML = `
+        <div class="analysis-result ${resultClass}">
+          <h4 style="margin-bottom: 1rem;">
+            ${analysis.isPhishing ? '🚨 Phishing Detected' : '✅ Safe Message'}
+          </h4>
+          
+          <div style="margin-bottom: 1rem;">
+            <strong>Message:</strong> ${smsText}
+          </div>
+          
+          <div style="margin-bottom: 1rem;">
+            <strong>Confidence:</strong> ${analysis.confidence}%
+          </div>
+          
+          <div style="margin-bottom: 1rem;">
+            <strong>Reason:</strong> ${analysis.reason}
+          </div>
+          
+          <div>
+            <strong>Recommendations:</strong>
+            <ul style="margin-top: 0.5rem;">
+              ${analysis.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+
+    function loadSampleSMS(element) {
+      const input = document.getElementById('testSMSInput');
+      const text = element.textContent.replace(/^.*?:\s*/, ''); // Remove the label
+      input.value = text;
+    }
+
+    function clearTestResults() {
+      document.getElementById('testSMSInput').value = '';
+      document.getElementById('analysisResults').innerHTML = '';
+    }
+
+    function toggleClipboardMonitoring() {
+      if (!window.realTimeSMSIntegration) return;
+      
+      clipboardMonitoring = !clipboardMonitoring;
+      
+      if (clipboardMonitoring) {
+        // Start clipboard monitoring
+        navigator.clipboard.readText().then(text => {
+          if (text && text.length > 10) {
+            window.realTimeSMSIntegration.handleIncomingSMS(text);
+          }
+        });
+        
+        alert('Clipboard monitoring enabled! Copy SMS text to clipboard for automatic analysis.');
+      } else {
+        alert('Clipboard monitoring disabled.');
+      }
+    }
+
+    function testShareAPI() {
+      if ('share' in navigator) {
+        navigator.share({
+          title: 'SMS Shield Test',
+          text: 'Testing SMS Shield integration via Share API',
+          url: window.location.href
+        }).then(() => {
+          console.log('Share successful');
+        }).catch(error => {
+          console.log('Share failed:', error);
+        });
+      } else {
+        alert('Share API not supported on this device');
+      }
+    }
+
+    function installPWA() {
+      // Trigger PWA install prompt
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw-sms-monitor.js').then(registration => {
+          console.log('PWA service worker registered:', registration);
+          alert('PWA installation initiated! Check your browser for install prompt.');
+        }).catch(error => {
+          console.error('PWA registration failed:', error);
+          alert('PWA installation failed. Please try again.');
+        });
+      } else {
+        alert('PWA not supported on this device');
+      }
+    }
+
+    function testWebhook() {
+      // Simulate webhook test
+      const testSMS = {
+        sender: '+1234567890',
+        message: 'Test SMS via webhook integration',
+        timestamp: new Date().toISOString()
+      };
+      
+      if (window.realTimeSMSIntegration) {
+        window.realTimeSMSIntegration.handleIncomingSMS(testSMS);
+        alert('Webhook test SMS sent! Check the analysis results.');
+      }
+    }
+
+    function handleSMSAnalysis(event) {
+      const { sms, analysis } = event.detail;
+      addToHistory(sms, analysis);
+      displayAnalysisResult(sms.message, analysis);
+    }
+
+    function addToHistory(sms, analysis) {
+      analysisHistory.unshift({
+        ...sms,
+        analysis
+      });
+      
+      // Keep only last 10 analyses
+      if (analysisHistory.length > 10) {
+        analysisHistory = analysisHistory.slice(0, 10);
+      }
+      
+      updateAnalysisHistory();
+    }
+
+    function updateAnalysisHistory() {
+      const historyContainer = document.getElementById('analysisHistory');
+      
+      if (analysisHistory.length === 0) {
+        historyContainer.innerHTML = '<p style="text-align: center; opacity: 0.7;">No analysis history yet</p>';
+        return;
+      }
+      
+      historyContainer.innerHTML = analysisHistory.map(item => `
+        <div class="analysis-result ${item.analysis.isPhishing ? 'phishing' : 'safe'}" style="margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <strong>${item.sender}</strong>
+            <small>${new Date(item.timestamp).toLocaleTimeString()}</small>
+          </div>
+          <div style="margin-bottom: 0.5rem; opacity: 0.8;">${item.message.substring(0, 100)}${item.message.length > 100 ? '...' : ''}</div>
+          <div style="font-size: 0.9rem;">
+            ${item.analysis.isPhishing ? '🚨 Phishing' : '✅ Safe'} (${item.analysis.confidence}% confidence)
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      const mobileMenu = document.querySelector('.mobile-menu');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+
+      if (mobileMenu.classList.contains('show')) {
+        mobileMenu.classList.remove('show');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
+      } else {
+        mobileMenu.classList.add('show');
+        menuBtn.textContent = '✕';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+  </script>
+</body>
+</html>

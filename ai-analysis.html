@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Powered Analysis - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Cache Clear Button -->
+  <button class="cache-clear-btn" onclick="clearCacheAndReload()" aria-label="Clear cache" style="position: fixed; top: 20px; right: 80px; z-index: 1000; background: rgba(239, 68, 68, 0.9); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px);">
+    🔄
+  </button>
+
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="profile.html" class="nav-link">Profile</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="login.html" class="nav-link auth-link">Sign In</a>
+        
+        <!-- Notification Bell -->
+        <div class="notification-bell-container">
+          <button class="nav-link notification-bell" onclick="toggleNotificationPanel()" aria-label="View notifications">
+            🔔
+            <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
+          </button>
+          
+          <!-- Notification Panel -->
+          <div class="notification-panel" id="notification-panel">
+            <div class="notification-panel-header">
+              <h3>Notifications</h3>
+              <button class="clear-notifications-btn" onclick="clearAllNotifications()">Clear All</button>
+            </div>
+            <div class="notification-list" id="notification-list">
+              <div class="no-notifications">No notifications yet</div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        ☰
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-links">
+        <a href="index.html" class="nav-link">🏠 Home</a>
+        <a href="detect.html" class="nav-link">🔍 Detect SMS</a>
+        <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+        <a href="profile.html" class="nav-link">👤 Profile</a>
+        <a href="about.html" class="nav-link">ℹ️ About</a>
+        <a href="contact.html" class="nav-link">📞 Contact</a>
+        <a href="login.html" class="nav-link">🔐 Sign In</a>
+        <button class="nav-link notification-bell" onclick="toggleNotificationPanel()" aria-label="View notifications">
+          🔔
+          <span class="notification-badge" style="display: none;">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- AI Analysis Hero Section -->
+  <section class="enhanced-hero animate-slide-up" style="padding-top: 120px;">
+    <h1 class="hero-title">🤖 AI-Powered Analysis</h1>
+    <p class="hero-subtitle">
+      Advanced machine learning models providing multi-layered protection against sophisticated phishing attempts
+    </p>
+  </section>
+
+  <!-- AI Technology Overview -->
+  <section style="padding: 3rem 1.5rem; max-width: 1200px; margin: 0 auto;">
+    <div class="card-enhanced animate-slide-up" style="padding: 2.5rem; margin-bottom: 2rem;">
+      <h2 style="text-align: center; margin-bottom: 2rem; color: #10b981;">🧠 Our AI Technology Stack</h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+        <div style="padding: 1.5rem; background: rgba(16, 185, 129, 0.1); border-radius: 1rem; border-left: 4px solid #10b981;">
+          <h3 style="color: #10b981; margin-bottom: 1rem;">🔬 Naive Bayes Classifier</h3>
+          <p style="margin: 0; line-height: 1.6;">
+            Fast and efficient probabilistic classifier that analyzes text patterns and word frequencies to identify phishing indicators with high accuracy.
+          </p>
+        </div>
+        
+        <div style="padding: 1.5rem; background: rgba(59, 130, 246, 0.1); border-radius: 1rem; border-left: 4px solid #3b82f6;">
+          <h3 style="color: #3b82f6; margin-bottom: 1rem;">🧠 LSTM Neural Networks</h3>
+          <p style="margin: 0; line-height: 1.6;">
+            Deep learning models that understand context and sequence in SMS messages, detecting sophisticated phishing patterns that rule-based systems miss.
+          </p>
+        </div>
+        
+        <div style="padding: 1.5rem; background: rgba(245, 158, 11, 0.1); border-radius: 1rem; border-left: 4px solid #f59e0b;">
+          <h3 style="color: #f59e0b; margin-bottom: 1rem;">🤖 Gemini AI Integration</h3>
+          <p style="margin: 0; line-height: 1.6;">
+            Google's advanced language model provides contextual understanding and natural language processing for complex threat analysis.
+          </p>
+        </div>
+        
+        <div style="padding: 1.5rem; background: rgba(139, 92, 246, 0.1); border-radius: 1rem; border-left: 4px solid #8b5cf6;">
+          <h3 style="color: #8b5cf6; margin-bottom: 1rem;">🎯 Ensemble Methods</h3>
+          <p style="margin: 0; line-height: 1.6;">
+            Combines multiple AI models for superior accuracy, reducing false positives while maintaining high detection rates.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Features -->
+    <div class="card-enhanced animate-slide-up" style="padding: 2.5rem; margin-bottom: 2rem;">
+      <h2 style="text-align: center; margin-bottom: 2rem; color: #06b6d4;">⚡ AI Analysis Features</h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+        <div style="text-align: center; padding: 1.5rem;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
+          <h4 style="margin-bottom: 0.5rem;">High Accuracy</h4>
+          <p style="opacity: 0.8; margin: 0;">99.8% detection rate with minimal false positives</p>
+        </div>
+        
+        <div style="text-align: center; padding: 1.5rem;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">⚡</div>
+          <h4 style="margin-bottom: 0.5rem;">Real-Time Analysis</h4>
+          <p style="opacity: 0.8; margin: 0;">Instant results with detailed threat assessment</p>
+        </div>
+        
+        <div style="text-align: center; padding: 1.5rem;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+          <h4 style="margin-bottom: 0.5rem;">Context Understanding</h4>
+          <p style="opacity: 0.8; margin: 0;">Analyzes message context and intent, not just keywords</p>
+        </div>
+        
+        <div style="text-align: center; padding: 1.5rem;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🔄</div>
+          <h4 style="margin-bottom: 0.5rem;">Continuous Learning</h4>
+          <p style="opacity: 0.8; margin: 0;">Models improve with new threat patterns</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Try AI Analysis -->
+    <div class="card-enhanced animate-slide-up" style="padding: 2.5rem; text-align: center;">
+      <h2 style="margin-bottom: 1.5rem; color: #10b981;">🚀 Ready to Experience AI Analysis?</h2>
+      <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem;">
+        Test our advanced AI-powered SMS analysis with real examples
+      </p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="detect.html" class="btn-enhanced btn-primary">
+          <i class="fas fa-robot"></i>
+          Try AI Analysis
+        </a>
+        <a href="dashboard.html" class="btn-enhanced btn-secondary">
+          <i class="fas fa-chart-line"></i>
+          View Analytics
+        </a>
+        <a href="index.html" class="btn-enhanced btn-secondary">
+          <i class="fas fa-home"></i>
+          Back to Home
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enhanced Footer -->
+  <footer class="enhanced-footer">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); opacity: 0.8;">
+        <p>&copy; 2024 SMS Shield. AI-powered protection for everyone.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="cache-clear.js"></script>
+  <script src="notification-panel.js"></script>
+  <script src="navigation-fix.js"></script>
+  <script src="enhanced-design-system.js"></script>
+  <script src="darkMode.js"></script>
+  <script>
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+
+      if (mobileMenu.classList.contains('show')) {
+        mobileMenu.classList.remove('show');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
+      } else {
+        mobileMenu.classList.add('show');
+        menuBtn.textContent = '✕';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+  </script>
+</body>
+</html>

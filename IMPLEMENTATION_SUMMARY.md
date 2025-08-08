@@ -25,7 +25,7 @@ SMS Phishing Detection System with Mobile App Integration
 
 ### ✅ AI Analysis
 - Gemini AI integration
-- DeepSeek AI integration
+- Gemini AI integration
 - Multiple ML models
 - Confidence scoring
 
@@ -66,7 +66,7 @@ SMS Phishing Detection System with Mobile App Integration
 
 ### AI Integration
 - `gemini-ai.js` - Gemini AI
-- `deepseek-ai.js` - DeepSeek AI
+
 - `api-manager.js` - API management
 - `ai-training-system.js` - Training system
 

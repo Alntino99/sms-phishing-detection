@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Optimized Features - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Enhanced Theme Toggle -->
+  <button class="nav-link theme-toggle-nav" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌙
+  </button>
+  
+  <!-- Cache Clear Button -->
+  <button class="cache-clear-btn" onclick="clearCacheAndReload()" aria-label="Clear cache" style="position: fixed; top: 20px; right: 80px; z-index: 1000; background: rgba(239, 68, 68, 0.9); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px);">
+    🔄
+  </button>
+
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="profile.html" class="nav-link">Profile</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="login.html" class="nav-link auth-link">Sign In</a>
+        <button class="nav-link theme-toggle-nav" onclick="toggleTheme()" aria-label="Toggle theme">
+          🌙
+        </button>
+      </nav>
+
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        ☰
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-links">
+        <a href="index.html" class="nav-link">🏠 Home</a>
+        <a href="detect.html" class="nav-link">🔍 Detect SMS</a>
+        <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+        <a href="profile.html" class="nav-link">👤 Profile</a>
+        <a href="about.html" class="nav-link">ℹ️ About</a>
+        <a href="contact.html" class="nav-link">📞 Contact</a>
+        <a href="login.html" class="nav-link">🔐 Sign In</a>
+        <button class="nav-link theme-toggle-nav" onclick="toggleTheme()" aria-label="Toggle theme">
+          🌙
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Features Hero Section -->
+  <section class="enhanced-hero animate-slide-up" style="padding-top: 120px;">
+    <h1 class="hero-title">📱 Mobile Optimized Features</h1>
+    <p class="hero-subtitle">
+      Seamlessly works across all devices with responsive design, offline capabilities, and integration with your device's SMS app
+    </p>
+  </section>
+
+  <!-- Mobile Features Overview -->
+  <section style="padding: 3rem 1.5rem; max-width: 1200px; margin: 0 auto;">
+    <div class="card-enhanced animate-slide-up" style="padding: 2.5rem; margin-bottom: 2rem;">
+      <h2 style="text-align: center; margin-bottom: 2rem; color: #06b6d4;">📱 Mobile-First Design</h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+        <div style="padding: 1.5rem; background: rgba(6, 182, 212, 0.1); border-radius: 1rem; border-left: 4px solid #06b6d4;">
+          <h3 style="color: #06b6d4; margin-bottom: 1rem;">📐 Responsive Design</h3>
+          <p style="margin: 0; line-height: 1.6;">
+            Perfectly adapts to any screen size - from smartphones to tablets to desktop computers, ensuring optimal user experience across all devices.
+          </p>
+        </div>
+        
+        <div style="padding: 1.5rem; background: rgba(16, 185, 129, 0.1); border-radius: 1rem; border-left: 4px solid #10b981;">
+          <h3 style="color: #10b981; margin-bottom: 1rem;">🔌 SMS Integration</h3>
+          <p style="margin: 0; line-height: 1.6;">
+            Direct integration with your device's SMS app for seamless message analysis without switching between applications.
+          </p>
+        </div>
+        
+        <div style="padding: 1.5rem; background: rgba(245, 158, 11, 0.1); border-radius: 1rem; border-left: 4px solid #f59e0b;">
+          <h3 style="color: #f59e0b; margin-bottom: 1rem;">⚡ Offline Capabilities</h3>
+          <p style="margin: 0; line-height: 1.6;">
+            Works without internet connection using local AI models, ensuring protection even when you're offline or have poor connectivity.
+          </p>
+        </div>
+        
+        <div style="padding: 1.5rem; background: rgba(139, 92, 246, 0.1); border-radius: 1rem; border-left: 4px solid #8b5cf6;">
+          <h3 style="color: #8b5cf6; margin-bottom: 1rem;">🎯 Touch Optimized</h3>
+          <p style="margin: 0; line-height: 1.6;">
+            Large touch targets, intuitive gestures, and mobile-friendly navigation designed specifically for touchscreen devices.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Features Grid -->
+    <div class="card-enhanced animate-slide-up" style="padding: 2.5rem; margin-bottom: 2rem;">
+      <h2 style="text-align: center; margin-bottom: 2rem; color: #10b981;">🚀 Mobile Features</h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+        <div style="text-align: center; padding: 1.5rem;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">📱</div>
+          <h4 style="margin-bottom: 0.5rem;">Progressive Web App</h4>
+          <p style="opacity: 0.8; margin: 0;">Install as a native app on your device</p>
+        </div>
+        
+        <div style="text-align: center; padding: 1.5rem;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🔔</div>
+          <h4 style="margin-bottom: 0.5rem;">Push Notifications</h4>
+          <p style="opacity: 0.8; margin: 0;">Instant alerts for detected threats</p>
+        </div>
+        
+        <div style="text-align: center; padding: 1.5rem;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">💾</div>
+          <h4 style="margin-bottom: 0.5rem;">Local Storage</h4>
+          <p style="opacity: 0.8; margin: 0;">Secure local data storage for privacy</p>
+        </div>
+        
+        <div style="text-align: center; padding: 1.5rem;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">⚡</div>
+          <h4 style="margin-bottom: 0.5rem;">Fast Loading</h4>
+          <p style="opacity: 0.8; margin: 0;">Optimized for quick response times</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Device Compatibility -->
+    <div class="card-enhanced animate-slide-up" style="padding: 2.5rem; margin-bottom: 2rem;">
+      <h2 style="text-align: center; margin-bottom: 2rem; color: #f59e0b;">📱 Device Compatibility</h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+        <div style="text-align: center; padding: 1.5rem; background: rgba(255, 255, 255, 0.05); border-radius: 1rem;">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📱</div>
+          <h4 style="margin-bottom: 0.5rem;">iOS Devices</h4>
+          <p style="opacity: 0.8; margin: 0; font-size: 0.9rem;">iPhone & iPad</p>
+        </div>
+        
+        <div style="text-align: center; padding: 1.5rem; background: rgba(255, 255, 255, 0.05); border-radius: 1rem;">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🤖</div>
+          <h4 style="margin-bottom: 0.5rem;">Android Devices</h4>
+          <p style="opacity: 0.8; margin: 0; font-size: 0.9rem;">Phones & Tablets</p>
+        </div>
+        
+        <div style="text-align: center; padding: 1.5rem; background: rgba(255, 255, 255, 0.05); border-radius: 1rem;">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">💻</div>
+          <h4 style="margin-bottom: 0.5rem;">Desktop</h4>
+          <p style="opacity: 0.8; margin: 0; font-size: 0.9rem;">Windows, Mac, Linux</p>
+        </div>
+        
+        <div style="text-align: center; padding: 1.5rem; background: rgba(255, 255, 255, 0.05); border-radius: 1rem;">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🌐</div>
+          <h4 style="margin-bottom: 0.5rem;">Web Browsers</h4>
+          <p style="opacity: 0.8; margin: 0; font-size: 0.9rem;">Chrome, Safari, Firefox</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Try Mobile Features -->
+    <div class="card-enhanced animate-slide-up" style="padding: 2.5rem; text-align: center;">
+      <h2 style="margin-bottom: 1.5rem; color: #06b6d4;">🚀 Experience Mobile Optimization</h2>
+      <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem;">
+        Test our mobile-optimized SMS detection features on any device
+      </p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="detect.html" class="btn-enhanced btn-primary">
+          <i class="fas fa-mobile-alt"></i>
+          Try Mobile Detection
+        </a>
+        <a href="mobile-sms-dashboard.html" class="btn-enhanced btn-secondary">
+          <i class="fas fa-chart-line"></i>
+          SMS Dashboard
+        </a>
+        <a href="index.html" class="btn-enhanced btn-secondary">
+          <i class="fas fa-home"></i>
+          Back to Home
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enhanced Footer -->
+  <footer class="enhanced-footer">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); opacity: 0.8;">
+        <p>&copy; 2024 SMS Shield. Mobile-first protection for everyone.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="cache-clear.js"></script>
+  <script src="navigation-fix.js"></script>
+  <script src="enhanced-design-system.js"></script>
+  <script src="darkMode.js"></script>
+  <script>
+    // Enhanced theme toggle
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const themeToggle = document.querySelector('.theme-toggle-nav');
+      const isDark = document.body.classList.contains('dark-mode');
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('darkMode', isDark);
+    }
+
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuBtn = document.querySelector('.mobile-menu-btn');
+
+      if (mobileMenu.classList.contains('show')) {
+        mobileMenu.classList.remove('show');
+        menuBtn.textContent = '☰';
+        document.body.style.overflow = '';
+      } else {
+        mobileMenu.classList.add('show');
+        menuBtn.textContent = '✕';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    // Load saved theme
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('darkMode');
+      if (savedTheme === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.theme-toggle-nav').textContent = '☀️';
+      }
+    });
+  </script>
+</body>
+</html>

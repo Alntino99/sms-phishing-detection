@@ -1,4 +1,52 @@
 {
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "**/*.exe",
+      "**/*.bat",
+      "**/*.ps1",
+      "**/*.sh",
+      "**/*.md",
+      "**/*.log",
+      "**/package-lock.json",
+      "**/package.json",
+      "**/requirements.txt",
+      "**/deploy-vercel.bat",
+      "**/deploy-vercel.ps1",
+      "**/deploy.bat",
+      "**/deploy.sh",
+      "**/start-server.ps1",
+      "**/FIREBASE_*.md",
+      "**/DEPLOYMENT_*.md",
+      "**/CROSS_PLATFORM_*.md",
+      "**/COMPREHENSIVE_*.md",
+      "**/BUTTON_FUNCTION_*.md",
+      "**/ERROR_HANDLING_*.md",
+      "**/FINAL_*.md",
+      "**/IMPLEMENTATION_*.md",
+      "**/LOGIN_*.md",
+      "**/MOBILE_*.md",
+      "**/NAVIGATION_*.md",
+      "**/TEST_*.md",
+      "**/VERCEL_*.md",
+      "**/DATASET_*.md",
+      "**/DEEPSEEK_*.md",
+      "**/GEMINI_*.md",
+      "**/FIXES_*.md",
+      "**/instance/**",
+      "**/.git/**",
+      "**/.idea/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
   "database": {
     "rules": "database.rules.json"
   }

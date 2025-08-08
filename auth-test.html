@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auth Test - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    .test-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .test-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-lg);
+      box-shadow: var(--glass-shadow);
+    }
+
+    .test-status {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .status-signed-in {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+
+    .status-signed-out {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+
+    .test-button {
+      background: var(--gradient-primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      cursor: pointer;
+      margin: 0.5rem;
+      transition: all var(--transition-normal);
+    }
+
+    .test-button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .test-button.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .user-info {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      border-radius: var(--radius-lg);
+      margin: 1rem 0;
+    }
+
+    .page-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .page-link {
+      background: var(--gradient-primary);
+      color: white;
+      text-decoration: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      transition: all var(--transition-normal);
+    }
+
+    .page-link:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+  </style>
+</head>
+<body>
+  <!-- Enhanced Theme Toggle -->
+  <button class="nav-link theme-toggle-nav" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌙
+  </button>
+
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="profile.html" class="nav-link">Profile</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="#" class="nav-link auth-link">Sign In</a>
+      </nav>
+
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        ☰
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-links">
+        <a href="index.html" class="nav-link">🏠 Home</a>
+        <a href="detect.html" class="nav-link">🔍 Detect SMS</a>
+        <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+        <a href="profile.html" class="nav-link">👤 Profile</a>
+        <a href="about.html" class="nav-link">ℹ️ About</a>
+        <a href="contact.html" class="nav-link">📞 Contact</a>
+        <a href="#" class="nav-link">🔐 Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="test-container">
+    <div class="test-card">
+      <h1>🔐 Authentication State Test</h1>
+      <p>This page tests the authentication state persistence across all pages.</p>
+      
+      <div id="authStatus" class="test-status status-signed-out">
+        Checking authentication status...
+      </div>
+      
+      <div id="userInfo" class="user-info" style="display: none;">
+        <h3>👤 User Information</h3>
+        <p><strong>Email:</strong> <span id="userEmail">-</span></p>
+        <p><strong>User ID:</strong> <span id="userId">-</span></p>
+        <p><strong>Login Time:</strong> <span id="loginTime">-</span></p>
+        <p><strong>Session Age:</strong> <span id="sessionAge">-</span></p>
+      </div>
+      
+      <div class="test-buttons">
+        <button class="test-button" onclick="testSignIn()">Test Sign In</button>
+        <button class="test-button secondary" onclick="testSignOut()">Test Sign Out</button>
+        <button class="test-button secondary" onclick="refreshStatus()">Refresh Status</button>
+        <button class="test-button secondary" onclick="clearSession()">Clear Session</button>
+      </div>
+    </div>
+
+    <div class="test-card">
+      <h2>🧪 Test Navigation</h2>
+      <p>Navigate to other pages to test if the authentication state persists:</p>
+      
+      <div class="page-links">
+        <a href="index.html" class="page-link">🏠 Home</a>
+        <a href="detect.html" class="page-link">🔍 Detect</a>
+        <a href="dashboard.html" class="page-link">📊 Dashboard</a>
+        <a href="profile.html" class="page-link">👤 Profile</a>
+        <a href="about.html" class="page-link">ℹ️ About</a>
+        <a href="contact.html" class="page-link">📞 Contact</a>
+        <a href="login.html" class="page-link">🔐 Login</a>
+        <a href="signup.html" class="page-link">📝 Sign Up</a>
+        <a href="logout.html" class="page-link">👋 Logout</a>
+      </div>
+    </div>
+
+    <div class="test-card">
+      <h2>📊 Test Results</h2>
+      <div id="testResults">
+        <p>Run tests to see results here...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="firebase-fixed.js"></script>
+  <script src="auth-state-manager.js"></script>
+  <script src="notification-system.js"></script>
+  <script src="navigation-fix.js"></script>
+  <script src="darkMode.js"></script>
+  <script>
+    // Test functions
+    function updateAuthStatus() {
+      const statusElement = document.getElementById('authStatus');
+      const userInfoElement = document.getElementById('userInfo');
+      const userEmailElement = document.getElementById('userEmail');
+      const userIdElement = document.getElementById('userId');
+      const loginTimeElement = document.getElementById('loginTime');
+      const sessionAgeElement = document.getElementById('sessionAge');
+      
+      if (authManager.isSignedIn()) {
+        const user = authManager.getCurrentUser();
+        statusElement.textContent = '✅ Signed In';
+        statusElement.className = 'test-status status-signed-in';
+        
+        userInfoElement.style.display = 'block';
+        userEmailElement.textContent = user.email;
+        userIdElement.textContent = user.uid;
+        
+        const loginDate = new Date(user.loginTime);
+        loginTimeElement.textContent = loginDate.toLocaleString();
+        
+        const now = Date.now();
+        const age = now - user.loginTime;
+        const hours = Math.floor(age / (1000 * 60 * 60));
+        const minutes = Math.floor((age % (1000 * 60 * 60)) / (1000 * 60));
+        sessionAgeElement.textContent = `${hours}h ${minutes}m`;
+        
+        addTestResult('✅ Authentication status: Signed In');
+      } else {
+        statusElement.textContent = '❌ Signed Out';
+        statusElement.className = 'test-status status-signed-out';
+        userInfoElement.style.display = 'none';
+        
+        addTestResult('❌ Authentication status: Signed Out');
+      }
+    }
+
+    function testSignIn() {
+      addTestResult('🧪 Testing sign in...');
+      
+      // Simulate sign in with test credentials
+      authManager.signIn('test@example.com', 'password123')
+        .then(() => {
+          addTestResult('✅ Test sign in successful');
+          updateAuthStatus();
+          showSuccess('Test sign in successful!', '✅ Test Complete');
+        })
+        .catch(error => {
+          addTestResult('❌ Test sign in failed: ' + error.message);
+          showError('Test sign in failed: ' + error.message, '❌ Test Failed');
+        });
+    }
+
+    function testSignOut() {
+      addTestResult('🧪 Testing sign out...');
+      
+      authManager.signOut()
+        .then(() => {
+          addTestResult('✅ Test sign out successful');
+          updateAuthStatus();
+          showSuccess('Test sign out successful!', '✅ Test Complete');
+        })
+        .catch(error => {
+          addTestResult('❌ Test sign out failed: ' + error.message);
+          showError('Test sign out failed: ' + error.message, '❌ Test Failed');
+        });
+    }
+
+    function refreshStatus() {
+      addTestResult('🔄 Refreshing authentication status...');
+      updateAuthStatus();
+      addTestResult('✅ Status refreshed');
+    }
+
+    function clearSession() {
+      addTestResult('🧹 Clearing session...');
+      localStorage.removeItem('current_user');
+      authManager.signOut();
+      updateAuthStatus();
+      addTestResult('✅ Session cleared');
+      showInfo('Session cleared successfully', '🧹 Session Cleared');
+    }
+
+    function addTestResult(message) {
+      const resultsElement = document.getElementById('testResults');
+      const timestamp = new Date().toLocaleTimeString();
+      const resultElement = document.createElement('p');
+      resultElement.innerHTML = `<strong>[${timestamp}]</strong> ${message}`;
+      resultsElement.appendChild(resultElement);
+      
+      // Keep only last 10 results
+      const results = resultsElement.querySelectorAll('p');
+      if (results.length > 10) {
+        resultsElement.removeChild(results[0]);
+      }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add auth state listener
+      authManager.addAuthListener((user) => {
+        updateAuthStatus();
+        if (user) {
+          addTestResult('🔄 Auth state changed: User signed in');
+        } else {
+          addTestResult('🔄 Auth state changed: User signed out');
+        }
+      });
+      
+      // Initial status update
+      updateAuthStatus();
+      
+      // Show welcome message
+      setTimeout(() => {
+        showInfo('Authentication test page loaded. Use the buttons to test auth state persistence.', '🧪 Auth Test');
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

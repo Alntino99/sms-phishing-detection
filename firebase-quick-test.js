@@ -221,3 +221,4 @@ window.testNotificationSystem = testNotificationSystem;
 
 console.log('🔥 Firebase Quick Test Script loaded');
 console.log('💡 Run runFirebaseTests() to start testing');
+

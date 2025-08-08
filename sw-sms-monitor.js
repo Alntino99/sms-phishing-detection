@@ -1,349 +1,583 @@
-// ===== SMS MONITORING SERVICE WORKER =====
-// Handles background SMS monitoring and notifications
+// SMS Monitoring Service Worker
+// Provides background SMS monitoring and analysis
 
-const CACHE_NAME = 'sms-monitor-v1';
-const STATIC_FILES = [
-    '/',
-    '/index.html',
-    '/detect.html',
-    '/mobile-test.html',
-    '/manifest.json',
-    '/favicon.svg',
-    '/ml-classifiers.js',
-    '/cross-platform-ml.js',
-    '/real-time-sms-monitor.js'
-];
+const CACHE_NAME = 'sms-shield-v1';
+const SMS_ANALYSIS_CACHE = 'sms-analyses';
 
-// Install event - cache static files
+// Install event - cache resources
 self.addEventListener('install', (event) => {
     console.log('📱 SMS Monitor Service Worker installing...');
+    
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                console.log('📱 Caching static files for SMS monitoring');
-                return cache.addAll(STATIC_FILES);
+                return cache.addAll([
+                    '/',
+                    '/index.html',
+                    '/detect.html',
+                    '/dashboard.html',
+                    '/mobile-sms-integration.js',
+                    '/gemini-ai.js',
+                    '/enhanced-design.css',
+                    '/mobile-enhancements.css',
+                    '/favicon.svg'
+                ]);
             })
-            .catch(error => {
-                console.log('📱 Cache installation failed:', error);
+            .then(() => {
+                console.log('✅ SMS Monitor Service Worker installed');
+                return self.skipWaiting();
             })
     );
-    self.skipWaiting();
 });
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
     console.log('📱 SMS Monitor Service Worker activating...');
+    
     event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (cacheName !== CACHE_NAME) {
-                        console.log('📱 Deleting old cache:', cacheName);
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
+        caches.keys()
+            .then(cacheNames => {
+                return Promise.all(
+                    cacheNames.map(cacheName => {
+                        if (cacheName !== CACHE_NAME) {
+                            console.log('🗑️ Deleting old cache:', cacheName);
+                            return caches.delete(cacheName);
+                        }
+                    })
+                );
+            })
+            .then(() => {
+                console.log('✅ SMS Monitor Service Worker activated');
+                return self.clients.claim();
+            })
     );
-    self.clients.claim();
 });
 
-// Background sync for SMS monitoring
-self.addEventListener('sync', (event) => {
-    console.log('🔄 Background sync triggered:', event.tag);
-    
-    if (event.tag === 'sms-check') {
-        event.waitUntil(checkForNewSMS());
+// Background SMS monitoring
+let smsMonitoringInterval = null;
+
+// Start SMS monitoring
+function startSMSMonitoring() {
+    if (smsMonitoringInterval) {
+        clearInterval(smsMonitoringInterval);
     }
-});
-
-// Handle push notifications
-self.addEventListener('push', (event) => {
-    console.log('🔔 Push notification received');
     
-    if (event.data) {
-        const data = event.data.json();
-        const options = {
-            body: data.message,
-            icon: '/favicon.svg',
-            badge: '/favicon.svg',
-            tag: 'sms-analysis',
-            data: data,
-            actions: [
+    // Check for new SMS every 15 seconds
+    smsMonitoringInterval = setInterval(async () => {
+        await checkForNewSMS();
+    }, 15000);
+    
+    console.log('📱 Background SMS monitoring started');
+}
+
+// Stop SMS monitoring
+function stopSMSMonitoring() {
+    if (smsMonitoringInterval) {
+        clearInterval(smsMonitoringInterval);
+        smsMonitoringInterval = null;
+    }
+    console.log('📱 Background SMS monitoring stopped');
+}
+
+// Check for new SMS messages
+async function checkForNewSMS() {
+    try {
+        // This would integrate with actual SMS APIs
+        // For demonstration, we'll simulate SMS detection
+        
+        // Check if we should simulate a new SMS (10% chance)
+        if (Math.random() < 0.1) {
+            const testMessages = [
                 {
-                    action: 'view',
-                    title: 'View Details'
+                    id: Date.now(),
+                    sender: '+1234567890',
+                    message: 'Your bank account has been suspended. Click here to verify: http://fake-bank-verify.com',
+                    timestamp: new Date().toISOString()
                 },
                 {
-                    action: 'dismiss',
-                    title: 'Dismiss'
+                    id: Date.now() + 1,
+                    sender: '+1987654321',
+                    message: 'Congratulations! You\'ve won $5000! Claim your prize now: http://fake-lottery-win.com',
+                    timestamp: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 2,
+                    sender: '+1555123456',
+                    message: 'Your package is ready for pickup. Click here to schedule: http://fake-delivery-pickup.com',
+                    timestamp: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 3,
+                    sender: '+1444567890',
+                    message: 'Your credit card has been charged $299.99. If this wasn\'t you, call immediately: 1-800-FAKE-BANK',
+                    timestamp: new Date().toISOString()
                 }
-            ]
-        };
-        
-        event.waitUntil(
-            self.registration.showNotification(data.title, options)
-        );
-    }
-});
-
-// Handle notification clicks
-self.addEventListener('notificationclick', (event) => {
-    console.log('🔔 Notification clicked:', event.action);
-    
-    event.notification.close();
-    
-    if (event.action === 'view') {
-        // Open the notification center
-        event.waitUntil(
-            clients.openWindow('/detect.html?notification=' + event.notification.data.notificationId)
-        );
-    }
-});
-
-// Handle messages from main thread
-self.addEventListener('message', (event) => {
-    console.log('📱 Message received in service worker:', event.data);
-    
-    switch (event.data.type) {
-        case 'START_MONITORING':
-            startSMSMonitoring();
-            break;
-        case 'STOP_MONITORING':
-            stopSMSMonitoring();
-            break;
-        case 'SMS_DETECTED':
-            handleSMSDetection(event.data.sms);
-            break;
-        case 'PERMISSION_REQUEST':
-            requestPermissions();
-            break;
-    }
-});
-
-// SMS monitoring functions
-let isMonitoring = false;
-let monitoringInterval = null;
-
-function startSMSMonitoring() {
-    if (isMonitoring) return;
-    
-    console.log('🚀 Starting SMS monitoring in service worker...');
-    isMonitoring = true;
-    
-    // Set up periodic SMS checks
-    monitoringInterval = setInterval(() => {
-        checkForNewSMS();
-    }, 30000); // Check every 30 seconds
-    
-    // Also check immediately
-    checkForNewSMS();
-    
-    // Notify main thread
-    notifyMainThread({
-        type: 'MONITORING_STARTED',
-        status: 'active'
-    });
-}
-
-function stopSMSMonitoring() {
-    console.log('⏹️ Stopping SMS monitoring in service worker...');
-    isMonitoring = false;
-    
-    if (monitoringInterval) {
-        clearInterval(monitoringInterval);
-        monitoringInterval = null;
-    }
-    
-    // Notify main thread
-    notifyMainThread({
-        type: 'MONITORING_STOPPED',
-        status: 'inactive'
-    });
-}
-
-async function checkForNewSMS() {
-    if (!isMonitoring) return;
-    
-    try {
-        console.log('📱 Checking for new SMS...');
-        
-        // In a real implementation, this would access the device's SMS API
-        // For now, we'll simulate SMS detection
-        await simulateSMSDetection();
-        
+            ];
+            
+            const randomSMS = testMessages[Math.floor(Math.random() * testMessages.length)];
+            await processIncomingSMS(randomSMS);
+        }
     } catch (error) {
         console.error('❌ SMS check failed:', error);
     }
 }
 
-async function simulateSMSDetection() {
-    // Simulate incoming SMS for testing
-    const testSMS = [
-        {
-            id: Date.now(),
-            sender: '+1234567890',
-            message: "URGENT: Your bank account has been suspended. Click here to verify: http://fake-bank.com",
-            timestamp: new Date().toISOString()
-        },
-        {
-            id: Date.now() + 1,
-            sender: '+1987654321',
-            message: "Congratulations! You've won $1,000,000. Claim now: http://fake-prize.com",
-            timestamp: new Date().toISOString()
-        },
-        {
-            id: Date.now() + 2,
-            sender: '+1555123456',
-            message: "Your package has been delivered. Track here: http://legitimate-delivery.com",
-            timestamp: new Date().toISOString()
-        },
-        {
-            id: Date.now() + 3,
-            sender: '+1444567890',
-            message: "Security alert: Unusual login detected. Verify here: http://fake-security.com",
-            timestamp: new Date().toISOString()
-        }
-    ];
-    
-    // Randomly select an SMS for testing
-    const randomSMS = testSMS[Math.floor(Math.random() * testSMS.length)];
-    
-    // Simulate SMS reception with random delay
-    setTimeout(() => {
-        handleSMSDetection(randomSMS);
-    }, Math.random() * 10000);
-}
-
-async function handleSMSDetection(sms) {
-    console.log('📱 SMS detected in service worker:', sms);
-    
-    // Analyze the SMS
-    const analysis = await analyzeSMS(sms.message);
-    
-    // Create notification data
-    const notificationData = {
-        id: Date.now(),
-        type: 'sms_analysis',
-        title: analysis.isPhishing ? '🚨 Phishing SMS Detected!' : '✅ Safe SMS',
-        message: sms.message,
-        sender: sms.sender,
-        timestamp: new Date().toISOString(),
-        analysis: analysis,
-        isRead: false
-    };
-    
-    // Send to main thread
-    notifyMainThread({
-        type: 'SMS_RECEIVED',
-        sms: sms,
-        notification: notificationData
-    });
-    
-    // Show push notification
-    await showPushNotification(notificationData);
-}
-
-async function analyzeSMS(message) {
-    // Simple keyword-based analysis for service worker
-    const suspiciousKeywords = ['urgent', 'bank', 'password', 'click', 'verify', 'suspended', 'locked', 'prize', 'won', 'claim'];
-    const foundKeywords = suspiciousKeywords.filter(keyword => 
-        message.toLowerCase().includes(keyword)
-    );
-    
-    const isPhishing = foundKeywords.length > 0;
-    const confidence = Math.min(0.9, foundKeywords.length * 0.2);
-    
-    return {
-        isPhishing: isPhishing,
-        confidence: confidence,
-        riskLevel: isPhishing ? 'High' : 'Low',
-        keywords: foundKeywords
-    };
-}
-
-async function showPushNotification(notification) {
-    const options = {
-        body: notification.message,
-        icon: '/favicon.svg',
-        badge: '/favicon.svg',
-        tag: 'sms-analysis',
-        data: {
-            notificationId: notification.id,
-            analysis: notification.analysis
-        },
-        actions: [
-            {
-                action: 'view',
-                title: 'View Details'
-            },
-            {
-                action: 'dismiss',
-                title: 'Dismiss'
-            }
-        ]
-    };
-    
+// Process incoming SMS
+async function processIncomingSMS(smsData) {
     try {
-        await self.registration.showNotification(notification.title, options);
-        console.log('🔔 Push notification sent from service worker');
+        console.log('📱 New SMS detected:', smsData);
+        
+        // Analyze the SMS
+        const analysis = await analyzeSMS(smsData.message);
+        
+        // Store analysis result
+        await storeSMSAnalysis({
+            ...smsData,
+            analysis,
+            processedAt: new Date().toISOString()
+        });
+        
+        // Send notification to user
+        await sendSMSNotification(smsData, analysis);
+        
+        // Notify all clients
+        await notifyClients('new-sms', {
+            sms: smsData,
+            analysis: analysis
+        });
+        
+        console.log('✅ SMS processed:', analysis);
+        
     } catch (error) {
-        console.error('❌ Push notification failed:', error);
+        console.error('❌ SMS processing failed:', error);
     }
 }
 
-function notifyMainThread(data) {
-    self.clients.matchAll().then(clients => {
-        clients.forEach(client => {
-            client.postMessage(data);
+// Analyze SMS using AI/rule-based system
+async function analyzeSMS(message) {
+    try {
+        // Rule-based analysis (same as in main integration)
+        const phishingKeywords = [
+            'urgent', 'account suspended', 'verify now', 'click here',
+            'bank account', 'credit card', 'social security', 'tax refund',
+            'lottery winner', 'inheritance', 'free money', 'limited time',
+            'account locked', 'security alert', 'verify identity'
+        ];
+        
+        const suspiciousPatterns = [
+            /https?:\/\/[^\s]+/g,  // URLs
+            /\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b/g,  // Credit card numbers
+            /\b\d{3}-\d{2}-\d{4}\b/g,  // SSN pattern
+        ];
+        
+        let score = 0;
+        const reasons = [];
+        
+        // Check for phishing keywords
+        const lowerMessage = message.toLowerCase();
+        phishingKeywords.forEach(keyword => {
+            if (lowerMessage.includes(keyword)) {
+                score += 20;
+                reasons.push(`Contains suspicious keyword: "${keyword}"`);
+            }
         });
+        
+        // Check for suspicious patterns
+        suspiciousPatterns.forEach(pattern => {
+            if (pattern.test(message)) {
+                score += 15;
+                reasons.push('Contains suspicious pattern');
+            }
+        });
+        
+        // Check for urgency indicators
+        const urgencyWords = ['urgent', 'immediate', 'now', 'quick', 'fast'];
+        urgencyWords.forEach(word => {
+            if (lowerMessage.includes(word)) {
+                score += 10;
+                reasons.push('Contains urgency indicators');
+            }
+        });
+        
+        const isPhishing = score >= 30;
+        const confidence = Math.min(score, 100);
+        
+        return {
+            isPhishing,
+            confidence,
+            reason: reasons.join('; '),
+            recommendations: isPhishing ? [
+                'Do not click any links',
+                'Do not provide personal information',
+                'Contact the sender through official channels',
+                'Report as spam if suspicious'
+            ] : [
+                'Message appears safe',
+                'Continue with normal communication'
+            ]
+        };
+        
+    } catch (error) {
+        console.error('SMS analysis failed:', error);
+        return {
+            isPhishing: false,
+            confidence: 0,
+            reason: 'Analysis failed',
+            recommendations: ['Unable to analyze message']
+        };
+    }
+}
+
+// Store SMS analysis in cache
+async function storeSMSAnalysis(analysisData) {
+    try {
+        const cache = await caches.open(SMS_ANALYSIS_CACHE);
+        const response = new Response(JSON.stringify(analysisData));
+        await cache.put(`sms-${analysisData.id}`, response);
+        
+        // Also store in IndexedDB for better persistence
+        await storeInIndexedDB(analysisData);
+        
+    } catch (error) {
+        console.error('Failed to store SMS analysis:', error);
+    }
+}
+
+// Store in IndexedDB
+async function storeInIndexedDB(analysisData) {
+    try {
+        const db = await openIndexedDB();
+        const transaction = db.transaction(['smsAnalyses'], 'readwrite');
+        const store = transaction.objectStore('smsAnalyses');
+        
+        await store.add(analysisData);
+        
+    } catch (error) {
+        console.error('IndexedDB storage failed:', error);
+    }
+}
+
+// Open IndexedDB
+async function openIndexedDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open('SMSShieldDB', 1);
+        
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => resolve(request.result);
+        
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            
+            // Create object store for SMS analyses
+            if (!db.objectStoreNames.contains('smsAnalyses')) {
+                const store = db.createObjectStore('smsAnalyses', { keyPath: 'id' });
+                store.createIndex('timestamp', 'timestamp', { unique: false });
+                store.createIndex('isPhishing', 'analysis.isPhishing', { unique: false });
+            }
+        };
     });
 }
 
-async function requestPermissions() {
-    console.log('🔐 Requesting permissions in service worker...');
-    
-    // Request notification permission
-    if ('Notification' in self) {
-        const permission = await Notification.requestPermission();
-        console.log('🔔 Notification permission:', permission);
+// Send SMS notification
+async function sendSMSNotification(smsData, analysis) {
+    try {
+        const title = analysis.isPhishing ? '🚨 Phishing Alert!' : '✅ Safe Message';
+        const body = analysis.isPhishing 
+            ? `Suspicious SMS from ${smsData.sender}: ${analysis.reason}`
+            : `Safe message from ${smsData.sender}`;
         
-        notifyMainThread({
-            type: 'PERMISSION_UPDATE',
-            permissions: {
-                notifications: permission === 'granted'
-            }
-        });
+        const options = {
+            body: body,
+            icon: '/favicon.svg',
+            badge: '/favicon.svg',
+            tag: `sms-${smsData.id}`,
+            requireInteraction: analysis.isPhishing,
+            data: {
+                smsId: smsData.id,
+                analysis: analysis
+            },
+            actions: analysis.isPhishing ? [
+                {
+                    action: 'report',
+                    title: 'Report as Spam'
+                },
+                {
+                    action: 'block',
+                    title: 'Block Sender'
+                },
+                {
+                    action: 'view',
+                    title: 'View Details'
+                }
+            ] : [
+                {
+                    action: 'view',
+                    title: 'View Details'
+                }
+            ]
+        };
+        
+        await self.registration.showNotification(title, options);
+        
+    } catch (error) {
+        console.error('Notification failed:', error);
     }
 }
 
-// Handle fetch events
-self.addEventListener('fetch', (event) => {
-    // Handle API requests
-    if (event.request.url.includes('/api/')) {
-        event.respondWith(handleAPIRequest(event.request));
-    } else {
-        // Serve from cache for static files
-        event.respondWith(
-            caches.match(event.request)
-                .then(response => {
-                    return response || fetch(event.request);
+// Notify all clients
+async function notifyClients(type, data) {
+    try {
+        const clients = await self.clients.matchAll();
+        
+        clients.forEach(client => {
+            client.postMessage({
+                type: type,
+                data: data,
+                timestamp: new Date().toISOString()
+            });
+        });
+        
+    } catch (error) {
+        console.error('Client notification failed:', error);
+    }
+}
+
+// Handle push notifications
+self.addEventListener('push', (event) => {
+    console.log('📱 Push notification received:', event);
+    
+    if (event.data) {
+        const data = event.data.json();
+        
+        if (data.type === 'sms-alert') {
+            event.waitUntil(
+                sendSMSNotification(data.sms, data.analysis)
+            );
+        }
+    }
+});
+
+// Handle notification clicks
+self.addEventListener('notificationclick', (event) => {
+    console.log('📱 Notification clicked:', event);
+    
+    event.notification.close();
+    
+    const data = event.notification.data;
+    
+    if (event.action === 'view' || !event.action) {
+        // Open the app and show SMS details
+        event.waitUntil(
+            self.clients.matchAll()
+                .then(clients => {
+                    if (clients.length > 0) {
+                        // Focus existing client
+                        return clients[0].focus();
+                    } else {
+                        // Open new client
+                        return self.clients.openWindow('/detect.html');
+                    }
                 })
+                .then(client => {
+                    if (client && data) {
+                        // Send SMS data to client
+                        client.postMessage({
+                            type: 'show-sms-details',
+                            data: data
+                        });
+                    }
+                })
+        );
+    } else if (event.action === 'report') {
+        // Report as spam
+        event.waitUntil(
+            reportAsSpam(data.smsId)
+        );
+    } else if (event.action === 'block') {
+        // Block sender
+        event.waitUntil(
+            blockSender(data.smsId)
         );
     }
 });
 
-async function handleAPIRequest(request) {
+// Report SMS as spam
+async function reportAsSpam(smsId) {
     try {
-        const response = await fetch(request);
-        return response;
-    } catch (error) {
-        console.error('❌ API request failed:', error);
-        return new Response(JSON.stringify({ error: 'Network error' }), {
-            status: 500,
-            headers: { 'Content-Type': 'application/json' }
+        console.log('🚫 Reporting SMS as spam:', smsId);
+        
+        // Store in spam list
+        const spamList = JSON.parse(localStorage.getItem('spam_list') || '[]');
+        spamList.push({
+            id: smsId,
+            reportedAt: new Date().toISOString()
         });
+        localStorage.setItem('spam_list', JSON.stringify(spamList));
+        
+        // Notify clients
+        await notifyClients('spam-reported', { smsId });
+        
+    } catch (error) {
+        console.error('Spam reporting failed:', error);
     }
 }
 
-console.log('✅ SMS Monitor Service Worker loaded'); 
+// Block sender
+async function blockSender(smsId) {
+    try {
+        console.log('🚫 Blocking sender for SMS:', smsId);
+        
+        // Store in blocked list
+        const blockedList = JSON.parse(localStorage.getItem('blocked_list') || '[]');
+        blockedList.push({
+            smsId: smsId,
+            blockedAt: new Date().toISOString()
+        });
+        localStorage.setItem('blocked_list', JSON.stringify(blockedList));
+        
+        // Notify clients
+        await notifyClients('sender-blocked', { smsId });
+        
+    } catch (error) {
+        console.error('Sender blocking failed:', error);
+    }
+}
+
+// Handle messages from clients
+self.addEventListener('message', (event) => {
+    console.log('📱 Message from client:', event.data);
+    
+    const { type, data } = event.data;
+    
+    switch (type) {
+        case 'start-monitoring':
+            startSMSMonitoring();
+            event.ports[0].postMessage({ success: true });
+            break;
+            
+        case 'stop-monitoring':
+            stopSMSMonitoring();
+            event.ports[0].postMessage({ success: true });
+            break;
+            
+        case 'get-status':
+            event.ports[0].postMessage({
+                monitoring: smsMonitoringInterval !== null,
+                timestamp: new Date().toISOString()
+            });
+            break;
+            
+        case 'test-sms':
+            event.waitUntil(
+                processIncomingSMS({
+                    id: Date.now(),
+                    sender: '+1234567890',
+                    message: data.message || 'Test SMS message',
+                    timestamp: new Date().toISOString()
+                })
+            );
+            break;
+            
+        default:
+            console.log('Unknown message type:', type);
+    }
+});
+
+// Handle fetch events
+self.addEventListener('fetch', (event) => {
+    const url = new URL(event.request.url);
+    
+    // Handle SMS-related API calls
+    if (url.pathname.startsWith('/api/sms/')) {
+        event.respondWith(handleSMSAPI(event.request));
+        return;
+    }
+    
+    // Cache-first strategy for other resources
+    event.respondWith(
+        caches.match(event.request)
+            .then(response => {
+                return response || fetch(event.request);
+            })
+    );
+});
+
+// Handle SMS API calls
+async function handleSMSAPI(request) {
+    try {
+        const url = new URL(request.url);
+        
+        if (url.pathname === '/api/sms/status') {
+            return new Response(JSON.stringify({
+                monitoring: smsMonitoringInterval !== null,
+                timestamp: new Date().toISOString()
+            }), {
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+        
+        if (url.pathname === '/api/sms/history') {
+            const analyses = await getSMSHistory();
+            return new Response(JSON.stringify(analyses), {
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+        
+        if (url.pathname === '/api/sms/clear') {
+            await clearSMSHistory();
+            return new Response(JSON.stringify({ success: true }), {
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+        
+        return new Response('Not found', { status: 404 });
+        
+    } catch (error) {
+        console.error('SMS API error:', error);
+        return new Response('Internal error', { status: 500 });
+    }
+}
+
+// Get SMS history
+async function getSMSHistory() {
+    try {
+        const db = await openIndexedDB();
+        const transaction = db.transaction(['smsAnalyses'], 'readonly');
+        const store = transaction.objectStore('smsAnalyses');
+        
+        return await store.getAll();
+        
+    } catch (error) {
+        console.error('Failed to get SMS history:', error);
+        return [];
+    }
+}
+
+// Clear SMS history
+async function clearSMSHistory() {
+    try {
+        const db = await openIndexedDB();
+        const transaction = db.transaction(['smsAnalyses'], 'readwrite');
+        const store = transaction.objectStore('smsAnalyses');
+        
+        await store.clear();
+        
+        // Also clear cache
+        const cache = await caches.open(SMS_ANALYSIS_CACHE);
+        await cache.keys().then(keys => {
+            return Promise.all(keys.map(key => cache.delete(key)));
+        });
+        
+    } catch (error) {
+        console.error('Failed to clear SMS history:', error);
+    }
+}
+
+// Start monitoring when service worker activates
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        startSMSMonitoring()
+    );
+});
+
+console.log('📱 SMS Monitor Service Worker loaded'); 

@@ -13,7 +13,7 @@
 </head>
 <body>
   <!-- Enhanced Theme Toggle -->
-  <button class="theme-toggle-enhanced" onclick="toggleTheme()" aria-label="Toggle theme">
+  <button class="nav-link theme-toggle-nav" onclick="toggleTheme()" aria-label="Toggle theme">
     🌙
   </button>
   
@@ -112,13 +112,13 @@
   <script src="navigation-fix.js"></script>
   <script src="darkMode.js"></script>
   <script>
-    // Enhanced theme toggle
+    // Enhanced theme toggle - now handled by darkMode.js
     function toggleTheme() {
-      document.body.classList.toggle('dark-mode');
-      const themeToggle = document.querySelector('.theme-toggle-enhanced');
-      const isDark = document.body.classList.contains('dark-mode');
-      themeToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('darkMode', isDark);
+      // This function is now handled by the global darkMode.js
+      // Call the global function
+      if (typeof window.toggleTheme === 'function') {
+        window.toggleTheme();
+      }
     }
 
     // Mobile menu toggle
@@ -137,14 +137,7 @@
       }
     }
 
-    // Load saved theme
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedTheme = localStorage.getItem('darkMode');
-      if (savedTheme === 'true') {
-        document.body.classList.add('dark-mode');
-        document.querySelector('.theme-toggle-enhanced').textContent = '☀️';
-      }
-    });
+    // Theme is now handled by darkMode.js
   </script>
 </body>
 </html>

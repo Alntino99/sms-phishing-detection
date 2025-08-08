@@ -13,7 +13,7 @@
 </head>
 <body>
   <!-- Enhanced Theme Toggle -->
-  <button class="theme-toggle-enhanced" onclick="toggleTheme()" aria-label="Toggle theme">
+  <button class="theme-toggle-enhanced" aria-label="Toggle theme" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: rgba(59, 130, 246, 0.9); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s ease;">
     🌙
   </button>
   
@@ -146,17 +146,8 @@
   <script src="cache-clear.js"></script>
   <script src="navigation-fix.js"></script>
   <script src="enhanced-design-system.js"></script>
-  <script src="darkMode.js"></script>
+  <script src="darkMode-fixed.js"></script>
   <script>
-    // Enhanced theme toggle
-    function toggleTheme() {
-      document.body.classList.toggle('dark-mode');
-      const themeToggle = document.querySelector('.theme-toggle-enhanced');
-      const isDark = document.body.classList.contains('dark-mode');
-      themeToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('darkMode', isDark);
-    }
-
     // Mobile menu toggle
     function toggleMobileMenu() {
       const mobileMenu = document.getElementById('mobileMenu');
@@ -172,15 +163,6 @@
         document.body.style.overflow = 'hidden';
       }
     }
-
-    // Load saved theme
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedTheme = localStorage.getItem('darkMode');
-      if (savedTheme === 'true') {
-        document.body.classList.add('dark-mode');
-        document.querySelector('.theme-toggle-enhanced').textContent = '☀️';
-      }
-    });
   </script>
 </body>
 </html>

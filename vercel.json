@@ -64,6 +64,10 @@
       "destination": "/signup.html"
     },
     {
+      "source": "/signin",
+      "destination": "/login.html"
+    },
+    {
       "source": "/detect",
       "destination": "/detect.html"
     },

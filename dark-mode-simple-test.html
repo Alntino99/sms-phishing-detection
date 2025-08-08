@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dark Mode Simple Test - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Enhanced Theme Toggle -->
+  <button class="theme-toggle-enhanced" aria-label="Toggle theme" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: rgba(59, 130, 246, 0.9); color: white; border: none; padding: 10px; border-radius: 50%; cursor: pointer; font-size: 16px; backdrop-filter: blur(10px); transition: all 0.3s ease;">
+    🌙
+  </button>
+
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <section class="enhanced-hero animate-slide-up" style="padding-top: 120px;">
+    <h1 class="hero-title">🌙 Dark Mode Test</h1>
+    <p class="hero-subtitle">
+      Simple test to verify dark mode functionality
+    </p>
+  </section>
+
+  <section style="padding: 3rem 1.5rem; max-width: 800px; margin: 0 auto;">
+    <div class="card-enhanced animate-slide-up" style="padding: 2rem;">
+      <h2 style="text-align: center; margin-bottom: 2rem;">🎯 Dark Mode Status</h2>
+      
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <p><strong>Current Theme:</strong> <span id="currentTheme">Loading...</span></p>
+        <p><strong>Button Text:</strong> <span id="buttonText">Loading...</span></p>
+        <p><strong>LocalStorage:</strong> <span id="localStorageValue">Loading...</span></p>
+      </div>
+      
+      <div style="text-align: center;">
+        <p>Click the 🌙/☀️ button in the top-right corner to test dark mode!</p>
+        <p>You should see the page background and colors change.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scripts -->
+  <script src="darkMode-fixed.js"></script>
+  <script>
+    // Update status display
+    function updateStatus() {
+      const body = document.body;
+      const isDark = body.classList.contains('dark-mode');
+      const currentTheme = document.getElementById('currentTheme');
+      const buttonText = document.getElementById('buttonText');
+      const localStorageValue = document.getElementById('localStorageValue');
+      
+      // Update text
+      currentTheme.textContent = isDark ? 'Dark' : 'Light';
+      
+      // Get button text
+      const themeButton = document.querySelector('.theme-toggle-enhanced');
+      buttonText.textContent = themeButton ? themeButton.textContent : 'Button not found';
+      
+      // Get localStorage value
+      const savedTheme = localStorage.getItem('theme');
+      localStorageValue.textContent = savedTheme || 'Not set';
+    }
+
+    // Update status every second
+    setInterval(updateStatus, 1000);
+    
+    // Initial update
+    setTimeout(updateStatus, 500);
+  </script>
+</body>
+</html>

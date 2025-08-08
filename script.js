@@ -11,24 +11,8 @@ if (typeof firebase === 'undefined') {
   document.head.appendChild(script3);
 }
 
-// Firebase configuration - using your actual config
-const firebaseConfig = {
-  apiKey: "AIzaSyBJqVavJpv6YaHvzJi49-fI2LsvTYGqijw",
-  authDomain: "smsphising.firebaseapp.com",
-  projectId: "smsphising",
-  storageBucket: "smsphising.firebasestorage.app",
-  messagingSenderId: "92088698439",
-  appId: "1:92088698439:web:bae163a42c9996ee6e5362",
-  measurementId: "G-72619E1HYY"
-};
-
-// Initialize Firebase
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-
-const auth = firebase.auth();
-const db = firebase.database(); // Use Realtime Database, not Firestore
+// Firebase services - will be initialized by firebase-fixed.js
+let auth, db;
 
 // ===== NAIVE BAYES CLASSIFIER IMPLEMENTATION =====
 
@@ -330,6 +314,583 @@ class LSTMClassifier {
   }
 }
 
+// ===== SUPPORT VECTOR MACHINE (SVM) IMPLEMENTATION =====
+
+class SVMClassifier {
+  constructor() {
+    this.supportVectors = [];
+    this.alphas = [];
+    this.bias = 0;
+    this.isTrained = false;
+    this.vocabulary = new Set();
+    this.featureVectors = [];
+    this.labels = [];
+  }
+
+  preprocessText(text) {
+    return text.toLowerCase()
+      .replace(/[^\w\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .split(' ')
+      .filter(word => word.length > 2);
+  }
+
+  buildVocabulary(trainingData) {
+    trainingData.forEach(item => {
+      const words = this.preprocessText(item.text);
+      words.forEach(word => this.vocabulary.add(word));
+    });
+  }
+
+  textToFeatureVector(text) {
+    const words = this.preprocessText(text);
+    const featureVector = [];
+    
+    this.vocabulary.forEach(word => {
+      const count = words.filter(w => w === word).length;
+      featureVector.push(count);
+    });
+    
+    return featureVector;
+  }
+
+  kernelFunction(x1, x2) {
+    // Linear kernel implementation
+    let dotProduct = 0;
+    for (let i = 0; i < x1.length; i++) {
+      dotProduct += x1[i] * x2[i];
+    }
+    return dotProduct;
+  }
+
+  train(trainingData, maxIterations = 100, learningRate = 0.01) {
+    console.log('Training SVM classifier...');
+    this.buildVocabulary(trainingData);
+    
+    // Convert training data to feature vectors
+    this.featureVectors = trainingData.map(item => this.textToFeatureVector(item.text));
+    this.labels = trainingData.map(item => item.label === 'phishing' ? 1 : -1);
+    
+    // Initialize alphas
+    this.alphas = new Array(trainingData.length).fill(0);
+    this.bias = 0;
+    
+    // Simplified SMO (Sequential Minimal Optimization) algorithm
+    for (let iteration = 0; iteration < maxIterations; iteration++) {
+      let numChanged = 0;
+      
+      for (let i = 0; i < trainingData.length; i++) {
+        const xi = this.featureVectors[i];
+        const yi = this.labels[i];
+        
+        // Calculate prediction
+        let prediction = 0;
+        for (let j = 0; j < trainingData.length; j++) {
+          if (this.alphas[j] > 0) {
+            prediction += this.alphas[j] * this.labels[j] * this.kernelFunction(xi, this.featureVectors[j]);
+          }
+        }
+        prediction += this.bias;
+        
+        const error = prediction - yi;
+        
+        // Simplified update rule
+        if ((yi * error < -0.001 && this.alphas[i] < 1) || 
+            (yi * error > 0.001 && this.alphas[i] > 0)) {
+          
+          const oldAlpha = this.alphas[i];
+          this.alphas[i] = Math.max(0, Math.min(1, this.alphas[i] + learningRate * error));
+          
+          if (Math.abs(this.alphas[i] - oldAlpha) > 0.00001) {
+            numChanged++;
+          }
+        }
+      }
+      
+      if (numChanged === 0) break;
+    }
+    
+    // Calculate support vectors and bias
+    this.supportVectors = [];
+    for (let i = 0; i < trainingData.length; i++) {
+      if (this.alphas[i] > 0.001) {
+        this.supportVectors.push({
+          vector: this.featureVectors[i],
+          alpha: this.alphas[i],
+          label: this.labels[i]
+        });
+      }
+    }
+    
+    this.isTrained = true;
+    console.log(`SVM training complete! Support vectors: ${this.supportVectors.length}`);
+  }
+
+  predict(text) {
+    if (!this.isTrained) {
+      throw new Error('SVM classifier not trained yet!');
+    }
+
+    const featureVector = this.textToFeatureVector(text);
+    let prediction = 0;
+    
+    this.supportVectors.forEach(sv => {
+      prediction += sv.alpha * sv.label * this.kernelFunction(featureVector, sv.vector);
+    });
+    prediction += this.bias;
+    
+    const isPhishing = prediction > 0;
+    const confidence = Math.min(0.95, Math.max(0.05, Math.abs(prediction)));
+    
+    return {
+      isPhishing: isPhishing,
+      confidence: confidence,
+      score: prediction,
+      supportVectors: this.supportVectors.length
+    };
+  }
+}
+
+// ===== DECISION TREE CLASSIFIER IMPLEMENTATION =====
+
+class DecisionTreeClassifier {
+  constructor() {
+    this.root = null;
+    this.isTrained = false;
+    this.features = [];
+    this.maxDepth = 10;
+  }
+
+  preprocessText(text) {
+    return text.toLowerCase()
+      .replace(/[^\w\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .split(' ')
+      .filter(word => word.length > 2);
+  }
+
+  extractFeatures(trainingData) {
+    const allWords = new Set();
+    trainingData.forEach(item => {
+      const words = this.preprocessText(item.text);
+      words.forEach(word => allWords.add(word));
+    });
+    
+    // Select top features by frequency
+    const wordCounts = {};
+    trainingData.forEach(item => {
+      const words = this.preprocessText(item.text);
+      words.forEach(word => {
+        wordCounts[word] = (wordCounts[word] || 0) + 1;
+      });
+    });
+    
+    this.features = Object.entries(wordCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 50) // Top 50 features
+      .map(([word]) => word);
+  }
+
+  textToFeatureVector(text) {
+    const words = this.preprocessText(text);
+    const featureVector = [];
+    
+    this.features.forEach(feature => {
+      featureVector.push(words.includes(feature) ? 1 : 0);
+    });
+    
+    return featureVector;
+  }
+
+  calculateEntropy(labels) {
+    const counts = {};
+    labels.forEach(label => {
+      counts[label] = (counts[label] || 0) + 1;
+    });
+    
+    let entropy = 0;
+    const total = labels.length;
+    Object.values(counts).forEach(count => {
+      const p = count / total;
+      entropy -= p * Math.log2(p);
+    });
+    
+    return entropy;
+  }
+
+  findBestSplit(featureVectors, labels, depth) {
+    if (depth >= this.maxDepth || labels.length < 5) {
+      return null;
+    }
+    
+    const numFeatures = featureVectors[0].length;
+    let bestFeature = -1;
+    let bestThreshold = 0;
+    let bestInfoGain = -1;
+    
+    for (let feature = 0; feature < numFeatures; feature++) {
+      const values = featureVectors.map(v => v[feature]);
+      const uniqueValues = [...new Set(values)].sort((a, b) => a - b);
+      
+      for (let i = 0; i < uniqueValues.length - 1; i++) {
+        const threshold = (uniqueValues[i] + uniqueValues[i + 1]) / 2;
+        
+        const leftLabels = [];
+        const rightLabels = [];
+        
+        featureVectors.forEach((vector, index) => {
+          if (vector[feature] <= threshold) {
+            leftLabels.push(labels[index]);
+          } else {
+            rightLabels.push(labels[index]);
+          }
+        });
+        
+        if (leftLabels.length === 0 || rightLabels.length === 0) continue;
+        
+        const parentEntropy = this.calculateEntropy(labels);
+        const leftEntropy = this.calculateEntropy(leftLabels);
+        const rightEntropy = this.calculateEntropy(rightLabels);
+        
+        const infoGain = parentEntropy - 
+          (leftLabels.length / labels.length) * leftEntropy -
+          (rightLabels.length / labels.length) * rightEntropy;
+        
+        if (infoGain > bestInfoGain) {
+          bestInfoGain = infoGain;
+          bestFeature = feature;
+          bestThreshold = threshold;
+        }
+      }
+    }
+    
+    return bestInfoGain > 0 ? { feature: bestFeature, threshold: bestThreshold } : null;
+  }
+
+  buildTree(featureVectors, labels, depth = 0) {
+    const uniqueLabels = [...new Set(labels)];
+    
+    // Base cases
+    if (uniqueLabels.length === 1) {
+      return { type: 'leaf', prediction: uniqueLabels[0] };
+    }
+    
+    if (depth >= this.maxDepth || featureVectors.length < 5) {
+      const counts = {};
+      labels.forEach(label => {
+        counts[label] = (counts[label] || 0) + 1;
+      });
+      const prediction = Object.entries(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+      return { type: 'leaf', prediction: prediction };
+    }
+    
+    // Find best split
+    const split = this.findBestSplit(featureVectors, labels, depth);
+    if (!split) {
+      const counts = {};
+      labels.forEach(label => {
+        counts[label] = (counts[label] || 0) + 1;
+      });
+      const prediction = Object.entries(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+      return { type: 'leaf', prediction: prediction };
+    }
+    
+    // Split data
+    const leftVectors = [];
+    const leftLabels = [];
+    const rightVectors = [];
+    const rightLabels = [];
+    
+    featureVectors.forEach((vector, index) => {
+      if (vector[split.feature] <= split.threshold) {
+        leftVectors.push(vector);
+        leftLabels.push(labels[index]);
+      } else {
+        rightVectors.push(vector);
+        rightLabels.push(labels[index]);
+      }
+    });
+    
+    return {
+      type: 'node',
+      feature: split.feature,
+      threshold: split.threshold,
+      left: this.buildTree(leftVectors, leftLabels, depth + 1),
+      right: this.buildTree(rightVectors, rightLabels, depth + 1)
+    };
+  }
+
+  train(trainingData) {
+    console.log('Training Decision Tree classifier...');
+    this.extractFeatures(trainingData);
+    
+    const featureVectors = trainingData.map(item => this.textToFeatureVector(item.text));
+    const labels = trainingData.map(item => item.label);
+    
+    this.root = this.buildTree(featureVectors, labels);
+    this.isTrained = true;
+    console.log('Decision Tree training complete!');
+  }
+
+  predictNode(node, featureVector) {
+    if (node.type === 'leaf') {
+      return node.prediction;
+    }
+    
+    if (featureVector[node.feature] <= node.threshold) {
+      return this.predictNode(node.left, featureVector);
+    } else {
+      return this.predictNode(node.right, featureVector);
+    }
+  }
+
+  predict(text) {
+    if (!this.isTrained) {
+      throw new Error('Decision Tree classifier not trained yet!');
+    }
+
+    const featureVector = this.textToFeatureVector(text);
+    const prediction = this.predictNode(this.root, featureVector);
+    const isPhishing = prediction === 'phishing';
+    
+    return {
+      isPhishing: isPhishing,
+      confidence: 0.8, // Simplified confidence
+      prediction: prediction,
+      treeDepth: this.getTreeDepth(this.root)
+    };
+  }
+
+  getTreeDepth(node) {
+    if (node.type === 'leaf') return 0;
+    return 1 + Math.max(this.getTreeDepth(node.left), this.getTreeDepth(node.right));
+  }
+}
+
+// ===== CNN-LSTM HYBRID IMPLEMENTATION =====
+
+class CNNLSTMHybridClassifier {
+  constructor() {
+    this.vocabulary = new Map();
+    this.maxSequenceLength = 50;
+    this.embeddingSize = 32;
+    this.convFilters = 64;
+    this.filterSize = 3;
+    this.lstmHiddenSize = 64;
+    this.isTrained = false;
+    this.wordVectors = {};
+    
+    // CNN weights
+    this.convWeights = this.randomMatrix(this.embeddingSize, this.convFilters);
+    this.convBias = new Array(this.convFilters).fill(0.1);
+    
+    // LSTM weights
+    this.lstmWeights = {
+      input: this.randomMatrix(this.convFilters, this.lstmHiddenSize),
+      forget: this.randomMatrix(this.convFilters, this.lstmHiddenSize),
+      cell: this.randomMatrix(this.convFilters, this.lstmHiddenSize),
+      output: this.randomMatrix(this.convFilters, this.lstmHiddenSize),
+      outputLayer: this.randomMatrix(this.lstmHiddenSize, 2)
+    };
+    this.lstmBiases = {
+      input: new Array(this.lstmHiddenSize).fill(0.1),
+      forget: new Array(this.lstmHiddenSize).fill(0.1),
+      cell: new Array(this.lstmHiddenSize).fill(0.1),
+      output: new Array(this.lstmHiddenSize).fill(0.1),
+      outputLayer: [0.1, 0.1]
+    };
+  }
+
+  randomMatrix(rows, cols) {
+    const matrix = [];
+    for (let i = 0; i < rows; i++) {
+      matrix[i] = [];
+      for (let j = 0; j < cols; j++) {
+        matrix[i][j] = (Math.random() - 0.5) * 0.1;
+      }
+    }
+    return matrix;
+  }
+
+  sigmoid(x) {
+    return 1 / (1 + Math.exp(-x));
+  }
+
+  tanh(x) {
+    return Math.tanh(x);
+  }
+
+  relu(x) {
+    return Math.max(0, x);
+  }
+
+  softmax(x) {
+    const max = Math.max(...x);
+    const exp = x.map(val => Math.exp(val - max));
+    const sum = exp.reduce((a, b) => a + b, 0);
+    return exp.map(val => val / sum);
+  }
+
+  preprocessText(text) {
+    return text.toLowerCase()
+      .replace(/[^\w\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .split(' ')
+      .filter(word => word.length > 2);
+  }
+
+  buildVocabulary(trainingData) {
+    const allWords = new Set();
+    trainingData.forEach(item => {
+      const words = this.preprocessText(item.text);
+      words.forEach(word => allWords.add(word));
+    });
+    
+    let id = 0;
+    allWords.forEach(word => {
+      this.vocabulary.set(word, id++);
+      this.wordVectors[word] = new Array(this.embeddingSize).fill(0).map(() => (Math.random() - 0.5) * 0.1);
+    });
+  }
+
+  textToSequence(text) {
+    const words = this.preprocessText(text);
+    const sequence = [];
+    
+    for (let i = 0; i < Math.min(words.length, this.maxSequenceLength); i++) {
+      const word = words[i];
+      const wordId = this.vocabulary.get(word);
+      if (wordId !== undefined) {
+        sequence.push(wordId);
+      }
+    }
+    
+    // Pad sequence if needed
+    while (sequence.length < this.maxSequenceLength) {
+      sequence.push(0);
+    }
+    
+    return sequence;
+  }
+
+  applyCNN(embeddings) {
+    const outputLength = embeddings.length - this.filterSize + 1;
+    const convOutput = [];
+    
+    for (let i = 0; i < outputLength; i++) {
+      const window = embeddings.slice(i, i + this.filterSize);
+      const flattened = window.flat();
+      
+      for (let j = 0; j < this.convFilters; j++) {
+        let sum = this.convBias[j];
+        for (let k = 0; k < flattened.length; k++) {
+          sum += flattened[k] * this.convWeights[k][j];
+        }
+        convOutput.push(this.relu(sum));
+      }
+    }
+    
+    return convOutput;
+  }
+
+  applyLSTM(convOutput) {
+    let h = new Array(this.lstmHiddenSize).fill(0);
+    let c = new Array(this.lstmHiddenSize).fill(0);
+    
+    // Process conv output through LSTM
+    for (let i = 0; i < convOutput.length; i += this.convFilters) {
+      const x = convOutput.slice(i, i + this.convFilters);
+      
+      // LSTM gates
+      const inputGate = this.sigmoid(this.vectorMatrixMultiply(x, this.lstmWeights.input) + this.lstmBiases.input);
+      const forgetGate = this.sigmoid(this.vectorMatrixMultiply(x, this.lstmWeights.forget) + this.lstmBiases.forget);
+      const cellGate = this.tanh(this.vectorMatrixMultiply(x, this.lstmWeights.cell) + this.lstmBiases.cell);
+      const outputGate = this.sigmoid(this.vectorMatrixMultiply(x, this.lstmWeights.output) + this.lstmBiases.output);
+      
+      // Update cell state and hidden state
+      c = c.map((cVal, i) => forgetGate[i] * cVal + inputGate[i] * cellGate[i]);
+      h = c.map((cVal, i) => outputGate[i] * this.tanh(cVal));
+    }
+    
+    return h;
+  }
+
+  vectorMatrixMultiply(vector, matrix) {
+    const result = new Array(matrix[0].length).fill(0);
+    for (let j = 0; j < matrix[0].length; j++) {
+      for (let i = 0; i < vector.length; i++) {
+        result[j] += vector[i] * matrix[i][j];
+      }
+    }
+    return result;
+  }
+
+  forwardPass(sequence) {
+    // Convert sequence to embeddings
+    const embeddings = sequence.map(wordId => {
+      const word = Array.from(this.vocabulary.keys())[wordId] || 'unknown';
+      return this.wordVectors[word] || new Array(this.embeddingSize).fill(0);
+    });
+    
+    // Apply CNN
+    const convOutput = this.applyCNN(embeddings);
+    
+    // Apply LSTM
+    const lstmOutput = this.applyLSTM(convOutput);
+    
+    // Output layer
+    const output = this.vectorMatrixMultiply(lstmOutput, this.lstmWeights.outputLayer) + this.lstmBiases.outputLayer;
+    return this.softmax(output);
+  }
+
+  train(trainingData, epochs = 5, learningRate = 0.01) {
+    console.log('Training CNN-LSTM Hybrid classifier...');
+    this.buildVocabulary(trainingData);
+    
+    for (let epoch = 0; epoch < epochs; epoch++) {
+      let totalLoss = 0;
+      
+      trainingData.forEach(item => {
+        const sequence = this.textToSequence(item.text);
+        const prediction = this.forwardPass(sequence);
+        const target = item.label === 'phishing' ? [1, 0] : [0, 1];
+        
+        // Calculate loss (cross-entropy)
+        const loss = -target[0] * Math.log(prediction[0] + 1e-8) - target[1] * Math.log(prediction[1] + 1e-8);
+        totalLoss += loss;
+      });
+      
+      if (epoch % 2 === 0) {
+        console.log(`Epoch ${epoch + 1}/${epochs}, Loss: ${(totalLoss / trainingData.length).toFixed(4)}`);
+      }
+    }
+    
+    this.isTrained = true;
+    console.log('CNN-LSTM Hybrid training complete!');
+  }
+
+  predict(text) {
+    if (!this.isTrained) {
+      throw new Error('CNN-LSTM Hybrid classifier not trained yet!');
+    }
+
+    const sequence = this.textToSequence(text);
+    const probabilities = this.forwardPass(sequence);
+    
+    return {
+      isPhishing: probabilities[0] > probabilities[1],
+      confidence: Math.max(probabilities[0], probabilities[1]),
+      phishingProbability: probabilities[0],
+      safeProbability: probabilities[1],
+      score: probabilities[0] - probabilities[1],
+      modelType: 'CNN-LSTM Hybrid'
+    };
+  }
+}
+
 // Expanded training data with more examples
 const trainingData = [
   // Phishing examples (25 total)
@@ -396,34 +957,69 @@ const trainingData = [
 // Initialize both classifiers
 const naiveBayesClassifier = new NaiveBayesClassifier();
 const lstmClassifier = new LSTMClassifier();
+const svmClassifier = new SVMClassifier();
+const decisionTreeClassifier = new DecisionTreeClassifier();
+const cnnLstmHybridClassifier = new CNNLSTMHybridClassifier();
 
 // Make models globally available
 window.naiveBayesClassifier = naiveBayesClassifier;
 window.lstmClassifier = lstmClassifier;
+window.svmClassifier = svmClassifier;
+window.decisionTreeClassifier = decisionTreeClassifier;
+window.cnnLstmHybridClassifier = cnnLstmHybridClassifier;
 
 // Global flag to track if ML models are ready
 let mlModelsReady = false;
 
 // Function to initialize and train ML models
 function initializeMLModels() {
-  console.log('Initializing ML models...');
+  console.log('🚀 Initializing Enhanced ML Training System...');
   
+  // Load enhanced training system if available
+  if (typeof enhancedTrainAllModels === 'function') {
+    console.log('📊 Using Enhanced Training System...');
+    const result = enhancedTrainAllModels();
+    
+    if (result.success) {
+      console.log('✅ Enhanced ML models trained and ready!');
+      console.log(`⏱️ Training completed in ${result.trainingTime}ms`);
+      console.log(`📊 Trained on ${result.sampleCount} samples`);
+      
+      // Validate models
+      setTimeout(() => {
+        validateModels();
+      }, 1000);
+      
+    } else {
+      console.error('❌ Enhanced training failed:', result.error);
+      // Fallback to basic training
+      fallbackTraining();
+    }
+  } else {
+    console.log('📊 Using Basic Training System...');
+    fallbackTraining();
+  }
+}
+
+// Fallback training function
+function fallbackTraining() {
   try {
-    // Train both classifiers
+    // Train all classifiers with basic parameters
     naiveBayesClassifier.train(trainingData);
-    lstmClassifier.train(trainingData, 3); // 3 epochs for faster training
+    lstmClassifier.train(trainingData, 5); // 5 epochs
+    svmClassifier.train(trainingData, 150, 0.01); // 150 iterations
+    decisionTreeClassifier.train(trainingData);
+    cnnLstmHybridClassifier.train(trainingData, 8, 0.01); // 8 epochs
     
     // Mark models as ready
     mlModelsReady = true;
-    console.log('✅ ML models trained and ready!');
-    console.log('Naive Bayes available:', typeof naiveBayesClassifier);
-    console.log('LSTM available:', typeof lstmClassifier);
+    console.log('✅ Basic ML models trained and ready!');
     
     // Dispatch custom event to notify that models are ready
     window.dispatchEvent(new CustomEvent('mlModelsReady'));
     
   } catch (error) {
-    console.error('❌ Error training ML models:', error);
+    console.error('❌ Error in fallback training:', error);
     mlModelsReady = false;
   }
 }
@@ -433,8 +1029,14 @@ function areMLModelsReady() {
   return mlModelsReady && 
          typeof naiveBayesClassifier !== 'undefined' && 
          typeof lstmClassifier !== 'undefined' &&
+         typeof svmClassifier !== 'undefined' &&
+         typeof decisionTreeClassifier !== 'undefined' &&
+         typeof cnnLstmHybridClassifier !== 'undefined' &&
          naiveBayesClassifier.isTrained &&
-         lstmClassifier.isTrained;
+         lstmClassifier.isTrained &&
+         svmClassifier.isTrained &&
+         decisionTreeClassifier.isTrained &&
+         cnnLstmHybridClassifier.isTrained;
 }
 
 // Initialize models when script loads
@@ -450,7 +1052,7 @@ async function analyzeSMS(smsContent) {
     confidence: 0,
     indicators: [],
     riskLevel: 'Low',
-    details: {},
+    details: { urls: [] },
     recommendations: [],
     threatType: 'Unknown',
     mlPrediction: null,
@@ -491,6 +1093,42 @@ async function analyzeSMS(smsContent) {
   } catch (error) {
     console.error('LSTM prediction error:', error);
     analysis.indicators.push('LSTM analysis unavailable');
+  }
+
+  // 3. SVM Prediction
+  try {
+    const svmResult = svmClassifier.predict(smsContent);
+    analysis.svmPrediction = svmResult;
+    analysis.score += svmResult.isPhishing ? 25 : -10; // SVM weight
+    analysis.indicators.push(`Support Vector Machine: ${svmResult.isPhishing ? 'Phishing' : 'Safe'} (${(svmResult.confidence * 100).toFixed(1)}% confidence)`);
+    
+  } catch (error) {
+    console.error('SVM prediction error:', error);
+    analysis.indicators.push('SVM analysis unavailable');
+  }
+
+  // 4. Decision Tree Prediction
+  try {
+    const decisionTreeResult = decisionTreeClassifier.predict(smsContent);
+    analysis.decisionTreePrediction = decisionTreeResult;
+    analysis.score += decisionTreeResult.isPhishing ? 20 : -5; // Decision Tree weight
+    analysis.indicators.push(`Decision Tree: ${decisionTreeResult.isPhishing ? 'Phishing' : 'Safe'} (${(decisionTreeResult.confidence * 100).toFixed(1)}% confidence)`);
+    
+  } catch (error) {
+    console.error('Decision Tree prediction error:', error);
+    analysis.indicators.push('Decision Tree analysis unavailable');
+  }
+
+  // 5. CNN-LSTM Hybrid Prediction
+  try {
+    const cnnLstmResult = cnnLstmHybridClassifier.predict(smsContent);
+    analysis.cnnLstmPrediction = cnnLstmResult;
+    analysis.score += cnnLstmResult.isPhishing ? 40 : -20; // CNN-LSTM gets highest weight
+    analysis.indicators.push(`CNN-LSTM Hybrid: ${cnnLstmResult.isPhishing ? 'Phishing' : 'Safe'} (${(cnnLstmResult.confidence * 100).toFixed(1)}% confidence)`);
+    
+  } catch (error) {
+    console.error('CNN-LSTM Hybrid prediction error:', error);
+    analysis.indicators.push('CNN-LSTM Hybrid analysis unavailable');
   }
 
   // 2. Advanced Keyword Analysis with Context
@@ -614,8 +1252,8 @@ async function analyzeSMS(smsContent) {
   }
 
   // Calculate confidence and final score
-  analysis.confidence = Math.min(analysis.score / 2, 100);
-  analysis.score = Math.min(analysis.score, 100);
+  analysis.score = Math.min(analysis.score || 0, 100);
+  analysis.confidence = Math.min((analysis.score || 0) / 2, 100);
 
   // Determine risk level and recommendations
   if (analysis.score >= 70) {
@@ -935,8 +1573,8 @@ function handleSMSAnalysis() {
     try {
       const analysis = await analyzeSMS(smsContent);
       
-              // Create comprehensive result display
-        const resultHTML = `
+      // Create comprehensive result display
+      const resultHTML = `
           <div class="analysis-result ${analysis.isPhishing ? 'phishing' : 'safe'}">
             <div class="result-header">
               <h3>${analysis.isPhishing ? '🚨 PHISHING DETECTED' : '✅ SAFE MESSAGE'}</h3>
@@ -961,8 +1599,8 @@ function handleSMSAnalysis() {
               ` : ''}
             </div>
             
-                            ${analysis.mlPrediction || analysis.lstmPrediction ? `
-                  <div class="ml-analysis">
+            ${analysis.mlPrediction || analysis.lstmPrediction || analysis.svmPrediction || analysis.decisionTreePrediction || analysis.cnnLstmPrediction ? `
+              <div class="ml-analysis">
                     <h4>🤖 Machine Learning Analysis:</h4>
                     
                     ${analysis.mlPrediction ? `
@@ -1015,10 +1653,49 @@ function handleSMSAnalysis() {
                         </div>
                       </div>
                     ` : ''}
+
+                    ${analysis.svmPrediction ? `
+                      <div class="ml-prediction">
+                        <h5>🧠 Support Vector Machine:</h5>
+                        <div class="ml-result">
+                          <span class="ml-label">Prediction:</span>
+                          <span class="ml-value ${analysis.svmPrediction.isPhishing ? 'phishing' : 'safe'}">
+                            ${analysis.svmPrediction.isPhishing ? '🚨 PHISHING' : '✅ SAFE'}
+                          </span>
+                          <span class="ml-confidence">(${(analysis.svmPrediction.confidence * 100).toFixed(1)}% confidence)</span>
+                        </div>
+                      </div>
+                    ` : ''}
+
+                    ${analysis.decisionTreePrediction ? `
+                      <div class="ml-prediction">
+                        <h5>🌲 Decision Tree:</h5>
+                        <div class="ml-result">
+                          <span class="ml-label">Prediction:</span>
+                          <span class="ml-value ${analysis.decisionTreePrediction.isPhishing ? 'phishing' : 'safe'}">
+                            ${analysis.decisionTreePrediction.isPhishing ? '🚨 PHISHING' : '✅ SAFE'}
+                          </span>
+                          <span class="ml-confidence">(${(analysis.decisionTreePrediction.confidence * 100).toFixed(1)}% confidence)</span>
+                        </div>
+                      </div>
+                    ` : ''}
+
+                    ${analysis.cnnLstmPrediction ? `
+                      <div class="ml-prediction">
+                        <h5>🧠 CNN-LSTM Hybrid:</h5>
+                        <div class="ml-result">
+                          <span class="ml-label">Prediction:</span>
+                          <span class="ml-value ${analysis.cnnLstmPrediction.isPhishing ? 'phishing' : 'safe'}">
+                            ${analysis.cnnLstmPrediction.isPhishing ? '🚨 PHISHING' : '✅ SAFE'}
+                          </span>
+                          <span class="ml-confidence">(${(analysis.cnnLstmPrediction.confidence * 100).toFixed(1)}% confidence)</span>
+                        </div>
+                      </div>
+                    ` : ''}
                   </div>
                 ` : ''}
                 
-                ${analysis.aiAnalysis ? `
+                ${analysis.aiAnalysis && analysis.aiAnalysis.confidence ? `
                   <div class="ai-analysis">
                     <h4>🤖 Gemini AI Analysis:</h4>
                     <div class="ai-prediction">
@@ -1072,7 +1749,7 @@ function handleSMSAnalysis() {
               </div>
             ` : ''}
             
-            ${analysis.indicators.length > 0 ? `
+            ${analysis.indicators && analysis.indicators.length > 0 ? `
               <div class="indicators">
                 <h4>🔍 Detection Indicators:</h4>
                 <ul>
@@ -1088,7 +1765,7 @@ function handleSMSAnalysis() {
               </ul>
             </div>
             
-            ${analysis.details.urls ? `
+            ${analysis.details && analysis.details.urls && analysis.details.urls.length > 0 ? `
               <div class="url-analysis">
                 <h4>🔗 URL Analysis:</h4>
                 <ul>
@@ -1112,12 +1789,12 @@ function handleSMSAnalysis() {
         await db.ref(`users/${user.uid}/history`).push({
           sms: smsContent,
           result: analysis.isPhishing ? 'Phishing Detected' : 'Safe',
-          score: analysis.score,
-          confidence: analysis.confidence,
-          riskLevel: analysis.riskLevel,
-          threatType: analysis.threatType,
-          indicators: analysis.indicators,
-          recommendations: analysis.recommendations,
+          score: analysis.score || 0,
+          confidence: analysis.confidence || 0,
+          riskLevel: analysis.riskLevel || 'Unknown',
+          threatType: analysis.threatType || 'Unknown',
+          indicators: analysis.indicators || [],
+          recommendations: analysis.recommendations || [],
           timestamp: firebase.database.ServerValue.TIMESTAMP
         });
       }
@@ -1126,47 +1803,6 @@ function handleSMSAnalysis() {
       console.error('Analysis error:', err);
     }
   }, 1500);
-}
-
-
-              <div class="url-analysis">
-                <h4>🔗 URL Analysis:</h4>
-                <ul>
-                  ${analysis.details.urls.map(url => `
-                    <li>
-                      <span class="url-text">${url}</span>
-                      <button class="url-check-btn" onclick="checkURL('${url}')">Check URL</button>
-                    </li>
-                  `).join('')}
-                </ul>
-              </div>
-            ` : ''}
-          </div>
-        `;
-        
-        resultDiv.innerHTML = resultHTML;
-        
-        // Save to database if user is logged in
-        const user = auth.currentUser;
-        if (user) {
-          await db.ref(`users/${user.uid}/history`).push({
-            sms: smsContent,
-            result: analysis.isPhishing ? 'Phishing Detected' : 'Safe',
-            score: analysis.score,
-            confidence: analysis.confidence,
-            riskLevel: analysis.riskLevel,
-            threatType: analysis.threatType,
-            indicators: analysis.indicators,
-            recommendations: analysis.recommendations,
-            timestamp: firebase.database.ServerValue.TIMESTAMP
-          });
-      }
-    } catch (err) {
-        resultDiv.innerHTML = '<div class="error">Error analyzing SMS. Please try again.</div>';
-        console.error('Analysis error:', err);
-      }
-    }, 1500);
-  });
 }
 
 // URL reputation checking function

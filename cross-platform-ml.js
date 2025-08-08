@@ -4,6 +4,8 @@
 // Global ML models
 let naiveBayesClassifier = null;
 let lstmClassifier = null;
+let knnClassifier = null;
+let randomForestClassifier = null;
 let mlModelsReady = false;
 
 // Initialize ML models with cross-platform support
@@ -14,6 +16,12 @@ function initializeCrossPlatformML() {
         
         // Initialize LSTM Classifier
         lstmClassifier = new LSTMClassifier();
+        
+        // Initialize KNN Classifier (as specified in project document)
+        knnClassifier = new KNNClassifier(6); // k=6 as specified
+        
+        // Initialize Random Forest Classifier (as specified in project document)
+        randomForestClassifier = new RandomForestClassifier(10, 5); // 10 trees, max depth 5
         
         // Train models with sample data
         const trainingData = [
@@ -30,9 +38,11 @@ function initializeCrossPlatformML() {
         // Train models
         naiveBayesClassifier.train(trainingData);
         lstmClassifier.train(trainingData, 5, 0.01);
+        knnClassifier.train(trainingData);
+        randomForestClassifier.train(trainingData);
         
         mlModelsReady = true;
-        console.log('✅ Cross-platform ML models initialized successfully');
+        console.log('✅ Cross-platform ML models initialized successfully (including KNN and Random Forest)');
         
     } catch (error) {
         console.error('❌ ML model initialization failed:', error);
@@ -228,7 +238,7 @@ async function analyzeSMS(smsContent) {
         analysis.educationalContent = generateEducationalContent(analysis);
 
         // 8. AI Analysis (if available)
-        if (window.geminiAnalyzer || window.deepseekAnalyzer) {
+        if (window.geminiAnalyzer) {
             try {
                 const aiResult = await performAIAnalysis(smsContent);
                 analysis.aiAnalysis = aiResult;
@@ -237,6 +247,31 @@ async function analyzeSMS(smsContent) {
             } catch (error) {
                 console.error('AI analysis error:', error);
                 analysis.indicators.push('AI analysis unavailable');
+            }
+        }
+
+        // 9. Additional ML Models (KNN and Random Forest)
+        if (knnClassifier && randomForestClassifier) {
+            try {
+                const knnResult = knnClassifier.predict(smsContent);
+                const rfResult = randomForestClassifier.predict(smsContent);
+                
+                analysis.knnAnalysis = knnResult;
+                analysis.randomForestAnalysis = rfResult;
+                
+                // Add to overall score
+                analysis.score += knnResult.isPhishing ? 15 : -5;
+                analysis.score += rfResult.isPhishing ? 15 : -5;
+                
+                // Add model insights
+                analysis.modelInsights = {
+                    knn: knnResult.modelType,
+                    randomForest: rfResult.modelType,
+                    knnDistance: knnResult.distance,
+                    rfVotes: `${rfResult.phishingVotes}/${rfResult.safeVotes}`
+                };
+            } catch (error) {
+                console.error('Additional ML analysis error:', error);
             }
         }
 
@@ -350,8 +385,6 @@ async function performAIAnalysis(smsContent) {
     try {
         if (window.geminiAnalyzer) {
             return await window.geminiAnalyzer.analyzeSMSWithAI(smsContent);
-        } else if (window.deepseekAnalyzer) {
-            return await window.deepseekAnalyzer.analyzeSMSWithAI(smsContent);
         } else {
             return {
                 isPhishing: false,
