@@ -322,6 +322,7 @@
   <script src="navigation-fix.js"></script>
   <script src="notification-panel.js"></script>
   <script src="gemini-ai.js"></script>
+  <script src="gemini-config.js"></script>
   <script src="cross-platform-ml.js"></script>
   <script src="api-manager.js"></script>
   <script>
@@ -411,21 +412,30 @@
         if (selectedMethod === 'gemini') {
           // Use Gemini AI analysis
           if (window.geminiAnalyzer && window.geminiAnalyzer.isAvailable()) {
-            const aiResult = await window.geminiAnalyzer.analyzeSMSWithAI(smsContent);
-            analysis = {
-              score: aiResult.analysis.threatAssessment.confidence,
-              isPhishing: aiResult.analysis.threatAssessment.isPhishing,
-              confidence: aiResult.analysis.threatAssessment.confidence,
-              riskLevel: aiResult.analysis.riskLevel,
-              indicators: aiResult.analysis.keyIndicators,
-              recommendations: aiResult.analysis.recommendations,
-              reasoning: aiResult.analysis.threatAssessment.reasoning,
-              threatType: aiResult.analysis.threatType,
-              psychologicalTactics: aiResult.analysis.psychologicalTactics,
-              technicalAnalysis: aiResult.analysis.technicalAnalysis,
-              analysisTime: Date.now(),
-              method: 'Gemini AI'
-            };
+            try {
+              const aiResult = await window.geminiAnalyzer.analyzeSMSWithAI(smsContent);
+              
+              // Ensure all required properties exist with fallback values
+              analysis = {
+                score: aiResult.analysis?.threatAssessment?.confidence || 0,
+                isPhishing: aiResult.analysis?.threatAssessment?.isPhishing || false,
+                confidence: aiResult.analysis?.threatAssessment?.confidence || 0,
+                riskLevel: aiResult.analysis?.riskLevel || 'Unknown',
+                indicators: aiResult.analysis?.keyIndicators || ['AI analysis completed'],
+                recommendations: aiResult.analysis?.recommendations || ['Be cautious with unknown messages'],
+                reasoning: aiResult.analysis?.threatAssessment?.reasoning || 'AI analysis completed',
+                threatType: aiResult.analysis?.threatType || 'Unknown',
+                psychologicalTactics: aiResult.analysis?.psychologicalTactics || [],
+                technicalAnalysis: aiResult.analysis?.technicalAnalysis || {},
+                analysisTime: Date.now(),
+                method: 'Gemini AI'
+              };
+            } catch (aiError) {
+              console.error('Gemini AI analysis failed:', aiError);
+              showWarning('Gemini AI analysis failed, using Smart Detection instead', '⚠️ Fallback');
+              analysis = await performMLAnalysis(smsContent);
+              analysis.method = 'Smart Detection (Fallback)';
+            }
           } else {
             // Fallback to ML if Gemini not available
             showWarning('Gemini AI not available, using Smart Detection instead', '⚠️ Fallback');
@@ -473,13 +483,14 @@
       // Perform ML analysis
       const mlAnalysis = await analyzeSMS(smsContent);
       
+      // Ensure all required properties exist with fallback values
       return {
-        score: mlAnalysis.score,
-        isPhishing: mlAnalysis.isPhishing,
-        confidence: mlAnalysis.confidence,
-        riskLevel: mlAnalysis.riskLevel,
-        indicators: mlAnalysis.indicators,
-        recommendations: mlAnalysis.recommendations,
+        score: mlAnalysis.score || 0,
+        isPhishing: mlAnalysis.isPhishing || false,
+        confidence: mlAnalysis.confidence || 0,
+        riskLevel: mlAnalysis.riskLevel || 'Unknown',
+        indicators: mlAnalysis.indicators || ['Analysis completed'],
+        recommendations: mlAnalysis.recommendations || ['Be cautious with unknown messages'],
         reasoning: 'Smart pattern analysis completed',
         threatType: mlAnalysis.threatType || 'Unknown',
         analysisTime: Date.now(),
@@ -492,8 +503,24 @@
       const riskIndicator = document.getElementById('riskIndicator');
       const analysisResults = document.getElementById('analysisResults');
       
+      // Ensure analysis object has required properties
+      const safeAnalysis = {
+        isPhishing: analysis.isPhishing || false,
+        score: analysis.score || 0,
+        confidence: analysis.confidence || 0,
+        riskLevel: analysis.riskLevel || 'Unknown',
+        indicators: analysis.indicators || ['Analysis completed'],
+        recommendations: analysis.recommendations || ['Be cautious with unknown messages'],
+        reasoning: analysis.reasoning || 'Analysis completed',
+        threatType: analysis.threatType || 'Unknown',
+        psychologicalTactics: analysis.psychologicalTactics || [],
+        technicalAnalysis: analysis.technicalAnalysis || {},
+        method: analysis.method || 'Smart Detection',
+        analysisTime: analysis.analysisTime || Date.now()
+      };
+      
       // Set risk indicator
-      if (analysis.isPhishing) {
+      if (safeAnalysis.isPhishing) {
         riskIndicator.style.background = 'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)';
         riskIndicator.textContent = '🚨 PHISHING DETECTED';
       } else {
@@ -505,19 +532,19 @@
       analysisResults.innerHTML = `
         <div style="margin-bottom: 1.5rem;">
           <h4 style="margin-bottom: 0.5rem;">📊 Analysis Summary</h4>
-          <p><strong>Analysis Method:</strong> ${analysis.method}</p>
-          <p><strong>Threat Score:</strong> ${analysis.score}/100</p>
-          <p><strong>Confidence:</strong> ${analysis.confidence}%</p>
-          <p><strong>Risk Level:</strong> ${analysis.riskLevel}</p>
-          <p><strong>Threat Type:</strong> ${analysis.threatType || 'Unknown'}</p>
-          <p><strong>Analysis Time:</strong> ${Date.now() - analysis.analysisTime}ms</p>
+          <p><strong>Analysis Method:</strong> ${safeAnalysis.method}</p>
+          <p><strong>Threat Score:</strong> ${safeAnalysis.score}/100</p>
+          <p><strong>Confidence:</strong> ${safeAnalysis.confidence}%</p>
+          <p><strong>Risk Level:</strong> ${safeAnalysis.riskLevel}</p>
+          <p><strong>Threat Type:</strong> ${safeAnalysis.threatType}</p>
+          <p><strong>Analysis Time:</strong> ${Date.now() - safeAnalysis.analysisTime}ms</p>
         </div>
         
-        ${analysis.reasoning ? `
+        ${safeAnalysis.reasoning ? `
         <div style="margin-bottom: 1.5rem;">
           <h4 style="margin-bottom: 0.5rem;">🧠 AI Reasoning</h4>
           <p style="background: rgba(66, 133, 244, 0.1); padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #4285f4;">
-            ${analysis.reasoning}
+            ${safeAnalysis.reasoning}
           </p>
         </div>
         ` : ''}
@@ -525,26 +552,26 @@
         <div style="margin-bottom: 1.5rem;">
           <h4 style="margin-bottom: 0.5rem;">🔍 Key Indicators</h4>
           <ul style="list-style: none; padding: 0;">
-            ${analysis.indicators.map(indicator => `<li style="margin-bottom: 0.5rem;">• ${indicator}</li>`).join('')}
+            ${safeAnalysis.indicators.map(indicator => `<li style="margin-bottom: 0.5rem;">• ${indicator}</li>`).join('')}
           </ul>
         </div>
         
-        ${analysis.psychologicalTactics ? `
+        ${safeAnalysis.psychologicalTactics && safeAnalysis.psychologicalTactics.length > 0 ? `
         <div style="margin-bottom: 1.5rem;">
           <h4 style="margin-bottom: 0.5rem;">🎭 Psychological Tactics</h4>
           <ul style="list-style: none; padding: 0;">
-            ${analysis.psychologicalTactics.map(tactic => `<li style="margin-bottom: 0.5rem;">• ${tactic}</li>`).join('')}
+            ${safeAnalysis.psychologicalTactics.map(tactic => `<li style="margin-bottom: 0.5rem;">• ${tactic}</li>`).join('')}
           </ul>
         </div>
         ` : ''}
         
-        ${analysis.technicalAnalysis ? `
+        ${safeAnalysis.technicalAnalysis && Object.keys(safeAnalysis.technicalAnalysis).length > 0 ? `
         <div style="margin-bottom: 1.5rem;">
           <h4 style="margin-bottom: 0.5rem;">🔧 Technical Analysis</h4>
-          ${analysis.technicalAnalysis.suspiciousUrls && analysis.technicalAnalysis.suspiciousUrls.length > 0 ? `
+          ${safeAnalysis.technicalAnalysis.suspiciousUrls && safeAnalysis.technicalAnalysis.suspiciousUrls.length > 0 ? `
             <p><strong>Suspicious URLs:</strong></p>
             <ul style="list-style: none; padding: 0;">
-              ${analysis.technicalAnalysis.suspiciousUrls.map(url => `<li style="margin-bottom: 0.5rem;">• ${url}</li>`).join('')}
+              ${safeAnalysis.technicalAnalysis.suspiciousUrls.map(url => `<li style="margin-bottom: 0.5rem;">• ${url}</li>`).join('')}
             </ul>
           ` : ''}
           ${analysis.technicalAnalysis.suspiciousPhoneNumbers && analysis.technicalAnalysis.suspiciousPhoneNumbers.length > 0 ? `

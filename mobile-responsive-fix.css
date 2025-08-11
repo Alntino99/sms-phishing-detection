@@ -1,512 +1,492 @@
-/* ===== MOBILE RESPONSIVE FIXES ===== */
+/* Mobile Responsive Fix - Comprehensive Solution */
 
-/* Mobile-specific viewport and base styles */
-@media screen and (max-width: 768px) {
-  html, body {
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    position: relative;
+/* Reset and base mobile styles */
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    font-size: 16px;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
-  }
+}
 
-  /* Force full width and height */
-  body {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-    min-height: -moz-available;
-    min-height: fill-available;
-  }
-
-  /* Mobile header fixes */
-  header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    padding: 0.5rem 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  }
-
-  .header-content {
-    padding: 0 1rem;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .logo-title {
-    flex-direction: column;
-    gap: 0.5rem;
-    text-align: center;
-  }
-
-  .main-title {
-    font-size: 1.2rem !important;
-    line-height: 1.2;
+body {
     margin: 0;
-  }
-
-  .logo {
-    width: 40px;
-    height: 40px;
-  }
-
-  /* Mobile navigation */
-  .nav-container {
-    width: 100%;
-    padding: 0.5rem 1rem;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 0;
-  }
-
-  .nav-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 1rem;
-    background: rgba(0, 0, 0, 0.9);
-    border-radius: 10px;
-    margin-top: 0.5rem;
-  }
-
-  .nav-links a {
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-  }
-
-  .nav-links a:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateX(5px);
-  }
-
-  /* Mobile back button */
-  .mobile-back-btn {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    z-index: 1001;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    color: white;
-    font-size: 1.2rem;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .mobile-back-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-  }
-
-  /* Main content adjustments */
-  main {
-    margin-top: 120px; /* Account for fixed header */
-    padding: 1rem;
-    min-height: calc(100vh - 120px);
-  }
-
-  /* Mobile action sections */
-  .action {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-  }
-
-  .action section {
-    width: 100%;
-    padding: 1.5rem;
-    margin: 0;
-    border-radius: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-  }
-
-  .action section:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  }
-
-  .action section i {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .action section h2 {
-    font-size: 1.3rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .action section p {
-    font-size: 0.9rem;
-    line-height: 1.4;
-  }
-
-  /* Mobile welcome section */
-  .welcome-cont {
-    padding: 2rem 1rem;
-    margin: 1rem 0;
-    border-radius: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    text-align: center;
-  }
-
-  .welcome-cont h1 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-  }
-
-  .welcome-cont p {
-    font-size: 1rem;
-    line-height: 1.5;
-    margin-bottom: 1.5rem;
-  }
-
-  /* Mobile buttons */
-  .button {
-    width: 100%;
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
-    border-radius: 10px;
-    margin: 0.5rem 0;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border: none;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-  }
-
-  .button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-  }
-
-  /* Mobile about section */
-  .about {
-    padding: 2rem 1rem;
-    margin: 1rem 0;
-  }
-
-  .about section {
-    padding: 1.5rem;
-    margin: 1rem 0;
-    border-radius: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-  }
-
-  /* Mobile contact section */
-  .contact {
-    padding: 2rem 1rem;
-    margin: 1rem 0;
-  }
-
-  .contact section {
-    padding: 1.5rem;
-    margin: 1rem 0;
-    border-radius: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-  }
-
-  /* Mobile form fixes */
-  .form-container {
-    padding: 1.5rem;
-    margin: 1rem 0;
-    border-radius: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-  }
-
-  #contactForm div input,
-  #contactForm div textarea {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1rem;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    margin-bottom: 1rem;
-  }
-
-  #contactForm div input:focus,
-  #contactForm div textarea:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-  }
-
-  /* Mobile theme toggle */
-  .theme-toggle {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    z-index: 1001;
-    width: 45px;
-    height: 45px;
-    font-size: 1rem;
-  }
-
-  /* Mobile user account */
-  .user-account {
-    position: relative;
-    margin-left: auto;
-  }
-
-  .user-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
-
-  .user-dropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: rgba(0, 0, 0, 0.9);
-    border-radius: 10px;
-    padding: 0.5rem;
-    min-width: 150px;
-    z-index: 1002;
-  }
-
-  .user-dropdown a {
-    display: block;
-    padding: 0.75rem 1rem;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background 0.3s ease;
-  }
-
-  .user-dropdown a:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  /* Mobile notification button */
-  .notification-btn {
-    padding: 0.5rem;
-    font-size: 1rem;
-    margin-left: 0.5rem;
-  }
-
-  /* Mobile menu button */
-  .mobile-menu-btn {
-    display: block;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0.5rem;
-  }
-
-  /* Hide desktop elements on mobile */
-  .nav-links:not(.show) {
-    display: none;
-  }
-
-  /* Mobile-specific spacing */
-  .mobile-spacing {
-    margin: 1rem 0;
-    padding: 1rem;
-  }
-
-  /* Mobile footer */
-  footer {
-    padding: 1rem;
-    text-align: center;
-    background: rgba(0, 0, 0, 0.3);
-    margin-top: 2rem;
-  }
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* Extra small mobile devices */
-@media screen and (max-width: 480px) {
-  .header-content {
-    padding: 0 0.5rem;
-  }
-
-  .main-title {
-    font-size: 1rem !important;
-  }
-
-  .logo {
-    width: 35px;
-    height: 35px;
-  }
-
-  .action section {
-    padding: 1rem;
-  }
-
-  .action section i {
-    font-size: 2rem;
-  }
-
-  .action section h2 {
-    font-size: 1.1rem;
-  }
-
-  .action section p {
-    font-size: 0.8rem;
-  }
-
-  .button {
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
-  }
-
-  .mobile-back-btn {
-    width: 45px;
-    height: 45px;
-    font-size: 1rem;
-  }
-
-  .theme-toggle {
-    width: 40px;
-    height: 40px;
-    font-size: 0.9rem;
-  }
+/* Mobile-first responsive breakpoints */
+@media (max-width: 480px) {
+    html {
+        font-size: 14px;
+    }
+    
+    body {
+        padding-top: 60px !important;
+    }
 }
 
-/* Landscape mobile orientation */
-@media screen and (max-width: 768px) and (orientation: landscape) {
-  header {
-    padding: 0.25rem 0;
-  }
-
-  .header-content {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .logo-title {
-    flex-direction: row;
-  }
-
-  main {
-    margin-top: 80px;
-  }
-
-  .action {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .action section {
-    flex: 1;
-    min-width: 250px;
-  }
+@media (min-width: 481px) and (max-width: 768px) {
+    html {
+        font-size: 15px;
+    }
+    
+    body {
+        padding-top: 60px !important;
+    }
 }
 
-/* Mobile PWA enhancements */
-@media (display-mode: standalone) {
-  header {
-    padding-top: env(safe-area-inset-top);
-  }
-
-  main {
-    margin-top: calc(120px + env(safe-area-inset-top));
-  }
-
-  .mobile-back-btn {
-    top: calc(1rem + env(safe-area-inset-top));
-  }
-
-  .theme-toggle {
-    top: calc(1rem + env(safe-area-inset-top));
-  }
+@media (min-width: 769px) {
+    html {
+        font-size: 16px;
+    }
+    
+    body {
+        padding-top: 60px !important;
+    }
 }
 
-/* Dark mode mobile adjustments */
+/* Fix for viewport issues */
+@viewport {
+    width: device-width;
+    initial-scale: 1.0;
+    maximum-scale: 1.0;
+    user-scalable: no;
+}
+
+/* Mobile navigation fixes */
+.mobile-navbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 9999 !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 60px !important;
+}
+
+.nav-container {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0 20px !important;
+    height: 60px !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+}
+
+.nav-brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+.nav-logo {
+    height: 40px !important;
+    width: auto !important;
+    max-width: 40px !important;
+}
+
+.nav-title {
+    color: white !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+    display: none !important;
+}
+
+@media (min-width: 480px) {
+    .nav-title {
+        display: block !important;
+    }
+}
+
+/* Hamburger menu fixes */
+.hamburger-menu {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-around !important;
+    width: 30px !important;
+    height: 25px !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    z-index: 10000 !important;
+    position: relative !important;
+}
+
+.hamburger-menu span {
+    width: 100% !important;
+    height: 3px !important;
+    background: white !important;
+    border-radius: 3px !important;
+    transition: all 0.3s ease !important;
+    transform-origin: center !important;
+    display: block !important;
+}
+
+.hamburger-menu.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px) !important;
+}
+
+.hamburger-menu.active span:nth-child(2) {
+    opacity: 0 !important;
+}
+
+.hamburger-menu.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px) !important;
+}
+
+/* Navigation links fixes */
+.nav-links {
+    position: fixed !important;
+    top: 60px !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: rgba(102, 126, 234, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 20px 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    transform: translateY(-100%) !important;
+    transition: transform 0.3s ease !important;
+    z-index: 9998 !important;
+    max-height: calc(100vh - 60px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+.nav-links.active {
+    transform: translateY(0) !important;
+}
+
+.nav-links li {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+
+.nav-link {
+    display: block !important;
+    padding: 15px 20px !important;
+    color: white !important;
+    text-decoration: none !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+    text-align: center !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.nav-link:hover,
+.nav-link:active,
+.nav-link:focus {
+    background: rgba(255,255,255,0.1) !important;
+    color: white !important;
+    transform: translateX(5px) !important;
+    outline: none !important;
+}
+
+/* Backdrop fixes */
+.nav-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0,0,0,0.5) !important;
+    z-index: 9997 !important;
+    animation: fadeIn 0.3s ease !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Content area fixes */
+.main-content,
+.container,
+.content {
+    padding-top: 60px !important;
+    margin-top: 0 !important;
+    min-height: calc(100vh - 60px) !important;
+}
+
+/* Mobile-specific responsive fixes */
+@media (max-width: 480px) {
+    .nav-container {
+        padding: 0 15px !important;
+    }
+    
+    .nav-links {
+        padding: 15px 0 !important;
+    }
+    
+    .nav-link {
+        padding: 12px 15px !important;
+        font-size: 15px !important;
+    }
+    
+    /* Fix for small screens */
+    .container,
+    .main-content {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+    .mobile-navbar {
+        position: -webkit-sticky !important;
+        position: sticky !important;
+    }
+    
+    .nav-links {
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    /* Fix for iOS Safari viewport issues */
+    body {
+        -webkit-overflow-scrolling: touch !important;
+    }
+}
+
+/* Android Chrome specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .nav-links {
+        -webkit-transform: translateY(-100%) !important;
+    }
+    
+    .nav-links.active {
+        -webkit-transform: translateY(0) !important;
+    }
+}
+
+/* Fix for older Android browsers */
 @media screen and (max-width: 768px) {
-  body.dark-mode .action section {
-    background: rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-
-  body.dark-mode .welcome-cont,
-  body.dark-mode .about section,
-  body.dark-mode .contact section,
-  body.dark-mode .form-container {
-    background: rgba(0, 0, 0, 0.3);
-  }
-
-  body.dark-mode #contactForm div input,
-  body.dark-mode #contactForm div textarea {
-    background: rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.2);
-  }
+    .nav-links {
+        transform: translateY(-100%) !important;
+        -webkit-transform: translateY(-100%) !important;
+        -moz-transform: translateY(-100%) !important;
+        -ms-transform: translateY(-100%) !important;
+    }
+    
+    .nav-links.active {
+        transform: translateY(0) !important;
+        -webkit-transform: translateY(0) !important;
+        -moz-transform: translateY(0) !important;
+        -ms-transform: translateY(0) !important;
+    }
 }
 
-/* Mobile loading states */
-.mobile-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  font-size: 1.2rem;
+/* Prevent horizontal scrolling */
+html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
 }
 
-.mobile-loading::after {
-  content: '';
-  width: 20px;
-  height: 20px;
-  border: 2px solid white;
-  border-top: 2px solid transparent;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-left: 10px;
+/* Fix for touch targets */
+.nav-link,
+.hamburger-menu {
+    min-height: 44px !important;
+    min-width: 44px !important;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+/* Fix for focus states */
+.nav-link:focus,
+.hamburger-menu:focus {
+    outline: 2px solid rgba(255,255,255,0.5) !important;
+    outline-offset: 2px !important;
 }
 
-/* Mobile swipe gestures */
-.mobile-swipe-area {
-  touch-action: pan-y;
-  -webkit-overflow-scrolling: touch;
+/* Fix for active states */
+.nav-link.active {
+    background: rgba(255,255,255,0.2) !important;
+    font-weight: bold !important;
 }
 
-/* Mobile scroll improvements */
-.mobile-scroll {
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
+/* Fix for any existing navbar conflicts */
+.navbar,
+nav:not(.mobile-navbar),
+.nav-container:not(.mobile-navbar .nav-container) {
+    display: none !important;
 }
 
-/* Mobile focus improvements */
-.mobile-focus:focus {
-  outline: 2px solid #667eea;
-  outline-offset: 2px;
+/* Ensure proper stacking context */
+.mobile-navbar {
+    isolation: isolate !important;
 }
 
-/* Mobile accessibility */
+/* Fix for any floating elements */
+.floating,
+.fixed,
+.sticky {
+    z-index: 9996 !important;
+}
+
+/* Fix for any modal overlays */
+.modal,
+.overlay,
+.popup {
+    z-index: 10000 !important;
+}
+
+/* Fix for any dropdown menus */
+.dropdown,
+.menu {
+    z-index: 9995 !important;
+}
+
+/* Responsive image fixes */
+img {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Fix for any existing CSS conflicts */
+*[class*="nav"]:not(.mobile-navbar):not(.nav-container):not(.nav-brand):not(.nav-logo):not(.nav-title):not(.nav-links):not(.nav-link):not(.hamburger-menu) {
+    display: none !important;
+}
+
+/* Ensure proper touch handling */
+@media (hover: none) and (pointer: coarse) {
+    .nav-link:hover {
+        background: rgba(255,255,255,0.1) !important;
+        transform: none !important;
+    }
+    
+    .nav-link:active {
+        background: rgba(255,255,255,0.2) !important;
+        transform: scale(0.98) !important;
+    }
+}
+
+/* Fix for any existing JavaScript conflicts */
+.navbar-toggle,
+.menu-toggle,
+.hamburger {
+    display: none !important;
+}
+
+/* Ensure proper viewport handling */
+@viewport {
+    width: device-width;
+    initial-scale: 1.0;
+    maximum-scale: 1.0;
+    user-scalable: no;
+}
+
+/* Fix for any existing responsive issues */
+@media (max-width: 768px) {
+    .desktop-only,
+    .tablet-only {
+        display: none !important;
+    }
+    
+    .mobile-only {
+        display: block !important;
+    }
+}
+
+/* Fix for any existing layout issues */
+.flex-container {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+
+.flex-item {
+    flex: 1 1 auto !important;
+}
+
+/* Fix for any existing grid issues */
+.grid-container {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+    gap: 20px !important;
+}
+
+/* Fix for any existing button issues */
+button,
+.btn {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    touch-action: manipulation !important;
+}
+
+/* Fix for any existing form issues */
+input,
+textarea,
+select {
+    font-size: 16px !important;
+    -webkit-appearance: none !important;
+    border-radius: 0 !important;
+}
+
+/* Fix for any existing link issues */
+a {
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Fix for any existing scroll issues */
+.scroll-container {
+    -webkit-overflow-scrolling: touch !important;
+    overflow-scrolling: touch !important;
+}
+
+/* Fix for any existing animation issues */
 @media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Fix for any existing accessibility issues */
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Fix for any existing print issues */
+@media print {
+    .mobile-navbar,
+    .nav-links,
+    .nav-backdrop {
+        display: none !important;
+    }
+    
+    body {
+        padding-top: 0 !important;
+    }
 } 

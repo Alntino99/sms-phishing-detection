@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "name": "sms-shield",
   "builds": [
     {
       "src": "*.html",
@@ -14,6 +15,10 @@
       "use": "@vercel/static"
     },
     {
+      "src": "*.json",
+      "use": "@vercel/static"
+    },
+    {
       "src": "*.png",
       "use": "@vercel/static"
     },
@@ -22,23 +27,7 @@
       "use": "@vercel/static"
     },
     {
-      "src": "*.gif",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.ico",
-      "use": "@vercel/static"
-    },
-    {
       "src": "*.svg",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.woff",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.woff2",
       "use": "@vercel/static"
     },
     {
@@ -46,7 +35,7 @@
       "use": "@vercel/static"
     },
     {
-      "src": "*.eot",
+      "src": "*.woff2",
       "use": "@vercel/static"
     }
   ],
@@ -54,18 +43,6 @@
     {
       "source": "/",
       "destination": "/index.html"
-    },
-    {
-      "source": "/login",
-      "destination": "/login.html"
-    },
-    {
-      "source": "/signup",
-      "destination": "/signup.html"
-    },
-    {
-      "source": "/signin",
-      "destination": "/login.html"
     },
     {
       "source": "/detect",
@@ -80,243 +57,57 @@
       "destination": "/profile.html"
     },
     {
-      "source": "/contact",
-      "destination": "/contact.html"
-    },
-    {
       "source": "/about",
       "destination": "/about.html"
     },
     {
-      "source": "/create",
-      "destination": "/create.html"
-    },
-
-
-
-
-
-
-
-
-    {
-      "source": "/manifest.json",
-      "destination": "/manifest.json"
+      "source": "/contact",
+      "destination": "/contact.html"
     },
     {
-      "source": "/favicon.svg",
-      "destination": "/favicon.svg"
+      "source": "/login",
+      "destination": "/login.html"
     },
     {
-      "source": "/mobile-sms-detector.js",
-      "destination": "/mobile-sms-detector.js"
+      "source": "/signup",
+      "destination": "/signup.html"
     },
     {
-      "source": "/mobile-sms-detector-fixed.js",
-      "destination": "/mobile-sms-detector-fixed.js"
-    },
-    {
-      "source": "/mobile-sms-detector-fixed-v2.js",
-      "destination": "/mobile-sms-detector-fixed-v2.js"
-    },
-    {
-      "source": "/firebase-fixed.js",
-      "destination": "/firebase-fixed.js"
-    },
-    {
-      "source": "/sw-fixed.js",
-      "destination": "/sw-fixed.js"
-    },
-    {
-      "source": "/mobile-sms-detector.css",
-      "destination": "/mobile-sms-detector.css"
-    },
-    {
-      "source": "/mobile-responsive-fix.css",
-      "destination": "/mobile-responsive-fix.css"
-    },
-    {
-      "source": "/cross-platform-css.css",
-      "destination": "/cross-platform-css.css"
-    },
-    {
-      "source": "/ml-classifiers.js",
-      "destination": "/ml-classifiers.js"
-    },
-    {
-      "source": "/cross-platform-ml.js",
-      "destination": "/cross-platform-ml.js"
-    },
-    {
-      "source": "/complete-button-functions.js",
-      "destination": "/complete-button-functions.js"
-    },
-    {
-      "source": "/universal-button-handler.js",
-      "destination": "/universal-button-handler.js"
-    },
-    {
-      "source": "/button-function-verifier.js",
-      "destination": "/button-function-verifier.js"
-    },
-    {
-      "source": "/real-time-sms-monitor.js",
-      "destination": "/real-time-sms-monitor.js"
-    },
-    {
-      "source": "/sw-sms-monitor.js",
-      "destination": "/sw-sms-monitor.js"
-    },
-    {
-      "source": "/comprehensive-test.js",
-      "destination": "/comprehensive-test.js"
-    },
-    {
-      "source": "/enhanced-pwa-install.js",
-      "destination": "/enhanced-pwa-install.js"
-    },
-    {
-      "source": "/advanced-sms-notifications.js",
-      "destination": "/advanced-sms-notifications.js"
-    },
-    {
-      "source": "/webfonts/:file*",
-      "destination": "/webfonts/:file*"
-    },
-    {
-      "source": "/webfonts/fa-solid-900.woff2",
-      "destination": "/webfonts/fa-solid-900.woff2"
-    },
-    {
-      "source": "/webfonts/fa-solid-900.ttf",
-      "destination": "/webfonts/fa-solid-900.ttf"
-    },
-    {
-      "source": "/../webfonts/:file*",
-      "destination": "/webfonts/:file*"
-    },
-    {
-      "source": "/font-fix.css",
-      "destination": "/font-fix.css"
+      "source": "/logout",
+      "destination": "/logout.html"
     }
   ],
   "headers": [
     {
-      "source": "/sw-fixed.js",
+      "source": "/(.*)",
       "headers": [
         {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/mobile-sms-detector-fixed.js",
-      "headers": [
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
         {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/firebase-fixed.js",
-      "headers": [
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
         {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/complete-button-functions.js",
-      "headers": [
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
         {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/universal-button-handler.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/ml-classifiers.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/cross-platform-ml.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/cross-platform-css.css",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/real-time-sms-monitor.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/sw-sms-monitor.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/comprehensive-test.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/enhanced-pwa-install.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    },
-    {
-      "source": "/advanced-sms-notifications.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
         }
       ]
     }
-  ]
+  ],
+  "env": {
+    "FIREBASE_API_KEY": "AIzaSyBJqVavJpv6YaHvzJi49-fI2LsvTYGqijw",
+    "FIREBASE_AUTH_DOMAIN": "smsphising.firebaseapp.com",
+    "FIREBASE_PROJECT_ID": "smsphising",
+    "FIREBASE_STORAGE_BUCKET": "smsphising.firebasestorage.app",
+    "FIREBASE_MESSAGING_SENDER_ID": "92088698439",
+    "FIREBASE_APP_ID": "1:92088698439:web:bae163a42c9996ee6e5362",
+    "FIREBASE_MEASUREMENT_ID": "G-72619E1HYY",
+    "GEMINI_API_KEY": "AIzaSyBioNiN-EnZCv1dYqSV83QDxV8RVK21Omg"
+  }
 } 

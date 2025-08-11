@@ -1,0 +1,97 @@
+SMS Shield - Test Spam/Phishing Messages
+==========================================
+
+HIGH RISK PHISHING MESSAGES:
+----------------------------
+
+1. "URGENT: Your bank account has been suspended due to suspicious activity. Click here to verify: bit.ly/suspicious-link"
+
+2. "IRS ALERT: You owe $2,847 in back taxes. Call immediately to avoid arrest: 1-800-FAKE-IRS"
+
+3. "Your Amazon account has been locked. Verify your payment method now: amazon-verify.com/fake"
+
+4. "WARNING: Your Social Security Number has been compromised. Call 1-800-SSN-FAKE immediately."
+
+5. "Your Netflix subscription has expired. Update payment info now: netflix-pay.com/fake"
+
+MEDIUM RISK PHISHING MESSAGES:
+------------------------------
+
+6. "You've won a $1000 gift card! Click here to claim: giftcard-winner.com/fake"
+
+7. "Your package delivery failed. Reschedule here: delivery-reschedule.com/fake"
+
+8. "Your phone bill is overdue. Pay now to avoid disconnection: phone-bill-pay.com/fake"
+
+9. "Your email storage is full. Upgrade now: email-upgrade.com/fake"
+
+10. "Your insurance claim needs verification. Call 1-800-INSURANCE-FAKE"
+
+LOW RISK SUSPICIOUS MESSAGES:
+-----------------------------
+
+11. "Free ringtones! Download now: ringtone-free.com/fake"
+
+12. "You've been selected for a survey. Win $50: survey-win.com/fake"
+
+13. "Your friend sent you a message. View it here: friend-message.com/fake"
+
+14. "Your account needs verification. Click here: account-verify.com/fake"
+
+15. "Limited time offer! 50% off everything: limited-offer.com/fake"
+
+SAFE MESSAGES (FOR COMPARISON):
+------------------------------
+
+16. "Hi Mom, I'll be home for dinner at 7pm. Love you!"
+
+17. "Your appointment with Dr. Smith is confirmed for tomorrow at 2pm."
+
+18. "Your Uber ride has arrived. Driver: John D. Car: Toyota Camry"
+
+19. "Your order #12345 has been shipped. Track at: ups.com/track"
+
+20. "Your bank statement is ready. Log in to your secure account to view."
+
+SPECIALIZED PHISHING PATTERNS:
+------------------------------
+
+21. "Your PayPal account has been limited. Verify your identity: paypal-verify.com/fake"
+
+22. "Your Google account security alert. Unusual login detected: google-security.com/fake"
+
+23. "Your Apple ID has been locked. Unlock now: apple-unlock.com/fake"
+
+24. "Your Microsoft account needs attention. Click here: microsoft-account.com/fake"
+
+25. "Your credit card has been declined. Update information: credit-card-update.com/fake"
+
+URGENCY-BASED PHISHING:
+-----------------------
+
+26. "ACT NOW: Your account will be deleted in 24 hours unless you verify: account-delete.com/fake"
+
+27. "EMERGENCY: Your family member needs money. Send $500 immediately: family-emergency.com/fake"
+
+28. "URGENT: Your computer has been infected. Download antivirus now: virus-scan.com/fake"
+
+29. "CRITICAL: Your password expires in 1 hour. Reset now: password-reset.com/fake"
+
+30. "IMMEDIATE ACTION REQUIRED: Your account is compromised. Secure it now: secure-account.com/fake"
+
+Instructions for Testing:
+========================
+
+1. Copy any message from above
+2. Paste it into the SMS Shield analysis interface
+3. Test both "Smart Detection" and "Gemini AI" methods
+4. Compare the results and confidence scores
+5. Check if the system correctly identifies phishing patterns
+
+Expected Results:
+================
+
+- Messages 1-15 should be flagged as phishing with high confidence
+- Messages 16-20 should be marked as safe
+- Messages 21-30 should show various threat levels based on sophistication
+- The system should identify key indicators like urgency, authority impersonation, and suspicious URLs

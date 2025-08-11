@@ -2138,14 +2138,14 @@ document.addEventListener('DOMContentLoaded', function() {
 // Global function for mobile menu toggle
 function toggleMobileMenu() {
   const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-  const navLinks = document.querySelector('.nav-links');
+  const mobileMenu = document.getElementById('mobileMenu');
   
-  if (mobileMenuBtn && navLinks) {
-    navLinks.classList.toggle('show');
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenu.classList.toggle('show');
     mobileMenuBtn.classList.toggle('active');
     
     // Change button icon
-    if (navLinks.classList.contains('show')) {
+    if (mobileMenu.classList.contains('show')) {
       mobileMenuBtn.innerHTML = '✕';
       // Prevent body scroll when menu is open
       document.body.style.overflow = 'hidden';
@@ -2160,10 +2160,10 @@ function toggleMobileMenu() {
 // Close mobile menu when clicking on close button (X)
 function closeMobileMenu() {
   const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-  const navLinks = document.querySelector('.nav-links');
+  const mobileMenu = document.getElementById('mobileMenu');
   
-  if (mobileMenuBtn && navLinks) {
-    navLinks.classList.remove('show');
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenu.classList.remove('show');
     mobileMenuBtn.classList.remove('active');
     mobileMenuBtn.innerHTML = '☰';
     document.body.style.overflow = '';

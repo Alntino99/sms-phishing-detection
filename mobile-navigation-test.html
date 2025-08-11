@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Navigation Test - SMS Shield</title>
+  <link rel="stylesheet" href="enhanced-design.css">
+  <link rel="stylesheet" href="mobile-enhancements.css">
+  <link rel="stylesheet" href="cross-platform-responsive.css">
+  <link rel="stylesheet" href="all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Enhanced Header -->
+  <header class="enhanced-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-icon">🛡️</div>
+        <a href="index.html" class="logo-text">SMS Shield</a>
+      </div>
+      
+      <nav class="enhanced-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="detect.html" class="nav-link">Detect</a>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="profile.html" class="nav-link">Profile</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="login.html" class="nav-link auth-link">Sign In</a>
+      </nav>
+
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        ☰
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <div class="mobile-menu-links">
+        <a href="index.html" class="nav-link">🏠 Home</a>
+        <a href="detect.html" class="nav-link">🔍 Detect SMS</a>
+        <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+        <a href="profile.html" class="nav-link">👤 Profile</a>
+        <a href="about.html" class="nav-link">ℹ️ About</a>
+        <a href="contact.html" class="nav-link">📞 Contact</a>
+        <a href="login.html" class="nav-link">🔐 Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Test Content -->
+  <section class="enhanced-hero animate-slide-up" style="padding-top: 120px;">
+    <h1 class="hero-title">Mobile Navigation Test</h1>
+    <p class="hero-subtitle">
+      Test the mobile navigation functionality. Resize your browser window to see the mobile menu in action.
+    </p>
+    
+    <div style="margin-top: 2rem; padding: 2rem; background: rgba(255, 255, 255, 0.1); border-radius: 15px; backdrop-filter: blur(10px);">
+      <h3>Test Instructions:</h3>
+      <ul style="text-align: left; color: white;">
+        <li>Resize your browser window to less than 768px width</li>
+        <li>Click the hamburger menu button (☰) in the top right</li>
+        <li>The mobile menu should slide down with all navigation links</li>
+        <li>Click on any link to test navigation</li>
+        <li>Click outside the menu or press Escape to close it</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Scripts -->
+  <script src="navigation-fix.js"></script>
+  <script src="mobile-navigation-fix.js"></script>
+  <script src="script.js"></script>
+  
+  <script>
+    // Test function to verify mobile menu is working
+    function testMobileMenu() {
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      
+      if (mobileMenuBtn && mobileMenu) {
+        console.log('✅ Mobile menu elements found');
+        console.log('📱 Mobile menu button:', mobileMenuBtn);
+        console.log('📱 Mobile menu container:', mobileMenu);
+        
+        // Test click functionality
+        mobileMenuBtn.addEventListener('click', function() {
+          console.log('📱 Mobile menu button clicked');
+          console.log('📱 Menu is visible:', mobileMenu.classList.contains('show'));
+        });
+        
+        // Test window resize
+        window.addEventListener('resize', function() {
+          console.log('📱 Window resized to:', window.innerWidth);
+          console.log('📱 Mobile menu should be visible:', window.innerWidth <= 768);
+        });
+        
+      } else {
+        console.error('❌ Mobile menu elements not found');
+      }
+    }
+    
+    // Run test when page loads
+    document.addEventListener('DOMContentLoaded', testMobileMenu);
+  </script>
+</body>
+</html>

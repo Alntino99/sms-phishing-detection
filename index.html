@@ -293,10 +293,17 @@
   <script src="chatbot-ml-model.js"></script>
   <script src="chatbot-system.js"></script>
   <script src="navigation-fix.js"></script>
+  <script src="mobile-navigation-fix.js"></script>
   <script src="gemini-config.js"></script>
   <script src="gemini-ai.js"></script>
   <script src="mobile-sms-integration.js"></script>
   <script src="cross-platform-responsive.js"></script>
+  <script src="notification-panel.js"></script>
+  <script src="notification-system.js"></script>
+  <script src="auth-state-manager.js"></script>
+  <script src="darkMode.js"></script>
+  <script src="cache-clear.js"></script>
+  <script src="complete-button-functions.js"></script>
   <script src="script.js"></script>
   <script>
     // Authentication UI management using Auth Manager
@@ -318,6 +325,25 @@
       }
     });
     
+    // Function availability check
+    function checkFunctionAvailability() {
+      const requiredFunctions = [
+        'toggleMobileMenu',
+        'toggleNotificationPanel',
+        'showSuccess',
+        'showInfo',
+        'toggleTheme'
+      ];
+      
+      requiredFunctions.forEach(funcName => {
+        if (typeof window[funcName] === 'function') {
+          console.log(`✅ ${funcName} is available`);
+        } else {
+          console.warn(`⚠️ ${funcName} is not available`);
+        }
+      });
+    }
+
     // Enhanced scroll animations
     const observerOptions = {
       threshold: 0.1,
@@ -344,6 +370,9 @@
       });
 
       // Theme is now handled by darkMode.js
+
+      // Check function availability
+      checkFunctionAvailability();
 
       // Update authentication UI safely
       if (window.authManager && typeof authManager.updateAuthUI === 'function') {

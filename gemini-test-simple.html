@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini AI Test - SMS Shield</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #6c757d; cursor: not-allowed; }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Gemini AI Test - SMS Shield</h1>
+        
+        <div id="status"></div>
+        
+        <h2>Test Message</h2>
+        <textarea id="testMessage">URGENT: Your bank account has been suspended due to suspicious activity. Click here to verify: bit.ly/suspicious-link</textarea>
+        
+        <div>
+            <button onclick="testGeminiStatus()">Check Gemini Status</button>
+            <button onclick="testGeminiAnalysis()">Test Gemini Analysis</button>
+            <button onclick="testDemoMode()">Test Demo Mode</button>
+            <button onclick="clearResults()">Clear Results</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <!-- Load required scripts -->
+    <script src="gemini-ai.js"></script>
+    <script src="gemini-config.js"></script>
+    
+    <script>
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        function addResult(title, content) {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.innerHTML = `
+                <h3>${title}</h3>
+                <div class="result">${content}</div>
+            `;
+            resultsDiv.appendChild(resultDiv);
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        async function testGeminiStatus() {
+            clearResults();
+            
+            // Check if Gemini AI is loaded
+            if (!window.geminiAnalyzer) {
+                showStatus('❌ Gemini AI not loaded!', 'error');
+                addResult('Error', 'geminiAnalyzer object not found');
+                return;
+            }
+            
+            // Check initialization status
+            const status = window.geminiAnalyzer.getStatus();
+            addResult('Gemini AI Status', JSON.stringify(status, null, 2));
+            
+            // Check API key manager
+            if (window.geminiAPIKeyManager) {
+                const managerStats = window.geminiAPIKeyManager.getUsageStats();
+                addResult('API Key Manager Status', JSON.stringify(managerStats, null, 2));
+                
+                if (managerStats.isDemoMode) {
+                    showStatus(`✅ Demo mode active (${managerStats.remainingDemoUsage} tests remaining)`, 'warning');
+                } else {
+                    showStatus('✅ Using personal API key', 'success');
+                }
+            } else {
+                showStatus('❌ API Key Manager not loaded!', 'error');
+            }
+        }
+        
+        async function testGeminiAnalysis() {
+            clearResults();
+            
+            if (!window.geminiAnalyzer) {
+                showStatus('❌ Gemini AI not available!', 'error');
+                return;
+            }
+            
+            if (!window.geminiAnalyzer.isAvailable()) {
+                showStatus('❌ Gemini AI not initialized!', 'error');
+                return;
+            }
+            
+            const testMessage = document.getElementById('testMessage').value;
+            showStatus('🔄 Testing Gemini AI analysis...', 'info');
+            
+            try {
+                const startTime = Date.now();
+                const result = await window.geminiAnalyzer.analyzeSMSWithAI(testMessage);
+                const endTime = Date.now();
+                
+                addResult('Analysis Time', `${endTime - startTime}ms`);
+                addResult('Raw Result', JSON.stringify(result, null, 2));
+                
+                if (result.success) {
+                    showStatus('✅ Gemini AI analysis successful!', 'success');
+                    
+                    const analysis = result.analysis;
+                    addResult('Analysis Summary', `
+Threat Assessment: ${analysis.threatAssessment?.isPhishing ? 'PHISHING' : 'SAFE'}
+Confidence: ${analysis.threatAssessment?.confidence || 'N/A'}%
+Risk Level: ${analysis.riskLevel || 'N/A'}
+Threat Type: ${analysis.threatType || 'N/A'}
+Key Indicators: ${analysis.keyIndicators?.join(', ') || 'N/A'}
+Recommendations: ${analysis.recommendations?.join(', ') || 'N/A'}
+                    `);
+                } else {
+                    showStatus('❌ Gemini AI analysis failed!', 'error');
+                }
+                
+            } catch (error) {
+                showStatus('❌ Gemini AI analysis error!', 'error');
+                addResult('Error Details', error.toString());
+            }
+        }
+        
+        async function testDemoMode() {
+            clearResults();
+            
+            if (!window.geminiAPIKeyManager) {
+                showStatus('❌ API Key Manager not available!', 'error');
+                return;
+            }
+            
+            const manager = window.geminiAPIKeyManager;
+            const stats = manager.getUsageStats();
+            
+            addResult('Demo Mode Test', `
+Current Mode: ${stats.isDemoMode ? 'Demo' : 'Personal API'}
+Demo Usage: ${stats.demoUsageCount}/${stats.maxDemoUsage}
+Remaining Tests: ${stats.remainingDemoUsage}
+Can Use Demo: ${manager.canUseDemo()}
+Current API Key: ${manager.getCurrentAPIKey() ? 'Configured' : 'Not Configured'}
+            `);
+            
+            if (stats.isDemoMode) {
+                showStatus(`✅ Demo mode active (${stats.remainingDemoUsage} tests remaining)`, 'warning');
+            } else {
+                showStatus('✅ Using personal API key', 'success');
+            }
+        }
+        
+        // Auto-test on page load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                testGeminiStatus();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

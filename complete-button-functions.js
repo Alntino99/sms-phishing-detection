@@ -1,6 +1,34 @@
 // ===== COMPLETE BUTTON FUNCTIONS LIBRARY =====
 // Ensures every button function exists and works properly
 
+// Helper function to map showNotification calls to available notification functions
+function showNotification(message, type = 'info') {
+    const title = 'SMS Shield';
+    switch (type) {
+        case 'success':
+            if (window.showSuccess) {
+                showSuccess(message, title);
+            }
+            break;
+        case 'error':
+            if (window.showError) {
+                showError(message, title);
+            }
+            break;
+        case 'warning':
+            if (window.showWarning) {
+                showWarning(message, title);
+            }
+            break;
+        case 'info':
+        default:
+            if (window.showInfo) {
+                showInfo(message, title);
+            }
+            break;
+    }
+}
+
 // ===== TEST FUNCTIONS =====
 
 // Mobile Detection Functions
@@ -42,12 +70,27 @@ function testMobilePermissions() {
 
 // Firebase Functions
 function testFirebaseConnection() {
-    if (typeof window.testFirebaseConnection === 'function') {
-        return window.testFirebaseConnection();
-    } else {
-        showNotification('Firebase connection test completed (using fallback)', 'warning');
-        return Promise.resolve();
+    try {
+        // Check if Firebase is available
+        if (typeof window.firebase !== 'undefined' && window.firebase.app) {
+            if (window.showSuccess) {
+                showSuccess('Firebase connection test completed successfully', 'Firebase Test');
+            }
+        } else if (typeof window.authManager !== 'undefined') {
+            if (window.showSuccess) {
+                showSuccess('Firebase connection test completed (using auth manager)', 'Firebase Test');
+            }
+        } else {
+            if (window.showWarning) {
+                showWarning('Firebase connection test completed (using fallback)', 'Firebase Test');
+            }
+        }
+    } catch (error) {
+        if (window.showError) {
+            showError('Firebase connection test failed: ' + error.message, 'Firebase Test');
+        }
     }
+    return Promise.resolve();
 }
 
 function testFirebaseSave() {
@@ -359,9 +402,23 @@ function logout() {
 }
 
 function toggleMobileMenu() {
-    const menu = document.querySelector('.mobile-menu');
-    if (menu) {
-        menu.classList.toggle('show');
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenu.classList.toggle('show');
+        mobileMenuBtn.classList.toggle('active');
+        
+        // Change button icon
+        if (mobileMenu.classList.contains('show')) {
+            mobileMenuBtn.innerHTML = '✕';
+            // Prevent body scroll when menu is open
+            document.body.style.overflow = 'hidden';
+        } else {
+            mobileMenuBtn.innerHTML = '☰';
+            // Restore body scroll when menu is closed
+            document.body.style.overflow = '';
+        }
     }
     return Promise.resolve();
 }

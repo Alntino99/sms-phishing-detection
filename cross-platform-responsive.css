@@ -804,7 +804,7 @@ main {
 }
 
 /* Internet Explorer Support */
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+@media (forced-colors: active) {
     .enhanced-header {
         background: rgba(255, 255, 255, 0.95);
     }

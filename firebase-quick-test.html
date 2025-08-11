@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Quick Test - SMS Shield</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        #output { background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>🔥 Firebase Quick Test</h1>
+    
+    <div id="status"></div>
+    
+    <button onclick="testFirebase()">Test Firebase</button>
+    <button onclick="testAuth()">Test Authentication</button>
+    <button onclick="testDatabase()">Test Database</button>
+    <button onclick="clearOutput()">Clear</button>
+    
+    <div id="output"></div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    
+    <!-- Your Firebase config -->
+    <script src="firebase-fixed.js"></script>
+    
+    <script>
+        function log(message) {
+            const output = document.getElementById('output');
+            output.innerHTML += message + '<br>';
+        }
+        
+        function clearOutput() {
+            document.getElementById('output').innerHTML = '';
+        }
+        
+        function showStatus(message, type = 'success') {
+            document.getElementById('status').innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        async function testFirebase() {
+            clearOutput();
+            log('🔍 Starting Firebase test...');
+            
+            // Check if Firebase is loaded
+            if (typeof window.firebase === 'undefined') {
+                showStatus('❌ Firebase SDK not loaded', 'error');
+                log('ERROR: Firebase SDK not found');
+                return;
+            }
+            
+            log('✅ Firebase SDK loaded');
+            
+            // Check if your config is loaded
+            if (typeof window.auth === 'undefined' || typeof window.db === 'undefined') {
+                showStatus('❌ Firebase config not loaded', 'error');
+                log('ERROR: Firebase config not found');
+                return;
+            }
+            
+            log('✅ Firebase config loaded');
+            
+            // Test connection
+            try {
+                const connected = await window.testFirebaseConnection();
+                if (connected) {
+                    log('✅ Firebase connection successful');
+                    showStatus('✅ Firebase is working perfectly!', 'success');
+                } else {
+                    log('⚠️ Firebase connection failed, using fallback');
+                    showStatus('⚠️ Using fallback mode', 'warning');
+                }
+            } catch (error) {
+                log(`❌ Firebase connection error: ${error.message}`);
+                showStatus('❌ Firebase connection error', 'error');
+            }
+        }
+        
+        async function testAuth() {
+            clearOutput();
+            log('🔐 Testing Firebase Authentication...');
+            
+            try {
+                // Test sign up
+                const testEmail = 'test@example.com';
+                const testPassword = 'testpassword123';
+                
+                log('Testing user creation...');
+                const signUpResult = await window.authenticateUser(testEmail, testPassword, true);
+                log(`✅ User created: ${signUpResult.user.email}`);
+                
+                // Test sign in
+                log('Testing user sign in...');
+                const signInResult = await window.authenticateUser(testEmail, testPassword, false);
+                log(`✅ User signed in: ${signInResult.user.email}`);
+                
+                // Test sign out
+                log('Testing user sign out...');
+                await window.signOutUser();
+                log('✅ User signed out');
+                
+                showStatus('✅ Firebase Authentication working!', 'success');
+                
+            } catch (error) {
+                log(`❌ Authentication error: ${error.message}`);
+                showStatus('❌ Authentication error', 'error');
+            }
+        }
+        
+        async function testDatabase() {
+            clearOutput();
+            log('💾 Testing Firebase Database...');
+            
+            try {
+                const testData = {
+                    message: 'Test SMS message',
+                    analysis: 'This is a test analysis',
+                    timestamp: Date.now(),
+                    test: true
+                };
+                
+                // Test save
+                log('Testing data save...');
+                const saveKey = await window.saveToFirebase('test/analysis', testData);
+                log(`✅ Data saved with key: ${saveKey}`);
+                
+                // Test retrieve
+                log('Testing data retrieval...');
+                const retrievedData = await window.getFromFirebase('test/analysis');
+                log(`✅ Data retrieved: ${JSON.stringify(retrievedData, null, 2)}`);
+                
+                showStatus('✅ Firebase Database working!', 'success');
+                
+            } catch (error) {
+                log(`❌ Database error: ${error.message}`);
+                showStatus('❌ Database error', 'error');
+            }
+        }
+        
+        // Auto-test on load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                log('🚀 Page loaded, ready to test Firebase');
+                showStatus('Ready to test Firebase', 'success');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

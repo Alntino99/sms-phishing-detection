@@ -1,3 +1,4 @@
+
 // ===== SMS SECURITY RULES & PRIVACY PROTECTION =====
 
 class SMSSecurityRules {
