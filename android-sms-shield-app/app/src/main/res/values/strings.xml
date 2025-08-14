@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SMS Shield</string>
+    
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_scan">Scan</string>
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_settings">Settings</string>
+    
+    <!-- Home Screen -->
+    <string name="home_title">SMS Shield</string>
+    <string name="home_subtitle">AI-Powered SMS Protection</string>
+    <string name="start_scanning">Start Scanning</string>
+    <string name="messages_scanned">Messages Scanned</string>
+    <string name="spam_detected">Spam Detected</string>
+    <string name="protection_rate">Protection Rate</string>
+    <string name="key_features">Key Features</string>
+    <string name="recent_activity">Recent Activity</string>
+    <string name="view_all_messages">View All Messages</string>
+    
+    <!-- Scan Screen -->
+    <string name="scan_title">SMS Scanner</string>
+    <string name="scan_subtitle">AI-powered SMS analysis with Ghana-specific detection</string>
+    <string name="select_ai_model">Select AI Model</string>
+    <string name="scan_controls">Scan Controls</string>
+    <string name="scanning_sms">Scanning SMS messages…</string>
+    <string name="ready_to_scan">Ready to scan</string>
+    <string name="start_scanning_btn">Start Scanning</string>
+    <string name="stop_scanning_btn">Stop Scanning</string>
+    <string name="real_time_results">Real-time Results</string>
+    <string name="scan_statistics">Scan Statistics</string>
+    
+    <!-- Dashboard Screen -->
+    <string name="analytics_dashboard">Analytics Dashboard</string>
+    <string name="overview">Overview</string>
+    <string name="spam_trends">Spam Trends (Last 7 Days)</string>
+    <string name="model_performance">Model Performance</string>
+    <string name="total_messages">Total Messages</string>
+    <string name="money_saved">Money Saved</string>
+    
+    <!-- Profile Screen -->
+    <string name="profile">Profile</string>
+    <string name="account_information">Account Information</string>
+    <string name="subscription">Subscription</string>
+    <string name="actions">Actions</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="notification_settings">Notification Settings</string>
+    <string name="privacy_security">Privacy &amp; Security</string>
+    <string name="help_support">Help &amp; Support</string>
+    <string name="sign_out">Sign Out</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings">Settings</string>
+    <string name="scanning_settings">Scanning Settings</string>
+    <string name="auto_scan_sms">Auto-scan SMS</string>
+    <string name="auto_scan_sms_desc">Automatically scan incoming messages</string>
+    <string name="scan_incoming_sms">Scan incoming SMS</string>
+    <string name="scan_incoming_sms_desc">Analyze messages you receive</string>
+    <string name="scan_outgoing_sms">Scan outgoing SMS</string>
+    <string name="scan_outgoing_sms_desc">Analyze messages you send</string>
+    <string name="auto_block_spam">Auto-block spam</string>
+    <string name="auto_block_spam_desc">Automatically block detected spam</string>
+    <string name="notifications">Notifications</string>
+    <string name="spam_alerts">Spam alerts</string>
+    <string name="spam_alerts_desc">Notify when spam is detected</string>
+    <string name="daily_reports">Daily reports</string>
+    <string name="daily_reports_desc">Receive daily scanning summaries</string>
+    <string name="weekly_reports">Weekly reports</string>
+    <string name="weekly_reports_desc">Receive weekly analytics reports</string>
+    <string name="sound_notifications">Sound notifications</string>
+    <string name="sound_notifications_desc">Play sound for notifications</string>
+    <string name="vibration">Vibration</string>
+    <string name="vibration_desc">Vibrate for notifications</string>
+    <string name="privacy_data">Privacy &amp; Data</string>
+    <string name="cloud_sync">Cloud sync</string>
+    <string name="cloud_sync_desc">Sync data across devices</string>
+    <string name="analytics">Analytics</string>
+    <string name="analytics_desc">Help improve the app with usage data</string>
+    <string name="crash_reports">Crash reports</string>
+    <string name="crash_reports_desc">Send crash reports to help fix issues</string>
+    <string name="clear_all_data">Clear All Data</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
+    <string name="last_updated">Last updated</string>
+    <string name="build_number">Build number</string>
+    <string name="check_for_updates">Check for Updates</string>
+    
+    <!-- SMS List Screen -->
+    <string name="sms_messages">SMS Messages</string>
+    <string name="view_details">View Details</string>
+    <string name="block">Block</string>
+    <string name="report">Report</string>
+    
+    <!-- Analytics Screen -->
+    <string name="analytics_title">Analytics</string>
+    <string name="overview_30_days">Overview (Last 30 Days)</string>
+    <string name="top_spam_sources">Top Spam Sources</string>
+    <string name="messages">messages</string>
+    
+    <!-- Common -->
+    <string name="back">Back</string>
+    <string name="search">Search</string>
+    <string name="export">Export</string>
+    <string name="all">All</string>
+    <string name="spam">Spam</string>
+    <string name="safe">Safe</string>
+    <string name="phishing">Phishing</string>
+    <string name="accuracy">Accuracy</string>
+    <string name="precision">Precision</string>
+    <string name="recall">Recall</string>
+    <string name="predictions">predictions</string>
+    
+    <!-- AI Models -->
+    <string name="tensorflow_lite">TensorFlow Lite</string>
+    <string name="tensorflow_lite_desc">Fast, lightweight model for real-time scanning</string>
+    <string name="ghana_specific_model">Ghana-Specific Model</string>
+    <string name="ghana_specific_model_desc">Trained on Ghana SMS patterns</string>
+    <string name="hybrid_model">Hybrid Model</string>
+    <string name="hybrid_model_desc">Combines multiple detection methods</string>
+    <string name="custom_model">Custom Model</string>
+    <string name="custom_model_desc">User-trained model for specific patterns</string>
+    
+    <!-- Sample Messages -->
+    <string name="sample_spam_message">Congratulations! You\'ve won $10,000 in our lottery. Click here to claim your prize now!</string>
+    <string name="sample_safe_message">Your MTN Ghana account has been credited with 5.00 GHS. Thank you for using our services.</string>
+    <string name="sample_phishing_message">URGENT: Your bank account has been suspended. Call +233 XX XXX XXXX immediately to verify.</string>
+    
+    <!-- Notification Channels -->
+    <string name="default_notification_channel_id">sms_shield_default</string>
+    <string name="default_notification_channel_name">SMS Shield</string>
+    <string name="default_notification_channel_description">General notifications from SMS Shield</string>
+    
+    <!-- Permissions -->
+    <string name="permission_sms_rationale">SMS Shield needs SMS permissions to scan and protect your messages from spam.</string>
+    <string name="permission_notification_rationale">SMS Shield needs notification permissions to alert you about detected spam.</string>
+</resources>
